@@ -1,7 +1,6 @@
-﻿namespace Foksty.Shared
+﻿namespace Foksty.Shared;
+
+public class ApplicationConstants
 {
-    public class ApplicationConstants
-    {
-        public readonly string ApplicationName = "Foksty";
-    }
+    public readonly string ApplicationName = "Foksty";
 }

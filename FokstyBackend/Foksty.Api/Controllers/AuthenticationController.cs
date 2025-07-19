@@ -1,6 +1,5 @@
-﻿namespace Foksty.Api.Controllers
+﻿namespace Foksty.Api.Controllers;
+
+public class AuthenticationController
 {
-    public class AuthenticationController
-    {
-    }
 }
