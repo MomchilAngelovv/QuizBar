@@ -7,11 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="12.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Foksty.Data\Foksty.Data.csproj" />
+    <ProjectReference Include="..\Foksty.Services\Foksty.Services.csproj" />
     <ProjectReference Include="..\Foksty.Shared\Foksty.Shared.csproj" />
   </ItemGroup>
 

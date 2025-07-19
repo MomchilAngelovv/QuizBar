@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
+﻿using FluentValidation.Results;
+using Foksty.Api.Responses;
+using Foksty.Services.Results;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Foksty.Api.Controllers;
 
@@ -14,7 +16,8 @@ public class BaseController : ControllerBase
 {
     protected ActionResult ValidationFailed(ValidationResult validationResult)
     {
-        validationResult.AddToModelState(ModelState);
+        // TODO: Check this seems like deprecated
+        //validationResult.AddToModelState(ModelState);
         return ValidationProblem(ModelState);
     }
 
@@ -24,16 +27,16 @@ public class BaseController : ControllerBase
         var hasError = false;
         var errorMessage = default(string);
 
-        if (!string.IsNullOrWhiteSpace(serviceResult.ErrorMessage))
+        if (!string.IsNullOrWhiteSpace(serviceResult.Message))
         {
             hasError = true;
-            errorMessage = serviceResult.ErrorMessage;
+            errorMessage = serviceResult.Message;
         }
 
         var controllerResult = new ControllerResult<TResult>()
         {
             HasError = hasError,
-            ErrorMessage = errorMessage,
+            Message = errorMessage,
             Data = serviceResult.Data,
         };
 
