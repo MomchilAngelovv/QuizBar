@@ -1,6 +1,8 @@
 using Foksty.Data;
+using Foksty.Data.Entities;
 using Foksty.Shared;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -35,6 +37,23 @@ try
         };
     });
 
+    // Identity
+    builder.Services.AddIdentity<FokstyUser, FokstyRole>(options =>
+    {
+        options.Password.RequireDigit = true;
+        options.Password.RequiredLength = 6;
+        options.Password.RequiredUniqueChars = 0;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+
+        options.SignIn.RequireConfirmedEmail = false;
+        options.SignIn.RequireConfirmedAccount = false;
+        options.SignIn.RequireConfirmedPhoneNumber = false;
+    })
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
     // Controllers
     builder.Services.AddControllers(options =>
     {
@@ -64,6 +83,8 @@ try
 
     //Custom services
     builder.Services.AddSingleton<ApplicationConstants>();
+    builder.Services.AddSingleton<Statuses>();
+    builder.Services.AddSingleton<Roles>();
 
     var app = builder.Build();
 
