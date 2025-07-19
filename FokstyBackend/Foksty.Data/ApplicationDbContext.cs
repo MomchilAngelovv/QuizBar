@@ -18,6 +18,6 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         //TODO This should not be like this but currently throwing some strange error
-        optionsBuilder.UseSqlServer("Server=.;Database=FokstyDb;Trusted_Connection=True;");
+        optionsBuilder.UseSqlServer("Server=.;Database=FokstyDb;Trusted_Connection=True;TrustServerCertificate=True");
     }
 }
