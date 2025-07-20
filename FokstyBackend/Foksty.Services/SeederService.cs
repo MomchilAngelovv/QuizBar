@@ -12,14 +12,14 @@ public class SeederService(
     UserManager<FokstyUser> userManager,
     RoleManager<FokstyRole> roleManager)
 {
-    //public async Task<bool> IsDatabaseEmptyAsync()
-    //{
-    //    //var isDbEmpty = await db.Users.AnyAsync() && await db.Roles.AnyAsync();
-    //    //return !isDbEmpty;
-    //}
-
-    public async Task SeedAdministratorAndRolesAsync()
+    public async Task InitialSeedAdministratorAndRolesAsync()
     {
+        var isDbEmpty = (!await db.Users.AnyAsync()) || (!await db.Roles.AnyAsync());
+        if (!isDbEmpty)
+        {
+            return;
+        }
+
         var roleNames = new List<string> { roles.Administrator, roles.Default };
         foreach (var roleName in roleNames)
         {
@@ -28,7 +28,6 @@ public class SeederService(
                 Name = roleName,
                 Description = $"{roleName}_Description",
                 CreatedBy = "Seed",
-                CreatedOn = DateTime.UtcNow,
                 Status = "Active"
             };
 
@@ -40,7 +39,6 @@ public class SeederService(
             Email = "MomchilAngelov0040@gmail.com",
             UserName = "MomchilAngelov0040@gmail.com",
             CreatedBy = "Seed",
-            CreatedOn = DateTime.UtcNow,
             Status = "Active"
         };
 

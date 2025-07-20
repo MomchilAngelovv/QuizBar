@@ -1,5 +1,6 @@
 using Foksty.Data;
 using Foksty.Data.Entities;
+using Foksty.Services;
 using Foksty.Shared;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -81,10 +82,12 @@ try
         });
     });
 
-    //Custom services
+    // Custom services
     builder.Services.AddSingleton<ApplicationConstants>();
     builder.Services.AddSingleton<Statuses>();
     builder.Services.AddSingleton<Roles>();
+
+    builder.Services.AddTransient<SeederService>();
 
     var app = builder.Build();
 
@@ -102,6 +105,9 @@ try
     {
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         await dbContext.Database.MigrateAsync();
+
+        var seederService = scope.ServiceProvider.GetRequiredService<SeederService>();
+        await seederService.InitialSeedAdministratorAndRolesAsync();
     }
 
     app.Run();

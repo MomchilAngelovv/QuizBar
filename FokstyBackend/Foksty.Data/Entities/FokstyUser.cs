@@ -4,10 +4,16 @@ namespace Foksty.Data.Entities;
 
 public class FokstyUser : IdentityUser<string>, IEntityMetaData
 {
+    public FokstyUser()
+    {
+        Id = Guid.CreateVersion7().ToString();
+        CreatedOn = DateTime.UtcNow;
+    }
+
     public required string Status { get; set; }
     public string? Description { get; set; }
 
-    public required DateTime CreatedOn { get; set; }
+    public DateTime CreatedOn { get; set; }
     public required string CreatedBy { get; set; }
 
     public DateTime? ModifiedOn { get; set; }
