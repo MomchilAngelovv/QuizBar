@@ -5,7 +5,7 @@
 namespace Foksty.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Create_empty_database : Migration
+    public partial class Empty_database : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

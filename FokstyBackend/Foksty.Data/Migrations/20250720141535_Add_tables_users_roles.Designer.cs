@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Foksty.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250719124633_Add_tables_users_roles")]
+    [Migration("20250720141535_Add_tables_users_roles")]
     partial class Add_tables_users_roles
     {
         /// <inheritdoc />

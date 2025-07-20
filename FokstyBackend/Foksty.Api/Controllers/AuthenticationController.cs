@@ -9,8 +9,7 @@ namespace Foksty.Api.Controllers;
 public class AuthenticationController(
     Statuses statuses,
     Roles roles,
-    UserManager<FokstyUser> userManager,
-    RoleManager<FokstyRole> roleManager) : BaseController
+    UserManager<FokstyUser> userManager) : BaseController
 {
     [HttpPost("signup")]
     public async Task<IActionResult> Signup(SignUpRequest model)
@@ -29,6 +28,7 @@ public class AuthenticationController(
             EmailConfirmed = true,
             Status = statuses.Active,
             CreatedBy = model.Email,
+            CreatedOn = DateTime.UtcNow
         };
 
         var createUserResult = await userManager.CreateAsync(user, model.Password);
