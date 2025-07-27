@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace Foksty.Data;
 
@@ -15,10 +16,15 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
+}
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+public class ApplicationDbContextDesignFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
+{
+    public ApplicationDbContext CreateDbContext(string[] args)
     {
-        //TODO This should not be like this but currently throwing some strange error
-        optionsBuilder.UseSqlServer("Server=.;Database=FokstyDb;Trusted_Connection=True;TrustServerCertificate=True");
+        var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>()
+            .UseSqlServer("Host=localhost;Database=Foksty;Username=postgres;Password=123456");
+
+        return new ApplicationDbContext(optionsBuilder.Options);
     }
 }
