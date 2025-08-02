@@ -1,6 +1,8 @@
 ﻿using FluentValidation.Results;
 using Foksty.Api.Responses;
 using Foksty.Services.Results;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Foksty.Api.Controllers;
@@ -8,8 +10,8 @@ namespace Foksty.Api.Controllers;
 [ApiController]
 [Produces("application/json")]
 [Route("api/[controller]")]
-//[Authorize]
-//[ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ControllerResult))]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ControllerResult))]
 [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ControllerResult))]
 [ProducesResponseType(StatusCodes.Status504GatewayTimeout, Type = typeof(ControllerResult))]
 public class BaseController : ControllerBase

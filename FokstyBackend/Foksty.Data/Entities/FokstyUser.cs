@@ -10,6 +10,7 @@ public class FokstyUser : IdentityUser<string>, IEntityMetaData
         CreatedOn = DateTime.UtcNow;
     }
 
+    // IEntityMetaData
     public required string Status { get; set; }
     public string? Description { get; set; }
 

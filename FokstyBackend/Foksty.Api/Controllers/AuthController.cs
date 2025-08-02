@@ -22,6 +22,7 @@ public class AuthController(
     UserManager<FokstyUser> userManager,
     IConfiguration configuration) : BaseController
 {
+    [AllowAnonymous]
     [HttpPost("signup")]
     public async Task<IActionResult> SignUp(SignUpRequest model)
     {
@@ -57,7 +58,7 @@ public class AuthController(
         return Created();
     }
 
-
+    [AllowAnonymous]
     [HttpPost("signin")]
     public async Task<ActionResult<string>> SignIn(SignInRequest request)
     {
@@ -78,7 +79,6 @@ public class AuthController(
         return Ok(token);
     }
 
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpPost("profile")]
     public async Task<ActionResult<object>> Profile()
     {
