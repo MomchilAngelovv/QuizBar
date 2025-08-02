@@ -1,6 +1,8 @@
 ﻿using Foksty.Api.Requests;
 using Foksty.Data.Entities;
 using Foksty.Shared;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +16,7 @@ using System.Text;
 
 namespace Foksty.Api.Controllers;
 
-public class AuthenticationController(
+public class AuthController(
     Statuses statuses,
     Roles roles,
     UserManager<FokstyUser> userManager,
@@ -74,6 +76,23 @@ public class AuthenticationController(
         string token = CreateToken(user);
 
         return Ok(token);
+    }
+
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [HttpPost("profile")]
+    public async Task<ActionResult<object>> Profile()
+    {
+        var userClaims = User.Claims.Select(c => new
+        {
+            Type = c.Type,
+            Value = c.Value
+        });
+
+        return new
+        {
+            Test = "test",
+            UserClaims = userClaims
+        };
     }
 
     private string CreateToken(FokstyUser user)
