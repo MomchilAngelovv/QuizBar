@@ -2,12 +2,14 @@
 
 public class Quiz : IEntityMetaData
 {
+    // Main
     public string Id { get; set; }
     public string Title { get; set; }
-    public string Sector { get; set; }
+    public string Scope { get; set; }
 
-    public virtual ICollection<Score> Scores { get; set; }
-    public virtual ICollection<TeamQuiz> TeamsQuizzes { get; set; }
+    // Navigation properties
+    public virtual ICollection<Chapter> Chapters { get; set; }
+    public virtual ICollection<QuizResult> QuizResults { get; set; }
 
     // IEntityMetaData
     public required string Status { get; set; }

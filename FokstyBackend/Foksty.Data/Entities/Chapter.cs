@@ -1,16 +1,20 @@
 ﻿namespace Foksty.Data.Entities;
 
-public class Player : IEntityMetaData
+public class Chapter : IEntityMetaData
 {
-    // Database columns
+    // Main
     public string Id { get; set; }
-    public string FirstName { get; set; }
-    public string MiddleName { get; set; }
-    public string LastName { get; set; }
+    public string Title { get; set; }
+    public string Scope { get; set; }
 
-    // Naviation properties
+    // Foreign keys
+    public string QuizId { get; set; }
 
-    // IEntityMetaData columns
+    // Navigation properties
+    public virtual Quiz Quiz { get; set; }
+    public virtual ICollection<Question> Questions { get; set; }
+
+    // IEntityMetaData
     public required string Status { get; set; }
     public string? Description { get; set; }
 
