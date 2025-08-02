@@ -19,7 +19,7 @@ public class BaseController : ControllerBase
     protected ActionResult ValidationFailed(ValidationResult validationResult)
     {
         // TODO: Check this seems like deprecated
-        //validationResult.AddToModelState(ModelState);
+        // validationResult.AddToModelState(ModelState);
         return ValidationProblem(ModelState);
     }
 
