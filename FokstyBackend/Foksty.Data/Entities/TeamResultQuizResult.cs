@@ -5,12 +5,12 @@ public class TeamResultQuizResult : IEntityMetaData
     // Main
    
     // Foreign keys
-    public string TeamResultId { get; set; }
-    public string QuizResultId { get; set; }
+    public string TeamResultId { get; set; } //1
+    public string QuizResultId { get; set; } // 1
 
     // Navigation properties
-    public virtual TeamResult TeamResult { get; set; }
-    public virtual QuizResult QuizResult { get; set; }
+    public virtual TeamResult TeamResult { get; set; } //1
+    public virtual QuizResult QuizResult { get; set; } // 10
 
     // IEntityMetaData
     public required string Status { get; set; }

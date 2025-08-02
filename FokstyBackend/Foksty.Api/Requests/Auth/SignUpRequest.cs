@@ -1,4 +1,4 @@
-﻿namespace Foksty.Api.Requests;
+﻿namespace Foksty.Api.Requests.Auth;
 
 public class SignUpRequest
 {

@@ -1,12 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Foksty.Api.Requests.Quizzes;
+using Foksty.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Foksty.Api.Controllers;
 
-public class QuizzesController : BaseController
+public class QuizzesController(
+    QuizzesService quizzesService) : BaseController
 {
     [HttpPost]
-    public async Task<ActionResult<object>> CreateQuizAsync()
+    public async Task<ActionResult<object>> CreateQuizAsync(CreateQuizRequest request)
     {
+        // AI Create Quiz
         return null;
     }
 
@@ -21,8 +25,4 @@ public class QuizzesController : BaseController
     {
         return null;
     }
-
-    // Create Quiz
-    // Start Quiz = create quizREsult and start updagint it 
-    // Get quizResults
 }

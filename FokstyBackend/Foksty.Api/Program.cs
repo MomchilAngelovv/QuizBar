@@ -86,7 +86,8 @@ builder.Services.AddSingleton<ApplicationConstants>();
 builder.Services.AddSingleton<Statuses>();
 builder.Services.AddSingleton<Roles>();
 
-builder.Services.AddScoped<SeederService>();
+builder.Services.AddTransient<SeederService>();
+builder.Services.AddTransient<QuizzesService>();
 
 var app = builder.Build();
 
@@ -99,7 +100,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapHealthChecks("/health/ready");
 
-//Executed once just before application starts
+// Executed once just before application starts
 using var scope = app.Services.CreateScope();
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
