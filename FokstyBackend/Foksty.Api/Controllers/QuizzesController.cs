@@ -7,19 +7,19 @@ public class QuizzesController : BaseController
     [HttpPost]
     public async Task<ActionResult<object>> CreateQuizAsync()
     {
-
+        return null;
     }
 
     [HttpGet]
     public async Task<ActionResult<object>> GetQuizzesAsync()
     {
-
+        return null;
     }
 
     [HttpPost("{id}")]
     public async Task<ActionResult<object>> StartQuizAsync(string id)
     {
-
+        return null;
     }
 
     // Create Quiz
