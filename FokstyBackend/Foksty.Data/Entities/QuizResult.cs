@@ -10,7 +10,7 @@ public class QuizResult : IEntityMetaData
 
     // Navigation properties
     public virtual Quiz Quiz { get; set; }
-    public virtual ICollection<TeamResultQuizResult> TeamsQuizResults { get; set; }
+    public virtual ICollection<TeamResultQuizResult> TeamResultsQuizResults { get; set; }
 
     // IEntityMetaData
     public required string Status { get; set; }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using System.Reflection.Emit;
 
 namespace Foksty.Data;
 
@@ -39,7 +40,10 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
         AddTablePossibleAnswer(builder);
 
         AddTableQuizResults(builder);
-        AddTableTeamResultQuizResults(builder);
+        AddTableTeamResultsQuizResults(builder);
+        AddTableTeamResults(builder);
+
+        AddTableTeams(builder);
     }
 
     private static void AddTableQuizzes(ModelBuilder builder)
@@ -159,13 +163,13 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
         builder.Entity<QuizResult>().Property(p => p.DeletedOn).IsRequired(false);
         builder.Entity<QuizResult>().Property(p => p.DeletedBy).IsRequired(false).HasMaxLength(100);
     }
-    private static void AddTableTeamResultQuizResults(ModelBuilder builder)
+    private static void AddTableTeamResultsQuizResults(ModelBuilder builder)
     {
         // Main
-        builder.Entity<TeamResultQuizResult>().ToTable("TeamResultQuizResults").HasKey(op => new { op.TeamResultId, op.QuizResultId });
+        builder.Entity<TeamResultQuizResult>().ToTable("TeamResultsQuizResults").HasKey(op => new { op.TeamResultId, op.QuizResultId });
 
         // Foreign keys
-        builder.Entity<TeamResultQuizResult>().Property(p => p.TeamResult).IsRequired().HasMaxLength(36);
+        builder.Entity<TeamResultQuizResult>().Property(p => p.TeamResultId).IsRequired().HasMaxLength(36);
         builder.Entity<TeamResultQuizResult>().Property(p => p.QuizResultId).IsRequired().HasMaxLength(36);
 
         // IEntityMetaData
@@ -180,6 +184,51 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
 
         builder.Entity<TeamResultQuizResult>().Property(p => p.DeletedOn).IsRequired(false);
         builder.Entity<TeamResultQuizResult>().Property(p => p.DeletedBy).IsRequired(false).HasMaxLength(100);
+    }
+    private static void AddTableTeamResults(ModelBuilder builder)
+    {
+        // Main
+        builder.Entity<TeamResult>().ToTable("TeamResults").HasKey(tr => tr.Id);
+        builder.Entity<TeamResult>().Property(p => p.Id).IsRequired().HasMaxLength(36);
+        builder.Entity<TeamResult>().Property(p => p.Score).IsRequired();
+
+        // Foreign keys
+        builder.Entity<TeamResult>().Property(p => p.TeamId).IsRequired().HasMaxLength(36);
+
+        // IEntityMetaData
+        builder.Entity<TeamResult>().Property(p => p.Status).IsRequired().HasMaxLength(50);
+        builder.Entity<TeamResult>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
+
+        builder.Entity<TeamResult>().Property(p => p.CreatedOn).IsRequired();
+        builder.Entity<TeamResult>().Property(p => p.CreatedBy).IsRequired().HasMaxLength(100);
+
+        builder.Entity<TeamResult>().Property(p => p.ModifiedOn).IsRequired(false);
+        builder.Entity<TeamResult>().Property(p => p.ModifiedBy).IsRequired(false).HasMaxLength(100);
+
+        builder.Entity<TeamResult>().Property(p => p.DeletedOn).IsRequired(false);
+        builder.Entity<TeamResult>().Property(p => p.DeletedBy).IsRequired(false).HasMaxLength(100);
+    }
+    private static void AddTableTeams(ModelBuilder builder)
+    {
+        // Main
+        builder.Entity<Team>().ToTable("Teams").HasKey(tr => tr.Id);
+        builder.Entity<Team>().Property(p => p.Id).IsRequired().HasMaxLength(36);
+        builder.Entity<Team>().Property(p => p.Title).IsRequired().HasMaxLength(200);
+
+        // Foreign keys
+       
+        // IEntityMetaData
+        builder.Entity<Team>().Property(p => p.Status).IsRequired().HasMaxLength(50);
+        builder.Entity<Team>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
+
+        builder.Entity<Team>().Property(p => p.CreatedOn).IsRequired();
+        builder.Entity<Team>().Property(p => p.CreatedBy).IsRequired().HasMaxLength(100);
+
+        builder.Entity<Team>().Property(p => p.ModifiedOn).IsRequired(false);
+        builder.Entity<Team>().Property(p => p.ModifiedBy).IsRequired(false).HasMaxLength(100);
+
+        builder.Entity<Team>().Property(p => p.DeletedOn).IsRequired(false);
+        builder.Entity<Team>().Property(p => p.DeletedBy).IsRequired(false).HasMaxLength(100);
     }
 }
 

@@ -4,7 +4,7 @@ public class Quiz : IEntityMetaData
 {
     // Main
     public required string Id { get; set; }
-    public string Title { get; set; }
+    public required string Title { get; set; }
     public string Scope { get; set; }
 
     // Navigation properties
@@ -15,7 +15,7 @@ public class Quiz : IEntityMetaData
     public required string Status { get; set; }
     public string? Description { get; set; }
 
-    public DateTime CreatedOn { get; set; }
+    public required DateTime CreatedOn { get; set; }
     public required string CreatedBy { get; set; }
 
     public DateTime? ModifiedOn { get; set; }

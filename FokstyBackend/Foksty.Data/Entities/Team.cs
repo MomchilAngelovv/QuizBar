@@ -4,6 +4,7 @@ public class Team : IEntityMetaData
 {
     // Main
     public string Id { get; set; }
+    public string Title { get; set; }
 
     // Navigation properties
     public virtual ICollection<TeamResult> TeamResults { get; set; }

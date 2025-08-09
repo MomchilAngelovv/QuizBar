@@ -10,28 +10,30 @@ public class QuizzesService(
 {
     public async Task<string> CreateQuizAsync(string createdBy, string title, string scope = null)
     {
-        var newQuiz = new Quiz
+        var quiz = new Quiz
         {
             Id = Guid.CreateVersion7().ToString(),
             Title = title,
             Scope = scope,
+            Status = statuses.Active,
             CreatedBy = createdBy,
-            Status = statuses.Active
+            CreatedOn = DateTime.UtcNow,
         };
 
-        var newChapter = new Chapter
+        var chapter = new Chapter
         {
             Id = Guid.CreateVersion7().ToString(),
             Title = title,
-            CreatedBy = createdBy,
+            QuizId = quiz.Id,
             Status = statuses.Active,
-            QuizId = newQuiz.Id
+            CreatedBy = createdBy,
+            CreatedOn = DateTime.UtcNow,
         };
 
-        await db.Quizzes.AddAsync(newQuiz);
-        await db.Chapters.AddAsync(newChapter);
+        await db.Quizzes.AddAsync(quiz);
+        await db.Chapters.AddAsync(chapter);
         await db.SaveChangesAsync();
-        return newQuiz.Id;
+        return quiz.Id;
     }
 
     public string StartQuizAsync(string id)
