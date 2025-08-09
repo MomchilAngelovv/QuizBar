@@ -3,9 +3,10 @@
 public class Chapter : IEntityMetaData
 {
     // Main
-    public string Id { get; set; }
+    public required string Id { get; set; }
     public string Title { get; set; }
     public string Scope { get; set; }
+    public int ShowOrder { get; set; }
 
     // Foreign keys
     public string QuizId { get; set; }

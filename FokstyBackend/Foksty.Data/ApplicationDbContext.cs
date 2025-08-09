@@ -17,17 +17,10 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
 
     }
 
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        builder.Entity<TeamResultQuizResult>()
-            .HasKey(op => new { op.TeamResultId, op.QuizResultId });
-
-        base .OnModelCreating(builder);
-    }
-
     public DbSet<Quiz> Quizzes { get; set; }
     public DbSet<Chapter> Chapters { get; set; }
     public DbSet<Question> Questions { get; set; }
+    public DbSet<PossibleAnswer> PossibleAnswers { get; set; }
 
     public DbSet<QuizResult> QuizResults { get; set; }
     public DbSet<TeamResultQuizResult> TeamQuizResults { get; set; }
@@ -35,7 +28,159 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
 
     public DbSet<Team> Teams { get; set; }
 
-    //TODO make private methods with explicit definition of entityes and validatins
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        AddTableQuizzes(builder);
+        AddTableChapters(builder);
+        AddTableQuestions(builder);
+        AddTablePossibleAnswer(builder);
+
+        AddTableQuizResults(builder);
+        AddTableTeamResultQuizResults(builder);
+    }
+
+    private static void AddTableQuizzes(ModelBuilder builder)
+    {
+        // Main
+        builder.Entity<Quiz>().ToTable("Quizzes").HasKey(p => p.Id);
+        builder.Entity<Quiz>().Property(p => p.Id).IsRequired().HasMaxLength(36);
+        builder.Entity<Quiz>().Property(p => p.Title).IsRequired().HasMaxLength(200);
+        builder.Entity<Quiz>().Property(p => p.Scope).IsRequired(false).HasMaxLength(200);
+
+        // IEntityMetaData
+        builder.Entity<Quiz>().Property(p => p.Status).IsRequired().HasMaxLength(50);
+        builder.Entity<Quiz>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
+
+        builder.Entity<Quiz>().Property(p => p.CreatedOn).IsRequired();
+        builder.Entity<Quiz>().Property(p => p.CreatedBy).IsRequired().HasMaxLength(100);
+
+        builder.Entity<Quiz>().Property(p => p.ModifiedOn).IsRequired(false);
+        builder.Entity<Quiz>().Property(p => p.ModifiedBy).IsRequired(false).HasMaxLength(100);
+
+        builder.Entity<Quiz>().Property(p => p.DeletedOn).IsRequired(false);
+        builder.Entity<Quiz>().Property(p => p.DeletedBy).IsRequired(false).HasMaxLength(100);
+    }
+    private static void AddTableChapters(ModelBuilder builder)
+    {
+        // Main
+        builder.Entity<Chapter>().ToTable("Chapters").HasKey(p => p.Id);
+        builder.Entity<Chapter>().Property(p => p.Id).IsRequired().HasMaxLength(36);
+        builder.Entity<Chapter>().Property(p => p.Title).IsRequired().HasMaxLength(200);
+        builder.Entity<Chapter>().Property(p => p.Scope).IsRequired(false).HasMaxLength(200);
+        builder.Entity<Chapter>().Property(p => p.ShowOrder).IsRequired();
+
+        // Foreign keys
+        builder.Entity<Chapter>().Property(p => p.QuizId).IsRequired().HasMaxLength(36);
+
+        // IEntityMetaData
+        builder.Entity<Chapter>().Property(p => p.Status).IsRequired().HasMaxLength(50);
+        builder.Entity<Chapter>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
+
+        builder.Entity<Chapter>().Property(p => p.CreatedOn).IsRequired();
+        builder.Entity<Chapter>().Property(p => p.CreatedBy).IsRequired().HasMaxLength(100);
+
+        builder.Entity<Chapter>().Property(p => p.ModifiedOn).IsRequired(false);
+        builder.Entity<Chapter>().Property(p => p.ModifiedBy).IsRequired(false).HasMaxLength(100);
+
+        builder.Entity<Chapter>().Property(p => p.DeletedOn).IsRequired(false);
+        builder.Entity<Chapter>().Property(p => p.DeletedBy).IsRequired(false).HasMaxLength(100);
+    }
+    private static void AddTableQuestions(ModelBuilder builder)
+    {
+        // Main
+        builder.Entity<Question>().ToTable("Questions").HasKey(p => p.Id);
+        builder.Entity<Question>().Property(p => p.Id).IsRequired().HasMaxLength(36);
+        builder.Entity<Question>().Property(p => p.Text).IsRequired().HasMaxLength(500);
+        builder.Entity<Question>().Property(p => p.ShowOrder).IsRequired();
+
+        // Foreign keys
+        builder.Entity<Question>().Property(p => p.ChapterId).IsRequired().HasMaxLength(36);
+
+        // IEntityMetaData
+        builder.Entity<Question>().Property(p => p.Status).IsRequired().HasMaxLength(50);
+        builder.Entity<Question>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
+
+        builder.Entity<Question>().Property(p => p.CreatedOn).IsRequired();
+        builder.Entity<Question>().Property(p => p.CreatedBy).IsRequired().HasMaxLength(100);
+
+        builder.Entity<Question>().Property(p => p.ModifiedOn).IsRequired(false);
+        builder.Entity<Question>().Property(p => p.ModifiedBy).IsRequired(false).HasMaxLength(100);
+
+        builder.Entity<Question>().Property(p => p.DeletedOn).IsRequired(false);
+        builder.Entity<Question>().Property(p => p.DeletedBy).IsRequired(false).HasMaxLength(100);
+    }
+    private static void AddTablePossibleAnswer(ModelBuilder builder)
+    {
+        // Main
+        builder.Entity<PossibleAnswer>().ToTable("PossibleAnswers").HasKey(p => p.Id);
+        builder.Entity<PossibleAnswer>().Property(p => p.Id).IsRequired().HasMaxLength(36);
+        builder.Entity<PossibleAnswer>().Property(p => p.Text).IsRequired().HasMaxLength(500);
+        builder.Entity<PossibleAnswer>().Property(p => p.IsCorrect).IsRequired();
+        builder.Entity<PossibleAnswer>().Property(p => p.ShowOrder).IsRequired();
+
+        // Foreign keys
+        builder.Entity<PossibleAnswer>().Property(p => p.QuestionId).IsRequired().HasMaxLength(36);
+
+        // IEntityMetaData
+        builder.Entity<PossibleAnswer>().Property(p => p.Status).IsRequired().HasMaxLength(50);
+        builder.Entity<PossibleAnswer>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
+
+        builder.Entity<PossibleAnswer>().Property(p => p.CreatedOn).IsRequired();
+        builder.Entity<PossibleAnswer>().Property(p => p.CreatedBy).IsRequired().HasMaxLength(100);
+
+        builder.Entity<PossibleAnswer>().Property(p => p.ModifiedOn).IsRequired(false);
+        builder.Entity<PossibleAnswer>().Property(p => p.ModifiedBy).IsRequired(false).HasMaxLength(100);
+
+        builder.Entity<PossibleAnswer>().Property(p => p.DeletedOn).IsRequired(false);
+        builder.Entity<PossibleAnswer>().Property(p => p.DeletedBy).IsRequired(false).HasMaxLength(100);
+    }
+    private static void AddTableQuizResults(ModelBuilder builder)
+    {
+        // Main
+        builder.Entity<QuizResult>().ToTable("QuizResults").HasKey(p => p.Id);
+        builder.Entity<QuizResult>().Property(p => p.Id).IsRequired().HasMaxLength(36);
+
+        // Foreign keys
+        builder.Entity<QuizResult>().Property(p => p.QuizId).IsRequired().HasMaxLength(36);
+
+        // IEntityMetaData
+        builder.Entity<QuizResult>().Property(p => p.Status).IsRequired().HasMaxLength(50);
+        builder.Entity<QuizResult>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
+
+        builder.Entity<QuizResult>().Property(p => p.CreatedOn).IsRequired();
+        builder.Entity<QuizResult>().Property(p => p.CreatedBy).IsRequired().HasMaxLength(100);
+
+        builder.Entity<QuizResult>().Property(p => p.ModifiedOn).IsRequired(false);
+        builder.Entity<QuizResult>().Property(p => p.ModifiedBy).IsRequired(false).HasMaxLength(100);
+
+        builder.Entity<QuizResult>().Property(p => p.DeletedOn).IsRequired(false);
+        builder.Entity<QuizResult>().Property(p => p.DeletedBy).IsRequired(false).HasMaxLength(100);
+    }
+    private static void AddTableTeamResultQuizResults(ModelBuilder builder)
+    {
+        // Main
+        builder.Entity<TeamResultQuizResult>().ToTable("TeamResultQuizResults").HasKey(op => new { op.TeamResultId, op.QuizResultId });
+
+        // Foreign keys
+        builder.Entity<TeamResultQuizResult>().Property(p => p.TeamResult).IsRequired().HasMaxLength(36);
+        builder.Entity<TeamResultQuizResult>().Property(p => p.QuizResultId).IsRequired().HasMaxLength(36);
+
+        // IEntityMetaData
+        builder.Entity<TeamResultQuizResult>().Property(p => p.Status).IsRequired().HasMaxLength(50);
+        builder.Entity<TeamResultQuizResult>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
+
+        builder.Entity<TeamResultQuizResult>().Property(p => p.CreatedOn).IsRequired();
+        builder.Entity<TeamResultQuizResult>().Property(p => p.CreatedBy).IsRequired().HasMaxLength(100);
+
+        builder.Entity<TeamResultQuizResult>().Property(p => p.ModifiedOn).IsRequired(false);
+        builder.Entity<TeamResultQuizResult>().Property(p => p.ModifiedBy).IsRequired(false).HasMaxLength(100);
+
+        builder.Entity<TeamResultQuizResult>().Property(p => p.DeletedOn).IsRequired(false);
+        builder.Entity<TeamResultQuizResult>().Property(p => p.DeletedBy).IsRequired(false).HasMaxLength(100);
+    }
 }
 
 public class ApplicationDbContextDesignFactory : IDesignTimeDbContextFactory<ApplicationDbContext>

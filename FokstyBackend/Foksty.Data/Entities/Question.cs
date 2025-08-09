@@ -5,12 +5,14 @@ public class Question : IEntityMetaData
     // Main
     public string Id { get; set; }
     public string Text { get; set; }
+    public int ShowOrder { get; set; }
 
     // Foreign keys
     public string ChapterId { get; set; }
 
     // Navigation properties
     public virtual Chapter Chapter { get; set; }
+    public virtual ICollection<PossibleAnswer> PossibleAnswers { get; set; }
 
     // IEntityMetaData
     public required string Status { get; set; }

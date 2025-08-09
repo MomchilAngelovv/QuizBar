@@ -4,7 +4,6 @@ public class QuizResult : IEntityMetaData
 {
     // Main
     public string Id { get; set; }
-    public DateTime OccuredOn { get; set; }
 
     // Foreign keys
     public string QuizId { get; set; }
