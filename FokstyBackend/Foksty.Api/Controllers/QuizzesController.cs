@@ -27,10 +27,10 @@ public class QuizzesController(
         return new ControllerResult<CreateQuizResponse>
         {
             HasError = false,
-            Message = "",
+            Message = "asdasdas",
             Data = new CreateQuizResponse
             {
-
+                Test = "asdasd"
             },
         };
     }
