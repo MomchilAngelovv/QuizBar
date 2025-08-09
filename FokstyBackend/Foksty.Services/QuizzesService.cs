@@ -1,12 +1,11 @@
 ﻿using Foksty.Data;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Foksty.Services;
 
 public class QuizzesService(
     ApplicationDbContext db)
 {
-    public string CreateQuizAsync()
+    public async Task<string> CreateQuizAsync()
     {
         return null;
     }

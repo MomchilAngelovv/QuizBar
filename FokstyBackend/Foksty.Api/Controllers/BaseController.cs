@@ -18,8 +18,11 @@ public class BaseController : ControllerBase
 {
     protected ActionResult ValidationFailed(ValidationResult validationResult)
     {
-        // TODO: Check this seems like deprecated
-        // validationResult.AddToModelState(ModelState);
+        foreach (var error in validationResult.Errors)
+        {
+            ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+        }
+
         return ValidationProblem(ModelState);
     }
 

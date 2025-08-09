@@ -19,9 +19,15 @@ public class AuthController(
 {
     [AllowAnonymous]
     [HttpPost("signup")]
-    public async Task<IActionResult> SignUp(SignUpRequest model)
+    public async Task<IActionResult> SignUp(SignUpRequest request, [FromServices] SignUpRequestValidator requestValidator)
     {
-        var userExists = await userManager.FindByEmailAsync(model.Email);
+        var validationResult = await requestValidator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+        {
+            return ValidationFailed(validationResult);
+        }
+
+        var userExists = await userManager.FindByEmailAsync(request.Email);
         if (userExists is not null)
         {
             return BadRequest("User already exists");
@@ -29,16 +35,16 @@ public class AuthController(
 
         FokstyUser user = new()
         {
-            Email = model.Email,
+            Email = request.Email,
             SecurityStamp = Guid.NewGuid().ToString(),
-            UserName = model.Email,
+            UserName = request.Email,
             EmailConfirmed = true,
             Status = statuses.Active,
-            CreatedBy = model.Email,
+            CreatedBy = request.Email,
             CreatedOn = DateTime.UtcNow
         };
 
-        var createUserResult = await userManager.CreateAsync(user, model.Password);
+        var createUserResult = await userManager.CreateAsync(user, request.Password);
         if (!createUserResult.Succeeded)
         {
             return BadRequest("Failed to create user");
@@ -55,8 +61,14 @@ public class AuthController(
 
     [AllowAnonymous]
     [HttpPost("signin")]
-    public async Task<ActionResult<string>> SignIn(SignInRequest request)
+    public async Task<ActionResult<string>> SignIn(SignInRequest request, [FromServices] SignInRequestValidator requestValidator)
     {
+        var validationResult = await requestValidator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+        {
+            return ValidationFailed(validationResult);
+        }
+
         var user = await userManager.FindByEmailAsync(request.Email);
         if (user is null)
         {

@@ -1,4 +1,6 @@
 ﻿using Foksty.Api.Requests.Quizzes;
+using Foksty.Api.Responses;
+using Foksty.Api.Responses.Quizzes;
 using Foksty.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,10 +10,27 @@ public class QuizzesController(
     QuizzesService quizzesService) : BaseController
 {
     [HttpPost]
-    public async Task<ActionResult<object>> CreateQuizAsync(CreateQuizRequest request)
+    [ProducesResponseType(StatusCodes.Status504GatewayTimeout, Type = typeof(ControllerResult<CreateQuizResponse>))]
+    public async Task<ActionResult<ControllerResult<CreateQuizResponse>>> CreateQuizAsync(CreateQuizRequest request, [FromServices] CreateQuizRequestValidator requestValidator)
     {
+        var validationResult = await requestValidator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+        {
+            return ValidationFailed(validationResult);
+        }
+
+        var newQuiz = await quizzesService.CreateQuizAsync();
+
         // AI Create Quiz
-        return null;
+        return new ControllerResult<CreateQuizResponse>
+        {
+            HasError = false,
+            Message = "",
+            Data = new CreateQuizResponse
+            {
+
+            },
+        };
     }
 
     [HttpGet]
