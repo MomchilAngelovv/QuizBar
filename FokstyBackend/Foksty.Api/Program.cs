@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Scalar.AspNetCore;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -99,6 +100,11 @@ builder.Services.AddTransient<TeamsService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.MapOpenApi("/api/openapi.json");
+app.MapScalarApiReference("/api/scalar", options =>
+{
+    options.OpenApiRoutePattern = "/api/openapi.json";
+});
 app.UseDeveloperExceptionPage();
 app.UseHttpsRedirection();
 app.MapControllers();
