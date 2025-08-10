@@ -27,8 +27,9 @@ public class SeederService(
             {
                 Name = roleName,
                 Description = $"{roleName}_Description",
-                CreatedBy = "Seed",
-                Status = "Active"
+                Status = "Active",
+                CreatedOn = DateTime.UtcNow,
+                CreatedBy = "MomchilAngelov0040@gmail.com",
             };
 
             await roleManager.CreateAsync(role);
@@ -39,7 +40,8 @@ public class SeederService(
             Email = "MomchilAngelov0040@gmail.com",
             UserName = "MomchilAngelov0040@gmail.com",
             CreatedBy = "Seed",
-            Status = "Active"
+            Status = "Active",
+            CreatedOn = DateTime.UtcNow
         };
 
         await userManager.CreateAsync(administrator, "1234567890");
