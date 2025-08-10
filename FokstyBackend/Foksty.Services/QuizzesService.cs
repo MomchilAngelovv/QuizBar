@@ -8,7 +8,7 @@ public class QuizzesService(
     ApplicationDbContext db,
     Statuses statuses)
 {
-    public async Task<string> CreateQuizAsync(string createdBy, string title, string scope = null)
+    public async Task<Quiz> CreateQuizAsync(string createdBy, string title, string scope = null)
     {
         var quiz = new Quiz
         {
@@ -16,8 +16,8 @@ public class QuizzesService(
             Title = title,
             Scope = scope,
             Status = statuses.Active,
-            CreatedBy = createdBy,
             CreatedOn = DateTime.UtcNow,
+            CreatedBy = createdBy
         };
 
         var chapter = new Chapter
@@ -26,14 +26,14 @@ public class QuizzesService(
             Title = title,
             QuizId = quiz.Id,
             Status = statuses.Active,
-            CreatedBy = createdBy,
             CreatedOn = DateTime.UtcNow,
+            CreatedBy = createdBy
         };
 
         await db.Quizzes.AddAsync(quiz);
         await db.Chapters.AddAsync(chapter);
         await db.SaveChangesAsync();
-        return quiz.Id;
+        return quiz;
     }
 
     public string StartQuizAsync(string id)

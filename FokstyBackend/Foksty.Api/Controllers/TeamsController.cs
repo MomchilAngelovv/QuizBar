@@ -1,18 +1,49 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Foksty.Api.Requests.Teams;
+using Foksty.Api.Responses;
+using Foksty.Api.Responses.Teams;
+using Foksty.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Foksty.Api.Controllers;
 
-public class TeamsController : BaseController
+public class TeamsController
+    (TeamsService teamsService) : BaseController
 {
-    [HttpPost]
-    public async Task<ActionResult<object>> CreateTeamAsync()
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetTeamsResponse>))]
+    public async Task<IActionResult> GetTeamsAsync([FromQuery] GetTeamsRequest request, [FromServices] GetTeamsRequestValidator requestValidator)
     {
-        return null;
+        var validationResult = await requestValidator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+        {
+            return ValidationFailed(validationResult);
+        }
+
+        var teams = await teamsService.GetTeamsAsync();
+
+        return ControllerResponse(new GetTeamsResponse
+        {
+            Teams = teams,
+            Page = 1,
+            TotalItems = 50
+        });
     }
 
-    [HttpGet]
-    public async Task<ActionResult<object>> GetTeamsAsync()
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<CreateTeamResponse>))]
+    public async Task<IActionResult> CreateTeamAsync(CreateTeamRequest request, [FromServices] CreateTeamRequestValidator requestValidator)
     {
-        return null;
+        var validationResult = await requestValidator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+        {
+            return ValidationFailed(validationResult);
+        }
+
+        var team = await teamsService.CreateTeamAsync(LoggedInUserEmail, request.Title);
+
+        return ControllerResponse(new CreateTeamResponse
+        {
+            Id = team.Id
+        });
     }
 }

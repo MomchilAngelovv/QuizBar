@@ -1,6 +1,6 @@
 ﻿namespace Foksty.Api.Responses;
 
-public class ControllerResult<T> where T : class
+public class ControllerResponse<T> where T : class
 {
     public required bool HasError { get; set; }
     public string? Message { get; set; }

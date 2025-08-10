@@ -1,9 +1,10 @@
 ﻿using FluentValidation.Results;
 using Foksty.Api.Responses;
-using Foksty.Services.Results;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Security.Claims;
 
 namespace Foksty.Api.Controllers;
 
@@ -16,6 +17,9 @@ namespace Foksty.Api.Controllers;
 [ProducesResponseType(StatusCodes.Status504GatewayTimeout, Type = typeof(ControllerResult))]
 public class BaseController : ControllerBase
 {
+    public string LoggedInUserId => this.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+    public string LoggedInUserEmail => this.User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+
     protected ActionResult ValidationFailed(ValidationResult validationResult)
     {
         foreach (var error in validationResult.Errors)
@@ -26,25 +30,19 @@ public class BaseController : ControllerBase
         return ValidationProblem(ModelState);
     }
 
-    protected IActionResult ControllerResult<TResult>(ServiceResult<TResult> serviceResult)
-      where TResult : class
+    protected IActionResult ControllerResponse<TResult>(
+        TResult data, 
+        bool hasError = default, 
+        string message = default, 
+        HttpStatusCode statusCode = HttpStatusCode.OK) where TResult : class
     {
-        var hasError = false;
-        var errorMessage = default(string);
-
-        if (!string.IsNullOrWhiteSpace(serviceResult.Message))
-        {
-            hasError = true;
-            errorMessage = serviceResult.Message;
-        }
-
-        var controllerResult = new ControllerResult<TResult>()
+        var controllerResult = new ControllerResponse<TResult>()
         {
             HasError = hasError,
-            Message = errorMessage,
-            Data = serviceResult.Data,
+            Message = message,
+            Data = data
         };
 
-        return StatusCode((int)serviceResult.Status, controllerResult);
+        return StatusCode((int)statusCode, controllerResult);
     }
 }

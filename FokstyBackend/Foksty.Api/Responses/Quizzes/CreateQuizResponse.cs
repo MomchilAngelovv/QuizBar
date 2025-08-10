@@ -1,8 +1,6 @@
-﻿using FluentValidation;
-
-namespace Foksty.Api.Responses.Quizzes;
+﻿namespace Foksty.Api.Responses.Quizzes;
 
 public class CreateQuizResponse
 {
-    public string Test { get; set; }
+    public string Id { get; set; }
 }

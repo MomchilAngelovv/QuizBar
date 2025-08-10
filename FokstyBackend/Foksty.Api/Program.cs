@@ -94,6 +94,7 @@ builder.Services.AddSingleton<Roles>();
 
 builder.Services.AddTransient<SeederService>();
 builder.Services.AddTransient<QuizzesService>();
+builder.Services.AddTransient<TeamsService>();
 
 var app = builder.Build();
 
