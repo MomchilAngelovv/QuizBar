@@ -1,6 +1,7 @@
 ﻿using Foksty.Data;
 using Foksty.Data.Entities;
 using Foksty.Shared;
+using Microsoft.EntityFrameworkCore;
 
 namespace Foksty.Services;
 
@@ -8,6 +9,12 @@ public class QuizzesService(
     ApplicationDbContext db,
     Statuses statuses)
 {
+    public async Task<IEnumerable<Quiz>> GetQuizzesAsync()
+    {
+        var quizzes = await db.Quizzes.ToListAsync();
+        return quizzes;
+    }
+
     public async Task<Quiz> CreateQuizAsync(string createdBy, string title, string scope = null)
     {
         var quiz = new Quiz

@@ -12,9 +12,9 @@ namespace Foksty.Api.Controllers;
 [Produces("application/json")]
 [Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-[ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ControllerResult))]
-[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ControllerResult))]
-[ProducesResponseType(StatusCodes.Status504GatewayTimeout, Type = typeof(ControllerResult))]
+[ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ControllerResponse))]
+[ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ControllerResponse))]
+[ProducesResponseType(StatusCodes.Status504GatewayTimeout, Type = typeof(ControllerResponse))]
 public class BaseController : ControllerBase
 {
     public string LoggedInUserId => this.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
@@ -28,6 +28,20 @@ public class BaseController : ControllerBase
         }
 
         return ValidationProblem(ModelState);
+    }
+
+    protected IActionResult ControllerResponse(
+        bool hasError = default,
+        string message = default,
+        HttpStatusCode statusCode = HttpStatusCode.OK)
+    {
+        var controllerResult = new ControllerResponse
+        {
+            HasError = hasError,
+            Message = message,
+        };
+
+        return StatusCode((int)statusCode, controllerResult);
     }
 
     protected IActionResult ControllerResponse<TResult>(

@@ -1,4 +1,6 @@
 ﻿using Foksty.Api.Requests.Auth;
+using Foksty.Api.Responses;
+using Foksty.Api.Responses.Auth;
 using Foksty.Data.Entities;
 using Foksty.Shared;
 using Microsoft.AspNetCore.Authorization;
@@ -6,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 
@@ -19,6 +22,7 @@ public class AuthController(
 {
     [AllowAnonymous]
     [HttpPost("signup")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<SignUpResponse>))]
     public async Task<IActionResult> SignUp(SignUpRequest request, [FromServices] SignUpRequestValidator requestValidator)
     {
         var validationResult = await requestValidator.ValidateAsync(request);
@@ -47,21 +51,25 @@ public class AuthController(
         var createUserResult = await userManager.CreateAsync(user, request.Password);
         if (!createUserResult.Succeeded)
         {
-            return BadRequest("Failed to create user");
+            return ControllerResponse(true, "Failed to create user", HttpStatusCode.BadRequest);
         }
 
         var addUserToRoleResult = await userManager.AddToRoleAsync(user, roles.Default);
         if (!addUserToRoleResult.Succeeded)
         {
-            return BadRequest($"Failed to add user to role { roles.Default }");
+            return ControllerResponse(true, $"Failed to add user to role {roles.Default}", HttpStatusCode.BadRequest);
         }
 
-        return Created();
+        return ControllerResponse(new SignUpResponse
+        {
+
+        });
     }
 
     [AllowAnonymous]
     [HttpPost("signin")]
-    public async Task<ActionResult<string>> SignIn(SignInRequest request, [FromServices] SignInRequestValidator requestValidator)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<SignInResponse>))]
+    public async Task<IActionResult> SignIn(SignInRequest request, [FromServices] SignInRequestValidator requestValidator)
     {
         var validationResult = await requestValidator.ValidateAsync(request);
         if (!validationResult.IsValid)
@@ -72,18 +80,21 @@ public class AuthController(
         var user = await userManager.FindByEmailAsync(request.Email);
         if (user is null)
         {
-            return Unauthorized();
+            return ControllerResponse(true, "Invalid credentials", HttpStatusCode.Unauthorized);
         }
 
         var passwordCheck = await userManager.CheckPasswordAsync(user, request.Password);
         if (passwordCheck is false)
         {
-            return Unauthorized();
+            return ControllerResponse(true, "Invalid credentials", HttpStatusCode.Unauthorized);
         }
 
         string token = CreateToken(user);
 
-        return Ok(token);
+        return ControllerResponse(new SignInResponse
+        {
+            Token = token,
+        });
     }
 
     [HttpPost("profile")]

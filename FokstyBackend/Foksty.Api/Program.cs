@@ -1,6 +1,4 @@
 using FluentValidation;
-using Foksty.Api.Requests;
-using Foksty.Api.Requests.Quizzes;
 using Foksty.Data;
 using Foksty.Data.Entities;
 using Foksty.Services;
