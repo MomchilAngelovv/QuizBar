@@ -100,18 +100,19 @@ builder.Services.AddTransient<TeamsService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseDeveloperExceptionPage();
+app.UseHttpsRedirection();
+app.UseRouting();
+app.UseCors();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapOpenApi("/api/openapi.json");
 app.MapScalarApiReference("/api/scalar", options =>
 {
     options.OpenApiRoutePattern = "/api/openapi.json";
 });
-app.UseDeveloperExceptionPage();
-app.UseHttpsRedirection();
 app.MapControllers();
-app.UseCors();
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapHealthChecks("/health/ready");
+app.MapHealthChecks("api/health/ready");
 
 // Executed once just before application starts
 using var scope = app.Services.CreateScope();
