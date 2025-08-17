@@ -31,7 +31,8 @@ public class TeamsController
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<CreateTeamResponse>))]
-    public async Task<IActionResult> CreateTeamAsync(CreateTeamRequest request, [FromServices] CreateTeamRequestValidator requestValidator)
+    public async Task<IActionResult> CreateTeamAsync(
+        CreateTeamRequest request, [FromServices] CreateTeamRequestValidator requestValidator)
     {
         var validationResult = await requestValidator.ValidateAsync(request);
         if (!validationResult.IsValid)
@@ -39,7 +40,7 @@ public class TeamsController
             return ValidationFailed(validationResult);
         }
 
-        var team = await teamsService.CreateTeamAsync(LoggedInUserEmail, request.Title);
+        var team = await teamsService.CreateTeamAsync(UserId, request.Title);
 
         return ControllerResponse(new CreateTeamResponse
         {

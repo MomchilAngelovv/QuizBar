@@ -55,7 +55,7 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
         builder.Entity<Quiz>().Property(p => p.Scope).IsRequired(false).HasMaxLength(200);
 
         // IEntityMetaData
-        builder.Entity<Quiz>().Property(p => p.Status).IsRequired().HasMaxLength(50);
+        builder.Entity<Quiz>().Property(p => p.Status).IsRequired();
         builder.Entity<Quiz>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
 
         builder.Entity<Quiz>().Property(p => p.CreatedOn).IsRequired();
@@ -74,13 +74,13 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
         builder.Entity<Chapter>().Property(p => p.Id).IsRequired().HasMaxLength(36);
         builder.Entity<Chapter>().Property(p => p.Title).IsRequired().HasMaxLength(200);
         builder.Entity<Chapter>().Property(p => p.Scope).IsRequired(false).HasMaxLength(200);
-        builder.Entity<Chapter>().Property(p => p.ShowOrder).IsRequired();
+        builder.Entity<Chapter>().Property(p => p.Priority).IsRequired();
 
         // Foreign keys
         builder.Entity<Chapter>().Property(p => p.QuizId).IsRequired().HasMaxLength(36);
 
         // IEntityMetaData
-        builder.Entity<Chapter>().Property(p => p.Status).IsRequired().HasMaxLength(50);
+        builder.Entity<Chapter>().Property(p => p.Status).IsRequired();
         builder.Entity<Chapter>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
 
         builder.Entity<Chapter>().Property(p => p.CreatedOn).IsRequired();
@@ -104,7 +104,7 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
         builder.Entity<Question>().Property(p => p.ChapterId).IsRequired().HasMaxLength(36);
 
         // IEntityMetaData
-        builder.Entity<Question>().Property(p => p.Status).IsRequired().HasMaxLength(50);
+        builder.Entity<Question>().Property(p => p.Status).IsRequired();
         builder.Entity<Question>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
 
         builder.Entity<Question>().Property(p => p.CreatedOn).IsRequired();
@@ -129,7 +129,7 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
         builder.Entity<PossibleAnswer>().Property(p => p.QuestionId).IsRequired().HasMaxLength(36);
 
         // IEntityMetaData
-        builder.Entity<PossibleAnswer>().Property(p => p.Status).IsRequired().HasMaxLength(50);
+        builder.Entity<PossibleAnswer>().Property(p => p.Status).IsRequired();
         builder.Entity<PossibleAnswer>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
 
         builder.Entity<PossibleAnswer>().Property(p => p.CreatedOn).IsRequired();
@@ -151,7 +151,7 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
         builder.Entity<QuizResult>().Property(p => p.QuizId).IsRequired().HasMaxLength(36);
 
         // IEntityMetaData
-        builder.Entity<QuizResult>().Property(p => p.Status).IsRequired().HasMaxLength(50);
+        builder.Entity<QuizResult>().Property(p => p.Status).IsRequired();
         builder.Entity<QuizResult>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
 
         builder.Entity<QuizResult>().Property(p => p.CreatedOn).IsRequired();
@@ -173,7 +173,7 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
         builder.Entity<TeamResultQuizResult>().Property(p => p.QuizResultId).IsRequired().HasMaxLength(36);
 
         // IEntityMetaData
-        builder.Entity<TeamResultQuizResult>().Property(p => p.Status).IsRequired().HasMaxLength(50);
+        builder.Entity<TeamResultQuizResult>().Property(p => p.Status).IsRequired();
         builder.Entity<TeamResultQuizResult>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
 
         builder.Entity<TeamResultQuizResult>().Property(p => p.CreatedOn).IsRequired();
@@ -196,7 +196,7 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
         builder.Entity<TeamResult>().Property(p => p.TeamId).IsRequired().HasMaxLength(36);
 
         // IEntityMetaData
-        builder.Entity<TeamResult>().Property(p => p.Status).IsRequired().HasMaxLength(50);
+        builder.Entity<TeamResult>().Property(p => p.Status).IsRequired();
         builder.Entity<TeamResult>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
 
         builder.Entity<TeamResult>().Property(p => p.CreatedOn).IsRequired();
@@ -218,7 +218,7 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
         // Foreign keys
        
         // IEntityMetaData
-        builder.Entity<Team>().Property(p => p.Status).IsRequired().HasMaxLength(50);
+        builder.Entity<Team>().Property(p => p.Status).IsRequired();
         builder.Entity<Team>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
 
         builder.Entity<Team>().Property(p => p.CreatedOn).IsRequired();

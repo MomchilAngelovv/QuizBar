@@ -88,8 +88,6 @@ builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 // Custom services
 builder.Services.AddSingleton<ApplicationConstants>();
-builder.Services.AddSingleton<Statuses>();
-builder.Services.AddSingleton<Roles>();
 
 builder.Services.AddTransient<SeederService>();
 builder.Services.AddTransient<QuizzesService>();

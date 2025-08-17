@@ -15,15 +15,15 @@ using System.Text;
 namespace Foksty.Api.Controllers;
 
 public class AuthController(
-    Statuses statuses,
-    Roles roles,
+    Role roles,
     UserManager<FokstyUser> userManager,
     IConfiguration configuration) : BaseController
 {
     [AllowAnonymous]
     [HttpPost("signup")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<SignUpResponse>))]
-    public async Task<IActionResult> SignUp(SignUpRequest request, [FromServices] SignUpRequestValidator requestValidator)
+    public async Task<IActionResult> SignUp(
+        SignUpRequest request, [FromServices] SignUpRequestValidator requestValidator)
     {
         var validationResult = await requestValidator.ValidateAsync(request);
         if (!validationResult.IsValid)
@@ -43,7 +43,7 @@ public class AuthController(
             SecurityStamp = Guid.NewGuid().ToString(),
             UserName = request.Email,
             EmailConfirmed = true,
-            Status = statuses.Active,
+            Status = Status.Active,
             CreatedBy = request.Email,
             CreatedOn = DateTime.UtcNow
         };

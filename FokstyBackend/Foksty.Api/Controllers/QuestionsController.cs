@@ -12,15 +12,10 @@ public class QuestionsController(
 {
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<CreateQuestionResponse>))]
-    public async Task<IActionResult> CreateQuestionAsync(CreateQuestionRequest request, [FromServices] CreateQuestionRequestValidator requestValidator)
+    public async Task<IActionResult> CreateQuestionAsync(
+        CreateQuestionRequest request, [FromServices] CreateQuestionRequestValidator requestValidator)
     {
-        //var validationResult = await requestValidator.ValidateAsync(request);
-        //if (!validationResult.IsValid)
-        //{
-        //    return ValidationFailed(validationResult);
-        //}
-
-        var validationResult = this.ValidateRequest(requestValidator, request);
+        var validationResult = await requestValidator.ValidateAsync(request);
         if (!validationResult.IsValid)
         {
             return ValidationFailed(validationResult);
@@ -30,7 +25,7 @@ public class QuestionsController(
         {
             Text = request.Text,
             Type = request.Type,
-            ShowOrder = request.ShowOrder,
+            Priority = request.Priority,
             ChapterId = request.ChapterId,
             PossibleAnswers = request.PossibleAnswers.Select(pa => 
                 new CreateQuestionPossibleAnswerServiceInput
@@ -43,6 +38,10 @@ public class QuestionsController(
         };
 
         var serviceResult = await questionsService.CreateQuestionAsync(serviceInput);
+        if (!serviceResult.Success)
+        {
+            // Handle error
+        }
 
         return ControllerResponse(new CreateQuestionResponse
         {

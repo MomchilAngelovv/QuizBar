@@ -2,7 +2,7 @@
 
 public interface IEntityMetaData
 {
-    public string Status { get; set; }
+    public int Status { get; set; }
     public string? Description { get; set; }
 
     public DateTime CreatedOn { get; set; }

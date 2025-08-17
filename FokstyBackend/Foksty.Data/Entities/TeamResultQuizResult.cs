@@ -16,7 +16,7 @@ public class TeamResultQuizResult : IEntityMetaData
     public required string Status { get; set; }
     public string? Description { get; set; }
 
-    public DateTime CreatedOn { get; set; }
+    public required DateTime CreatedOn { get; set; }
     public required string CreatedBy { get; set; }
 
     public DateTime? ModifiedOn { get; set; }

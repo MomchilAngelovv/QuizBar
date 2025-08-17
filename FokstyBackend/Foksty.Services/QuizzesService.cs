@@ -1,13 +1,15 @@
 ﻿using Foksty.Data;
 using Foksty.Data.Entities;
+using Foksty.Services.Inputs.Quizzes;
+using Foksty.Services.Results;
+using Foksty.Services.Results.Quizzes;
 using Foksty.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace Foksty.Services;
 
 public class QuizzesService(
-    ApplicationDbContext db,
-    Statuses statuses)
+    ApplicationDbContext db)
 {
     public async Task<IEnumerable<Quiz>> GetQuizzesAsync()
     {
@@ -15,33 +17,42 @@ public class QuizzesService(
         return quizzes;
     }
 
-    public async Task<Quiz> CreateQuizAsync(string createdBy, string title, string scope = null)
+    public async Task<ServiceResult<CreateQuizServiceResult>> CreateQuizAsync(CreateQuizServiceInput input)
     {
         var quiz = new Quiz
         {
             Id = Guid.CreateVersion7().ToString(),
-            Title = title,
-            Scope = scope,
-            Status = statuses.Active,
+            Title = input.Title,
+            Scope = input.Scope,
+            Status = (int)Status.Active,
             CreatedOn = DateTime.UtcNow,
-            CreatedBy = createdBy
+            CreatedBy = input.CreatedBy
         };
 
         var chapter = new Chapter
         {
             Id = Guid.CreateVersion7().ToString(),
-            Title = title,
-            ShowOrder = 1,
+            Title = input.Title,
             QuizId = quiz.Id,
-            Status = statuses.Active,
+            Status = (int)Status.Active,
             CreatedOn = DateTime.UtcNow,
-            CreatedBy = createdBy
+            CreatedBy = input.CreatedBy
         };
 
         await db.Quizzes.AddAsync(quiz);
         await db.Chapters.AddAsync(chapter);
         await db.SaveChangesAsync();
-        return quiz;
+
+        var serviceResult = new ServiceResult<CreateQuizServiceResult>
+        {
+            Success = true,
+            Data = new CreateQuizServiceResult
+            {
+                Id = quiz.Id,
+            }
+        };
+
+        return serviceResult;
     }
 
     public string StartQuizAsync(string id)

@@ -4,13 +4,12 @@ using Foksty.Services.Inputs.Questions;
 using Foksty.Services.Results;
 using Foksty.Services.Results.Questions;
 using Foksty.Shared;
-using Npgsql.Internal;
 
 namespace Foksty.Services;
 
 public class QuestionsService(
      ApplicationDbContext db,
-     Statuses statuses)
+     Status statuses)
 {
     public async Task<ServiceResult<CreateQuestionServiceResult>> CreateQuestionAsync(CreateQuestionServiceInput input)
     {
@@ -19,15 +18,27 @@ public class QuestionsService(
             Id = Guid.CreateVersion7().ToString(),
             Type = input.Type,
             Text = input.Text,
-            ShowOrder = input.ShowOrder,
+            ShowPriority = input.ShowOrder,
             ChapterId = input.ChapterId,
             Status = statuses.Active,
             CreatedOn = DateTime.UtcNow,
             CreatedBy = input.CreatedBy
         };
 
-        foreach (var possibleAnswer in possibleAnswers)
+        foreach (var pa in input.PossibleAnswers)
         {
+            var possibleAnswer = new PossibleAnswer
+            {
+                Id = Guid.CreateVersion7().ToString(),
+                Text = pa.Text,
+                IsCorrect = pa.IsCorrect,
+                ShowOrder = pa.ShowOrder,
+                QuestionId = question.Id,
+                Status = statuses.Active,
+                CreatedOn = DateTime.UtcNow,
+                CreatedBy = input.CreatedBy
+            };
+
             question.PossibleAnswers.Add(possibleAnswer);
         }
 

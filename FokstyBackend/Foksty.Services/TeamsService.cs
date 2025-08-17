@@ -7,7 +7,7 @@ namespace Foksty.Services;
 
 public class TeamsService(
     ApplicationDbContext db,
-    Statuses statuses)
+    Status statuses)
 {
     public async Task<IEnumerable<Team>> GetTeamsAsync()
     {

@@ -3,10 +3,10 @@
 public class Question : IEntityMetaData
 {
     // Main
-    public string Id { get; set; }
-    public string Type { get; set; }
-    public string Text { get; set; }
-    public int ShowOrder { get; set; }
+    public required string Id { get; set; }
+    public required string Type { get; set; }
+    public required string Text { get; set; }
+    public int ShowPriority { get; set; }
 
     // Foreign keys
     public string ChapterId { get; set; }
@@ -19,7 +19,7 @@ public class Question : IEntityMetaData
     public required string Status { get; set; }
     public string? Description { get; set; }
 
-    public DateTime CreatedOn { get; set; }
+    public required DateTime CreatedOn { get; set; }
     public required string CreatedBy { get; set; }
 
     public DateTime? ModifiedOn { get; set; }

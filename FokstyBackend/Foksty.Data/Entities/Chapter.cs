@@ -6,7 +6,7 @@ public class Chapter : IEntityMetaData
     public required string Id { get; set; }
     public required string Title { get; set; }
     public string Scope { get; set; }
-    public int ShowOrder { get; set; }
+    public int Priority { get; set; }
 
     // Foreign keys
     public required string QuizId { get; set; }
@@ -16,7 +16,7 @@ public class Chapter : IEntityMetaData
     public virtual ICollection<Question> Questions { get; set; }
 
     // IEntityMetaData
-    public required string Status { get; set; }
+    public required int Status { get; set; }
     public string? Description { get; set; }
 
     public required DateTime CreatedOn { get; set; }

@@ -3,13 +3,13 @@
 public class PossibleAnswer : IEntityMetaData
 {
     // Main
-    public string Id { get; set; }
-    public string Text { get; set; }
-    public bool IsCorrect { get; set; }
-    public int ShowOrder { get; set; }
+    public required string Id { get; set; }
+    public required string Text { get; set; }
+    public required bool IsCorrect { get; set; }
+    public int ShowPriority { get; set; }
 
     // Foreign keys
-    public string QuestionId { get; set; }
+    public required string QuestionId { get; set; }
 
     // Navigation properties
     public virtual Question Question { get; set; }
@@ -18,7 +18,7 @@ public class PossibleAnswer : IEntityMetaData
     public required string Status { get; set; }
     public string? Description { get; set; }
 
-    public DateTime CreatedOn { get; set; }
+    public required DateTime CreatedOn { get; set; }
     public required string CreatedBy { get; set; }
 
     public DateTime? ModifiedOn { get; set; }

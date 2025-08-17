@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Foksty.Services;
 
 public class SeederService(
-    Roles roles,
+    Role roles,
     ApplicationDbContext db,
     UserManager<FokstyUser> userManager,
     RoleManager<FokstyRole> roleManager)

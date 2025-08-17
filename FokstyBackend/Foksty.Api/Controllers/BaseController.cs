@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-using FluentValidation.Results;
-using Foksty.Api.Requests;
+﻿using FluentValidation.Results;
 using Foksty.Api.Responses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -21,20 +19,6 @@ public class BaseController : ControllerBase
 {
     public string UserId => this.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
     public string UserEmail => this.User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
-
-    protected ValidatedRequest<TRequest> ValidateRequest<TRequest>(AbstractValidator<TRequest> requestValidator, TRequest request) where TRequest : class
-    {
-        var validationResult = requestValidator.Validate(request);
-        if (!validationResult.IsValid)
-        {
-            return ValidationFailed(validationResult);
-        }
-
-        return new ValidatedRequest<TRequest>
-        {
-            ValidatedRequest = request
-        };
-    }
 
     protected ActionResult ValidationFailed(ValidationResult validationResult)
     {

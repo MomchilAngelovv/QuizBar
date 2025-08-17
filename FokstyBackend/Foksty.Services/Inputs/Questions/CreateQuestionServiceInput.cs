@@ -1,13 +1,15 @@
-﻿namespace Foksty.Services.Inputs.Questions;
+﻿using Foksty.Shared;
+
+namespace Foksty.Services.Inputs.Questions;
 
 public class CreateQuestionServiceInput : IServiceInput
 {
-    public string Text { get; set; }
-    public string Type { get; set; }
-    public int ShowOrder { get; set; }
-    public string ChapterId { get; set; }
+    public required string Text { get; set; }
+    public required QuestionType Type { get; set; }
+    public int Priority { get; set; }
+    public required string ChapterId { get; set; }
     public IEnumerable<CreateQuestionPossibleAnswerServiceInput> PossibleAnswers { get; set; }
 
     //IServiceInput
-    public string CreatedBy { get; set; }
+    public required string CreatedBy { get; set; }
 }

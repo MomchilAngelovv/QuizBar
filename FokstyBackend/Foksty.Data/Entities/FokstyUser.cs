@@ -5,7 +5,7 @@ namespace Foksty.Data.Entities;
 public class FokstyUser : IdentityUser<string>, IEntityMetaData
 {
     // IEntityMetaData
-    public required string Status { get; set; }
+    public required int Status { get; set; }
     public string? Description { get; set; }
 
     public required DateTime CreatedOn { get; set; }

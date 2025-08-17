@@ -12,7 +12,7 @@ public class Quiz : IEntityMetaData
     public virtual ICollection<QuizResult> QuizResults { get; set; }
 
     // IEntityMetaData
-    public required string Status { get; set; }
+    public required int Status { get; set; }
     public string? Description { get; set; }
 
     public required DateTime CreatedOn { get; set; }
