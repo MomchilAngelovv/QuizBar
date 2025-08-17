@@ -15,7 +15,6 @@ using System.Text;
 namespace Foksty.Api.Controllers;
 
 public class AuthController(
-    Role roles,
     UserManager<FokstyUser> userManager,
     IConfiguration configuration) : BaseController
 {

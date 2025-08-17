@@ -10,10 +10,10 @@ namespace Foksty.Api.Controllers;
 public class QuizzesController(
     QuizzesService quizzesService) : BaseController
 {
-    [HttpGet]
+    [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetQuizResponse>))]
     public async Task<IActionResult> GetQuizAsync(
-        [FromQuery] GetQuizRequest request, [FromServices] GetQuizRequestValidator requestValidator)
+        [FromRoute] GetQuizRequest request, [FromServices] GetQuizRequestValidator requestValidator)
     {
         var validationResult = await requestValidator.ValidateAsync(request);
         if (!validationResult.IsValid)
@@ -21,7 +21,11 @@ public class QuizzesController(
             return ValidationFailed(validationResult);
         }
 
-        var serviceResult = await quizzesService.GetQuizAsync();
+        var serviceResult = await quizzesService.GetQuizAsync(request.Id);
+        if (serviceResult.Data is null)
+        {
+            return ControllerResponse(false, "Quiz not found", System.Net.HttpStatusCode.NotFound);
+        }
 
         return ControllerResponse(new GetQuizResponse
         {

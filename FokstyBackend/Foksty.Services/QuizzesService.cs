@@ -11,30 +11,24 @@ namespace Foksty.Services;
 public class QuizzesService(
     ApplicationDbContext db)
 {
-    public async Task<ServiceResult<GetQuizServiceResult>> GetQuizAsync(QuizzesFilter filter = null)
+    public async Task<ServiceResult<GetQuizServiceResult>> GetQuizAsync(string id)
     {
-        var query = db.Quizzes.AsQueryable();
-
-        if (filter == null) 
-        {
-            if (!string.IsNullOrWhiteSpace(filter.Id))
-            {
-                query = query.Where(q => q.Id == filter.Id);
-            }
-        }
-
-        var quiz = await query.FirstOrDefaultAsync();
+        var quiz = await db.Quizzes.FirstOrDefaultAsync(q => q.Id == id);
 
         var serviceResult = new ServiceResult<GetQuizServiceResult>
         {
-            Success = true,
-            Data = new GetQuizServiceResult
+            Success = true
+        };
+
+        if (quiz is not null)
+        {
+            serviceResult.Data = new GetQuizServiceResult
             {
                 Id = quiz.Id,
                 Title = quiz.Title,
                 Scope = quiz.Scope
-            }
-        };
+            };
+        }
 
         return serviceResult;
     }
