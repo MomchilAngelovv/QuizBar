@@ -11,6 +11,30 @@ public class QuizzesController(
     QuizzesService quizzesService) : BaseController
 {
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetQuizResponse>))]
+    public async Task<IActionResult> GetQuizAsync(
+        [FromQuery] GetQuizRequest request, [FromServices] GetQuizRequestValidator requestValidator)
+    {
+        var validationResult = await requestValidator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+        {
+            return ValidationFailed(validationResult);
+        }
+
+        var serviceResult = await quizzesService.GetQuizAsync();
+
+        return ControllerResponse(new GetQuizResponse
+        {
+            Quiz = new GetQuizQuiz 
+            { 
+                Id = serviceResult.Data.Id,
+                Title = serviceResult.Data.Title,
+                Scope = serviceResult.Data.Scope,
+            }
+        });
+    }
+
+    [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetQuizzesResponse>))]
     public async Task<IActionResult> GetQuizzesAsync(
         [FromQuery] GetQuizzesRequest request, [FromServices] GetQuizzesRequestValidator requestValidator)

@@ -2,6 +2,7 @@
 using Foksty.Api.Responses;
 using Foksty.Api.Responses.Teams;
 using Foksty.Services;
+using Foksty.Services.Inputs.Teams;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Foksty.Api.Controllers;
@@ -40,11 +41,17 @@ public class TeamsController
             return ValidationFailed(validationResult);
         }
 
-        var team = await teamsService.CreateTeamAsync(UserId, request.Title);
+        var serviceInput = new CreateTeamServiceInput
+        {
+            Title = request.Title,
+            CreatedBy = UserId
+        };
+
+        var team = await teamsService.CreateTeamAsync(serviceInput);
 
         return ControllerResponse(new CreateTeamResponse
         {
-            Id = team.Id
+            Id = team.Data.Id,
         });
     }
 }
