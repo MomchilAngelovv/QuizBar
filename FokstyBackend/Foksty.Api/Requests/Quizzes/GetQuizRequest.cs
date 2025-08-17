@@ -11,5 +11,6 @@ public class GetQuizRequestValidator : AbstractValidator<GetQuizRequest>
 {
     public GetQuizRequestValidator()
     {
+        RuleFor(x => x.Id).NotEmpty();
     }
 }

@@ -21,7 +21,8 @@ public class QuestionsService(
             ChapterId = input.ChapterId,
             Status = Status.Active,
             CreatedOn = DateTime.UtcNow,
-            CreatedBy = input.CreatedBy
+            CreatedBy = input.CreatedBy,
+            PossibleAnswers = []
         };
 
         foreach (var pa in input.PossibleAnswers)
