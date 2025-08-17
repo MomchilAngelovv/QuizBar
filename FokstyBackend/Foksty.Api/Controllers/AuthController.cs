@@ -54,10 +54,10 @@ public class AuthController(
             return ControllerResponse(true, "Failed to create user", HttpStatusCode.BadRequest);
         }
 
-        var addUserToRoleResult = await userManager.AddToRoleAsync(user, roles.Default);
+        var addUserToRoleResult = await userManager.AddToRoleAsync(user, Role.Default.ToString());
         if (!addUserToRoleResult.Succeeded)
         {
-            return ControllerResponse(true, $"Failed to add user to role {roles.Default}", HttpStatusCode.BadRequest);
+            return ControllerResponse(true, $"Failed to add user to role {Role.Default}", HttpStatusCode.BadRequest);
         }
 
         return ControllerResponse(new SignUpResponse

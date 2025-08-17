@@ -1,8 +1,10 @@
-﻿namespace Foksty.Data.Entities;
+﻿using Foksty.Shared;
+
+namespace Foksty.Data.Entities;
 
 public interface IEntityMetaData
 {
-    public int Status { get; set; }
+    public Status Status { get; set; }
     public string? Description { get; set; }
 
     public DateTime CreatedOn { get; set; }

@@ -6,8 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Foksty.Services;
 
 public class TeamsService(
-    ApplicationDbContext db,
-    Status statuses)
+    ApplicationDbContext db)
 {
     public async Task<IEnumerable<Team>> GetTeamsAsync()
     {
@@ -21,11 +20,11 @@ public class TeamsService(
         {
             Id = Guid.CreateVersion7().ToString(),
             Title = title,
-            Status = statuses.Active,
+            Status = Status.Active,
             CreatedOn = DateTime.UtcNow,
             CreatedBy = createdBy,
         };
-
+        
         await db.Teams.AddAsync(team);
         await db.SaveChangesAsync();
         return team;

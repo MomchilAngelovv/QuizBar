@@ -98,7 +98,7 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
         builder.Entity<Question>().ToTable("Questions").HasKey(p => p.Id);
         builder.Entity<Question>().Property(p => p.Id).IsRequired().HasMaxLength(36);
         builder.Entity<Question>().Property(p => p.Text).IsRequired().HasMaxLength(500);
-        builder.Entity<Question>().Property(p => p.ShowOrder).IsRequired();
+        builder.Entity<Question>().Property(p => p.Priority).IsRequired();
 
         // Foreign keys
         builder.Entity<Question>().Property(p => p.ChapterId).IsRequired().HasMaxLength(36);
@@ -123,7 +123,7 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
         builder.Entity<PossibleAnswer>().Property(p => p.Id).IsRequired().HasMaxLength(36);
         builder.Entity<PossibleAnswer>().Property(p => p.Text).IsRequired().HasMaxLength(500);
         builder.Entity<PossibleAnswer>().Property(p => p.IsCorrect).IsRequired();
-        builder.Entity<PossibleAnswer>().Property(p => p.ShowOrder).IsRequired();
+        builder.Entity<PossibleAnswer>().Property(p => p.Priority).IsRequired();
 
         // Foreign keys
         builder.Entity<PossibleAnswer>().Property(p => p.QuestionId).IsRequired().HasMaxLength(36);

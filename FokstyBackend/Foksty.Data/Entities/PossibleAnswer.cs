@@ -1,4 +1,6 @@
-﻿namespace Foksty.Data.Entities;
+﻿using Foksty.Shared;
+
+namespace Foksty.Data.Entities;
 
 public class PossibleAnswer : IEntityMetaData
 {
@@ -6,7 +8,7 @@ public class PossibleAnswer : IEntityMetaData
     public required string Id { get; set; }
     public required string Text { get; set; }
     public required bool IsCorrect { get; set; }
-    public int ShowPriority { get; set; }
+    public int Priority { get; set; }
 
     // Foreign keys
     public required string QuestionId { get; set; }
@@ -15,7 +17,7 @@ public class PossibleAnswer : IEntityMetaData
     public virtual Question Question { get; set; }
 
     // IEntityMetaData
-    public required string Status { get; set; }
+    public required Status Status { get; set; }
     public string? Description { get; set; }
 
     public required DateTime CreatedOn { get; set; }

@@ -8,8 +8,7 @@ using Foksty.Shared;
 namespace Foksty.Services;
 
 public class QuestionsService(
-     ApplicationDbContext db,
-     Status statuses)
+     ApplicationDbContext db)
 {
     public async Task<ServiceResult<CreateQuestionServiceResult>> CreateQuestionAsync(CreateQuestionServiceInput input)
     {
@@ -18,9 +17,9 @@ public class QuestionsService(
             Id = Guid.CreateVersion7().ToString(),
             Type = input.Type,
             Text = input.Text,
-            ShowPriority = input.ShowOrder,
+            Priority = input.Priority,
             ChapterId = input.ChapterId,
-            Status = statuses.Active,
+            Status = Status.Active,
             CreatedOn = DateTime.UtcNow,
             CreatedBy = input.CreatedBy
         };
@@ -32,9 +31,9 @@ public class QuestionsService(
                 Id = Guid.CreateVersion7().ToString(),
                 Text = pa.Text,
                 IsCorrect = pa.IsCorrect,
-                ShowOrder = pa.ShowOrder,
+                Priority = pa.Priority,
                 QuestionId = question.Id,
-                Status = statuses.Active,
+                Status = Status.Active,
                 CreatedOn = DateTime.UtcNow,
                 CreatedBy = input.CreatedBy
             };

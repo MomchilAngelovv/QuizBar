@@ -1,16 +1,18 @@
-﻿namespace Foksty.Data.Entities;
+﻿using Foksty.Shared;
+
+namespace Foksty.Data.Entities;
 
 public class Team : IEntityMetaData
 {
     // Main
-    public string Id { get; set; }
-    public string Title { get; set; }
+    public required string Id { get; set; }
+    public required string Title { get; set; }
 
     // Navigation properties
     public virtual ICollection<TeamResult> TeamResults { get; set; }
 
     // IEntityMetaData
-    public required string Status { get; set; }
+    public required Status Status { get; set; }
     public string? Description { get; set; }
 
     public required DateTime CreatedOn { get; set; }

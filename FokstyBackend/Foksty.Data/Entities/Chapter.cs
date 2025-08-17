@@ -1,4 +1,6 @@
-﻿namespace Foksty.Data.Entities;
+﻿using Foksty.Shared;
+
+namespace Foksty.Data.Entities;
 
 public class Chapter : IEntityMetaData
 {
@@ -16,7 +18,7 @@ public class Chapter : IEntityMetaData
     public virtual ICollection<Question> Questions { get; set; }
 
     // IEntityMetaData
-    public required int Status { get; set; }
+    public required Status Status { get; set; }
     public string? Description { get; set; }
 
     public required DateTime CreatedOn { get; set; }

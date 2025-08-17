@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Foksty.Shared;
+using Microsoft.AspNetCore.Identity;
 
 namespace Foksty.Data.Entities;
 
 public class FokstyUser : IdentityUser<string>, IEntityMetaData
 {
     // IEntityMetaData
-    public required int Status { get; set; }
+    public required Status Status { get; set; }
     public string? Description { get; set; }
 
     public required DateTime CreatedOn { get; set; }

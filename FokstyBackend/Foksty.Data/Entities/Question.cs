@@ -1,22 +1,24 @@
-﻿namespace Foksty.Data.Entities;
+﻿using Foksty.Shared;
+
+namespace Foksty.Data.Entities;
 
 public class Question : IEntityMetaData
 {
     // Main
     public required string Id { get; set; }
-    public required string Type { get; set; }
+    public required QuestionType Type { get; set; }
     public required string Text { get; set; }
-    public int ShowPriority { get; set; }
+    public int Priority { get; set; }
 
     // Foreign keys
-    public string ChapterId { get; set; }
+    public required string ChapterId { get; set; }
 
     // Navigation properties
     public virtual Chapter Chapter { get; set; }
     public virtual ICollection<PossibleAnswer> PossibleAnswers { get; set; }
 
     // IEntityMetaData
-    public required string Status { get; set; }
+    public required Status Status { get; set; }
     public string? Description { get; set; }
 
     public required DateTime CreatedOn { get; set; }

@@ -1,19 +1,21 @@
-﻿namespace Foksty.Data.Entities;
+﻿using Foksty.Shared;
+
+namespace Foksty.Data.Entities;
 
 public class QuizResult : IEntityMetaData
 {
     // Main
-    public string Id { get; set; }
+    public required string Id { get; set; }
 
     // Foreign keys
-    public string QuizId { get; set; }
+    public required string QuizId { get; set; }
 
     // Navigation properties
     public virtual Quiz Quiz { get; set; }
     public virtual ICollection<TeamResultQuizResult> TeamResultsQuizResults { get; set; }
 
     // IEntityMetaData
-    public required string Status { get; set; }
+    public required Status Status { get; set; }
     public string? Description { get; set; }
 
     public required DateTime CreatedOn { get; set; }

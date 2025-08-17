@@ -118,7 +118,9 @@ using var scope = app.Services.CreateScope();
     await dbContext.Database.MigrateAsync();
 
     var seederService = scope.ServiceProvider.GetRequiredService<SeederService>();
-    await seederService.InitialSeedAdministratorAndRolesAsync();
+    await seederService.SeedAdministratorsAsync();
+    await seederService.SeedRolesAsync();
+    await seederService.AttachAdminstratorsToRolesAsync();
 }
 
 app.Run();

@@ -2,7 +2,7 @@
 
 public class CreateQuestionPossibleAnswerServiceInput
 {
-    public string Text { get; set; }
-    public bool IsCorrect { get; set; }
-    public int ShowOrder { get; set; }
+    public required string Text { get; set; }
+    public required bool IsCorrect { get; set; }
+    public int Priority { get; set; }
 }

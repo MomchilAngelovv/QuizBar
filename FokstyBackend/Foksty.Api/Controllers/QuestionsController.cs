@@ -10,6 +10,7 @@ namespace Foksty.Api.Controllers;
 public class QuestionsController(
     QuestionsService questionsService) : BaseController
 {
+
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<CreateQuestionResponse>))]
     public async Task<IActionResult> CreateQuestionAsync(
@@ -32,7 +33,7 @@ public class QuestionsController(
                 {
                     Text = pa.Text,
                     IsCorrect = pa.IsCorrect,
-                    ShowOrder = pa.ShowOrder
+                    Priority = pa.Priority
                 }),
             CreatedBy = UserId
         };

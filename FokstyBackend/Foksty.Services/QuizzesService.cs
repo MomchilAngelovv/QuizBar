@@ -24,7 +24,7 @@ public class QuizzesService(
             Id = Guid.CreateVersion7().ToString(),
             Title = input.Title,
             Scope = input.Scope,
-            Status = (int)Status.Active,
+            Status = Status.Active,
             CreatedOn = DateTime.UtcNow,
             CreatedBy = input.CreatedBy
         };
@@ -34,7 +34,7 @@ public class QuizzesService(
             Id = Guid.CreateVersion7().ToString(),
             Title = input.Title,
             QuizId = quiz.Id,
-            Status = (int)Status.Active,
+            Status = Status.Active,
             CreatedOn = DateTime.UtcNow,
             CreatedBy = input.CreatedBy
         };

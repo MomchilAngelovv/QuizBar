@@ -7,44 +7,68 @@ using Microsoft.EntityFrameworkCore;
 namespace Foksty.Services;
 
 public class SeederService(
-    Role roles,
     ApplicationDbContext db,
     UserManager<FokstyUser> userManager,
     RoleManager<FokstyRole> roleManager)
 {
-    public async Task InitialSeedAdministratorAndRolesAsync()
+    public async Task SeedAdministratorsAsync()
     {
-        var isDbEmpty = (!await db.Users.AnyAsync()) || (!await db.Roles.AnyAsync());
-        if (!isDbEmpty)
+        var hasUsers = await db.Users.AnyAsync();
+        if (hasUsers)
         {
             return;
         }
 
-        var roleNames = new List<string> { roles.Administrator, roles.Default };
-        foreach (var roleName in roleNames)
+        var administrator = new FokstyUser()
+        {
+            Id = Guid.CreateVersion7().ToString(),
+            Email = "momchilangelov0040@gmail.com",
+            UserName = "momchilangelov0040@gmail.com",
+            CreatedBy = "momchilangelov0040@gmail.com",
+            Status = Status.Active,
+            CreatedOn = DateTime.UtcNow,
+        };
+
+        await userManager.CreateAsync(administrator, "123456");
+    }
+
+    public async Task SeedRolesAsync()
+    {
+        var hasRoles = await db.Roles.AnyAsync();
+        if (hasRoles)
+        {
+            return;
+        }
+
+        var roles = new List<Role> { Role.Default, Role.Administrator };
+        foreach (var r in roles)
         {
             var role = new FokstyRole
             {
-                Name = roleName,
-                Description = $"{roleName}_Description",
-                Status = "Active",
+                Id = Guid.CreateVersion7().ToString(),
+                Name = r.ToString(),
+                Description = r.ToString(),
+                Status = Status.Active,
                 CreatedOn = DateTime.UtcNow,
-                CreatedBy = "MomchilAngelov0040@gmail.com",
+                CreatedBy = "momchilangelov0040@gmail.com",
             };
 
             await roleManager.CreateAsync(role);
         }
+    }
 
-        var administrator = new FokstyUser()
+    public async Task AttachAdminstratorsToRolesAsync()
+    {
+        var adminUser = await userManager.FindByEmailAsync("momchilangelov0040@gmail.com");
+        if (adminUser is null)
         {
-            Email = "MomchilAngelov0040@gmail.com",
-            UserName = "MomchilAngelov0040@gmail.com",
-            CreatedBy = "Seed",
-            Status = "Active",
-            CreatedOn = DateTime.UtcNow
-        };
+            return;
+        }
 
-        await userManager.CreateAsync(administrator, "1234567890");
-        await userManager.AddToRolesAsync(administrator, roleNames);
+        var isInRole = await userManager.IsInRoleAsync(adminUser, Role.Administrator.ToString());
+        if (!isInRole)
+        {
+            await userManager.AddToRolesAsync(adminUser, [Role.Default.ToString(), Role.Administrator.ToString()]);
+        }
     }
 }

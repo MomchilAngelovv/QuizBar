@@ -1,4 +1,6 @@
-﻿namespace Foksty.Data.Entities;
+﻿using Foksty.Shared;
+
+namespace Foksty.Data.Entities;
 
 public class TeamResultQuizResult : IEntityMetaData
 {
@@ -13,7 +15,7 @@ public class TeamResultQuizResult : IEntityMetaData
     public virtual QuizResult QuizResult { get; set; }
 
     // IEntityMetaData
-    public required string Status { get; set; }
+    public required Status Status { get; set; }
     public string? Description { get; set; }
 
     public required DateTime CreatedOn { get; set; }
