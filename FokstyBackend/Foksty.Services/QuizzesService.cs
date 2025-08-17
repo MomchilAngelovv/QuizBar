@@ -31,6 +31,7 @@ public class QuizzesService(
         {
             Id = Guid.CreateVersion7().ToString(),
             Title = title,
+            ShowOrder = 1,
             QuizId = quiz.Id,
             Status = statuses.Active,
             CreatedOn = DateTime.UtcNow,

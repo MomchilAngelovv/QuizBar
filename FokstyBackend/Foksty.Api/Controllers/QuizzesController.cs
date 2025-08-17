@@ -47,8 +47,6 @@ public class QuizzesController(
         });
     }
 
-    
-
     [HttpPost("{id}")]
     public async Task<ActionResult<object>> StartQuizAsync(string id)
     {

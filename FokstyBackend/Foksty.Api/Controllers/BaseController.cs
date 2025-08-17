@@ -1,4 +1,6 @@
-﻿using FluentValidation.Results;
+﻿using FluentValidation;
+using FluentValidation.Results;
+using Foksty.Api.Requests;
 using Foksty.Api.Responses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -17,8 +19,22 @@ namespace Foksty.Api.Controllers;
 [ProducesResponseType(StatusCodes.Status504GatewayTimeout, Type = typeof(ControllerResponse))]
 public class BaseController : ControllerBase
 {
-    public string LoggedInUserId => this.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-    public string LoggedInUserEmail => this.User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+    public string UserId => this.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+    public string UserEmail => this.User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+
+    protected ValidatedRequest<TRequest> ValidateRequest<TRequest>(AbstractValidator<TRequest> requestValidator, TRequest request) where TRequest : class
+    {
+        var validationResult = requestValidator.Validate(request);
+        if (!validationResult.IsValid)
+        {
+            return ValidationFailed(validationResult);
+        }
+
+        return new ValidatedRequest<TRequest>
+        {
+            ValidatedRequest = request
+        };
+    }
 
     protected ActionResult ValidationFailed(ValidationResult validationResult)
     {
@@ -31,13 +47,13 @@ public class BaseController : ControllerBase
     }
 
     protected IActionResult ControllerResponse(
-        bool hasError = default,
+        bool success = false,
         string message = default,
         HttpStatusCode statusCode = HttpStatusCode.OK)
     {
         var controllerResult = new ControllerResponse
         {
-            HasError = hasError,
+            Success = success,
             Message = message,
         };
 
@@ -46,13 +62,13 @@ public class BaseController : ControllerBase
 
     protected IActionResult ControllerResponse<TResult>(
         TResult data, 
-        bool hasError = default, 
-        string message = default, 
+        bool success = true, 
+        string message = default,
         HttpStatusCode statusCode = HttpStatusCode.OK) where TResult : class
     {
         var controllerResult = new ControllerResponse<TResult>()
         {
-            HasError = hasError,
+            Success = success,
             Message = message,
             Data = data
         };

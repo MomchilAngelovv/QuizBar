@@ -4,12 +4,6 @@ namespace Foksty.Data.Entities;
 
 public class FokstyRole : IdentityRole<string>, IEntityMetaData
 {
-    public FokstyRole()
-    {
-        Id = Guid.CreateVersion7().ToString();
-        CreatedOn = DateTime.UtcNow;
-    }
-
     // IEntityMetaData
     public required string Status { get; set; }
     public string? Description { get; set; }
