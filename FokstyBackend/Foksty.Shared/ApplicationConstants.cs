@@ -2,5 +2,5 @@
 
 public class ApplicationConstants
 {
-    public readonly string ApplicationName = "Foksty";
+    public readonly string ApplicationName = "QuizBar";
 }

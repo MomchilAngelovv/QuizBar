@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Foksty.Api.Controllers;
 
-public class TeamsController
-    (TeamsService teamsService) : BaseController
+public class TeamsController(
+    TeamsService teamsService) : BaseController
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetTeamsResponse>))]
