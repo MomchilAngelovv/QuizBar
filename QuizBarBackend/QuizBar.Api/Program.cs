@@ -87,8 +87,6 @@ builder.Services.AddCors(options =>
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 // Custom services
-builder.Services.AddSingleton<ApplicationConstants>();
-
 builder.Services.AddTransient<SeederService>();
 builder.Services.AddTransient<QuizzesService>();
 builder.Services.AddTransient<TeamsService>();

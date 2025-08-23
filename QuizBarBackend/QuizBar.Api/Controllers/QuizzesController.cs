@@ -4,6 +4,7 @@ using QuizBar.Api.Responses;
 using QuizBar.Api.Responses.Quizzes;
 using QuizBar.Services;
 using QuizBar.Services.Inputs.Quizzes;
+using QuizBar.Shared;
 
 namespace QuizBar.Api.Controllers;
 
@@ -50,7 +51,7 @@ public class QuizzesController(
         var serviceResult = await quizzesService.GetQuizAsync(request.Id);
         if (serviceResult.Data is null)
         {
-            return ControllerResponse(false, "Quiz not found", System.Net.HttpStatusCode.NotFound);
+            return ControllerResponse(ValidationErrors.ErrorMessage(Entity.Quiz, ValidationError.NotFound), System.Net.HttpStatusCode.NotFound);
         }
 
         return ControllerResponse(new GetQuizResponse

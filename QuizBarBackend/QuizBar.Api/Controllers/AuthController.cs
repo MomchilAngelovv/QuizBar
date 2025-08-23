@@ -22,7 +22,7 @@ public class AuthController(
     [HttpPost("signup")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<SignUpResponse>))]
     public async Task<IActionResult> SignUp(
-        SignUpRequest request, [FromServices] SignUpRequestValidator requestValidator)
+        [FromBody] SignUpRequest request, [FromServices] SignUpRequestValidator requestValidator)
     {
         var validationResult = await requestValidator.ValidateAsync(request);
         if (!validationResult.IsValid)
@@ -33,11 +33,12 @@ public class AuthController(
         var userExists = await userManager.FindByEmailAsync(request.Email);
         if (userExists is not null)
         {
-            return BadRequest("User already exists");
+            return ControllerResponse(ValidationErrors.ErrorMessage(Entity.User, ValidationError.AlreadyExists), HttpStatusCode.BadRequest);
         }
 
         FokstyUser user = new()
         {
+            Id = Guid.CreateVersion7().ToString(),
             Email = request.Email,
             SecurityStamp = Guid.NewGuid().ToString(),
             UserName = request.Email,
@@ -50,18 +51,18 @@ public class AuthController(
         var createUserResult = await userManager.CreateAsync(user, request.Password);
         if (!createUserResult.Succeeded)
         {
-            return ControllerResponse(true, "Failed to create user", HttpStatusCode.BadRequest);
+            return ControllerResponse(ValidationErrors.ErrorMessage(Entity.User, ValidationError.FailedToCreate), HttpStatusCode.BadRequest);
         }
 
         var addUserToRoleResult = await userManager.AddToRoleAsync(user, Role.Default.ToString());
         if (!addUserToRoleResult.Succeeded)
         {
-            return ControllerResponse(true, $"Failed to add user to role {Role.Default}", HttpStatusCode.BadRequest);
+            return ControllerResponse($"Failed to add user to role {Role.Default}", HttpStatusCode.BadRequest);
         }
 
         return ControllerResponse(new SignUpResponse
         {
-
+            Id = user.Id
         });
     }
 
@@ -80,13 +81,13 @@ public class AuthController(
         var user = await userManager.FindByEmailAsync(request.Email);
         if (user is null)
         {
-            return ControllerResponse(true, "Invalid credentials", HttpStatusCode.Unauthorized);
+            return ControllerResponse("Invalid credentials", HttpStatusCode.Unauthorized);
         }
 
         var passwordCheck = await userManager.CheckPasswordAsync(user, request.Password);
         if (passwordCheck is false)
         {
-            return ControllerResponse(true, "Invalid credentials", HttpStatusCode.Unauthorized);
+            return ControllerResponse("Invalid credentials", HttpStatusCode.Unauthorized);
         }
 
         string token = CreateToken(user);

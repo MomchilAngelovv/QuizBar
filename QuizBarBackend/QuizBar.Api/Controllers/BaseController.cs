@@ -31,13 +31,13 @@ public class BaseController : ControllerBase
     }
 
     protected IActionResult ControllerResponse(
-        bool success = false,
+        // bool success = false,
         string message = default,
         HttpStatusCode statusCode = HttpStatusCode.OK)
     {
         var controllerResult = new ControllerResponse
         {
-            Success = success,
+            Success = false,    
             Message = message,
         };
 

@@ -2,4 +2,5 @@
 
 public class SignUpResponse
 {
+    public required string Id { get; set; }
 }

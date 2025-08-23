@@ -1,6 +1,6 @@
 ﻿namespace QuizBar.Shared;
 
-public class ApplicationConstants
+public static class ApplicationConstants
 {
-    public readonly string ApplicationName = "QuizBar";
+    public static readonly string ApplicationName = "QuizBar";
 }
