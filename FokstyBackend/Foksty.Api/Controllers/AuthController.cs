@@ -68,7 +68,8 @@ public class AuthController(
     [AllowAnonymous]
     [HttpPost("signin")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<SignInResponse>))]
-    public async Task<IActionResult> SignIn(SignInRequest request, [FromServices] SignInRequestValidator requestValidator)
+    public async Task<IActionResult> SignIn(
+        [FromBody] SignInRequest request, [FromServices] SignInRequestValidator requestValidator)
     {
         var validationResult = await requestValidator.ValidateAsync(request);
         if (!validationResult.IsValid)

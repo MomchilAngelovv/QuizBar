@@ -33,7 +33,7 @@ public class TeamsController
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<CreateTeamResponse>))]
     public async Task<IActionResult> CreateTeamAsync(
-        CreateTeamRequest request, [FromServices] CreateTeamRequestValidator requestValidator)
+        [FromBody] CreateTeamRequest request, [FromServices] CreateTeamRequestValidator requestValidator)
     {
         var validationResult = await requestValidator.ValidateAsync(request);
         if (!validationResult.IsValid)

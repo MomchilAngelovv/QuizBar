@@ -81,4 +81,48 @@ public class QuizzesService(
     {
         return null;
     }
+
+    public async Task<ServiceResult<AddTeamsServiceResult>> AddTeamsAsync(AddTeamsServiceInput input)
+    {
+        var quiz = await db.Quizzes.FirstOrDefaultAsync(q => q.Id == input.QuizId);
+        if (quiz is null)
+        {
+            return new ServiceResult<AddTeamsServiceResult>
+            {
+                Success = false,
+                Message = "Quiz not found"
+            };
+        }
+
+
+        var teams = await db.Teams.Where(t => input.TeamIds.Contains(t.Id)).ToListAsync();
+        foreach (var team in teams)
+        {
+            var teamQuizResult = new TeamQuizResult
+            {
+                Id = Guid.CreateVersion7().ToString(),
+                Score = 0,
+                TeamId = team.Id,
+                QuizId = quiz.Id,
+                Status = Status.Active,
+                CreatedOn = DateTime.UtcNow,
+                CreatedBy = input.CreatedBy
+            };
+
+            await db.TeamQuizResults.AddAsync(teamQuizResult);
+        }
+
+        await db.SaveChangesAsync();
+
+        var serviceResult = new ServiceResult<AddTeamsServiceResult>
+        {
+            Success = true,
+            Data = new AddTeamsServiceResult
+            {
+                TeamIds = db.TeamQuizResults.Local.Select(tqr => tqr.Id)
+            }
+        };
+
+        return serviceResult;
+    }
 }

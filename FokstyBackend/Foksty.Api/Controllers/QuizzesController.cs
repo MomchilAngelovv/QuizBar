@@ -10,6 +10,32 @@ namespace Foksty.Api.Controllers;
 public class QuizzesController(
     QuizzesService quizzesService) : BaseController
 {
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetQuizzesResponse>))]
+    public async Task<IActionResult> GetQuizzesAsync(
+        [FromQuery] GetQuizzesRequest request, [FromServices] GetQuizzesRequestValidator requestValidator)
+    {
+        var validationResult = await requestValidator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+        {
+            return ValidationFailed(validationResult);
+        }
+
+        var quizzes = await quizzesService.GetQuizzesAsync();
+
+        return ControllerResponse(new GetQuizzesResponse
+        {
+            Quizzes = quizzes.Select(q => new GetQuizzesQuiz
+            {
+                Id = q.Id,
+                Title = q.Title,
+                Status = q.Status
+            }),
+            Page = 1,
+            TotalItems = 50
+        });
+    }
+
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetQuizResponse>))]
     public async Task<IActionResult> GetQuizAsync(
@@ -38,31 +64,10 @@ public class QuizzesController(
         });
     }
 
-    [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetQuizzesResponse>))]
-    public async Task<IActionResult> GetQuizzesAsync(
-        [FromQuery] GetQuizzesRequest request, [FromServices] GetQuizzesRequestValidator requestValidator)
-    {
-        var validationResult = await requestValidator.ValidateAsync(request);
-        if (!validationResult.IsValid)
-        {
-            return ValidationFailed(validationResult);
-        }
-
-        var quizzes = await quizzesService.GetQuizzesAsync();
-
-        return ControllerResponse(new GetQuizzesResponse
-        {
-            Quizzes = quizzes,
-            Page = 1,
-            TotalItems = 50
-        });
-    }
-
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<CreateQuizResponse>))]
     public async Task<IActionResult> CreateQuizAsync(
-        CreateQuizRequest request, [FromServices] CreateQuizRequestValidator requestValidator)
+        [FromBody] CreateQuizRequest request, [FromServices] CreateQuizRequestValidator requestValidator)
     {
         var validationResult = await requestValidator.ValidateAsync(request);
         if (!validationResult.IsValid)
@@ -85,9 +90,37 @@ public class QuizzesController(
         });
     }
 
-    [HttpPost("{id}")]
+    [HttpPost("{id}/start")]
     public async Task<ActionResult<object>> StartQuizAsync(string id)
     {
         return null;
+    }
+
+    [HttpPost("{quizId:required}/teams")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<AddTeamsResponse>))]
+    public async Task<IActionResult> AddTeamsAsync(
+       [FromRoute] string quizId, [FromBody] AddTeamsRequest request, [FromServices] AddTeamsRequestValidator requestValidator)
+    {
+        request.QuizId = quizId;
+
+        var validationResult = await requestValidator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+        {
+            return ValidationFailed(validationResult);
+        }
+
+        var serviceInput = new AddTeamsServiceInput
+        {
+            QuizId = quizId,
+            TeamIds = request.TeamIds,
+            CreatedBy = UserId
+        };
+
+        var serviceResult = await quizzesService.AddTeamsAsync(serviceInput);
+
+        return ControllerResponse(new AddTeamsResponse
+        {
+            Ids = serviceResult.Data.TeamIds
+        });
     }
 }
