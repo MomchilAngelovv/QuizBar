@@ -2,17 +2,19 @@
 
 namespace Foksty.Data.Entities;
 
-public class TeamResultQuizResult : IEntityMetaData
+public class TeamQuizResult : IEntityMetaData
 {
     // Main
-   
+    public required string Id { get; set; }
+    public required double Score { get; set; }
+
     // Foreign keys
-    public string TeamResultId { get; set; }
-    public string QuizResultId { get; set; }
+    public required string TeamId { get; set; }
+    public required string QuizId { get; set; }
 
     // Navigation properties
-    public virtual TeamResult TeamResult { get; set; }
-    public virtual QuizResult QuizResult { get; set; }
+    public virtual Team Team { get; set; }
+    public virtual Quiz Quiz { get; set; }
 
     // IEntityMetaData
     public required Status Status { get; set; }

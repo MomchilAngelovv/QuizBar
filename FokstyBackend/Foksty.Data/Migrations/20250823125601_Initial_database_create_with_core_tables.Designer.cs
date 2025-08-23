@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Foksty.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250817181607_Initial_database_create_with_core_tables")]
+    [Migration("20250823125601_Initial_database_create_with_core_tables")]
     partial class Initial_database_create_with_core_tables
     {
         /// <inheritdoc />
@@ -80,6 +80,9 @@ namespace Foksty.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("QuizId");
+
+                    b.HasIndex("Title")
+                        .IsUnique();
 
                     b.ToTable("Chapters", (string)null);
                 });
@@ -281,6 +284,9 @@ namespace Foksty.Data.Migrations
 
                     b.HasIndex("QuestionId");
 
+                    b.HasIndex("Text")
+                        .IsUnique();
+
                     b.ToTable("PossibleAnswers", (string)null);
                 });
 
@@ -339,6 +345,9 @@ namespace Foksty.Data.Migrations
 
                     b.HasIndex("ChapterId");
 
+                    b.HasIndex("Text")
+                        .IsUnique();
+
                     b.ToTable("Questions", (string)null);
                 });
 
@@ -388,54 +397,10 @@ namespace Foksty.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Title")
+                        .IsUnique();
+
                     b.ToTable("Quizzes", (string)null);
-                });
-
-            modelBuilder.Entity("Foksty.Data.Entities.QuizResult", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(36)
-                        .HasColumnType("nvarchar(36)");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeletedBy")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("QuizId")
-                        .IsRequired()
-                        .HasMaxLength(36)
-                        .HasColumnType("nvarchar(36)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuizId");
-
-                    b.ToTable("QuizResults", (string)null);
                 });
 
             modelBuilder.Entity("Foksty.Data.Entities.Team", b =>
@@ -483,7 +448,7 @@ namespace Foksty.Data.Migrations
                     b.ToTable("Teams", (string)null);
                 });
 
-            modelBuilder.Entity("Foksty.Data.Entities.TeamResult", b =>
+            modelBuilder.Entity("Foksty.Data.Entities.TeamQuizResult", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(36)
@@ -515,6 +480,11 @@ namespace Foksty.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("QuizId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
                     b.Property<double>("Score")
                         .HasColumnType("float");
 
@@ -528,55 +498,11 @@ namespace Foksty.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("QuizId");
+
                     b.HasIndex("TeamId");
 
-                    b.ToTable("TeamResults", (string)null);
-                });
-
-            modelBuilder.Entity("Foksty.Data.Entities.TeamResultQuizResult", b =>
-                {
-                    b.Property<string>("TeamResultId")
-                        .HasMaxLength(36)
-                        .HasColumnType("nvarchar(36)");
-
-                    b.Property<string>("QuizResultId")
-                        .HasMaxLength(36)
-                        .HasColumnType("nvarchar(36)");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeletedBy")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("TeamResultId", "QuizResultId");
-
-                    b.HasIndex("QuizResultId");
-
-                    b.ToTable("TeamResultsQuizResults", (string)null);
+                    b.ToTable("TeamQuizResults", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -718,45 +644,23 @@ namespace Foksty.Data.Migrations
                     b.Navigation("Chapter");
                 });
 
-            modelBuilder.Entity("Foksty.Data.Entities.QuizResult", b =>
+            modelBuilder.Entity("Foksty.Data.Entities.TeamQuizResult", b =>
                 {
                     b.HasOne("Foksty.Data.Entities.Quiz", "Quiz")
-                        .WithMany("QuizResults")
+                        .WithMany("TeamsQuizzesResults")
                         .HasForeignKey("QuizId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Quiz");
-                });
-
-            modelBuilder.Entity("Foksty.Data.Entities.TeamResult", b =>
-                {
                     b.HasOne("Foksty.Data.Entities.Team", "Team")
-                        .WithMany("TeamResults")
+                        .WithMany("TeamsQuizzesResults")
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Quiz");
+
                     b.Navigation("Team");
-                });
-
-            modelBuilder.Entity("Foksty.Data.Entities.TeamResultQuizResult", b =>
-                {
-                    b.HasOne("Foksty.Data.Entities.QuizResult", "QuizResult")
-                        .WithMany("TeamResultsQuizResults")
-                        .HasForeignKey("QuizResultId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Foksty.Data.Entities.TeamResult", "TeamResult")
-                        .WithMany("TeamResultsQuizResults")
-                        .HasForeignKey("TeamResultId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("QuizResult");
-
-                    b.Navigation("TeamResult");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -824,22 +728,12 @@ namespace Foksty.Data.Migrations
                 {
                     b.Navigation("Chapters");
 
-                    b.Navigation("QuizResults");
-                });
-
-            modelBuilder.Entity("Foksty.Data.Entities.QuizResult", b =>
-                {
-                    b.Navigation("TeamResultsQuizResults");
+                    b.Navigation("TeamsQuizzesResults");
                 });
 
             modelBuilder.Entity("Foksty.Data.Entities.Team", b =>
                 {
-                    b.Navigation("TeamResults");
-                });
-
-            modelBuilder.Entity("Foksty.Data.Entities.TeamResult", b =>
-                {
-                    b.Navigation("TeamResultsQuizResults");
+                    b.Navigation("TeamsQuizzesResults");
                 });
 #pragma warning restore 612, 618
         }

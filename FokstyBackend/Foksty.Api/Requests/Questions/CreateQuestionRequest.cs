@@ -12,6 +12,14 @@ public class CreateQuestionRequest
     public IEnumerable<CreateQuestionPossibleAnswerRequest> PossibleAnswers { get; set; }
 }
 
+//TODO Naming THINK BETTER
+public class CreateQuestionPossibleAnswerRequest
+{
+    public string Text { get; set; }
+    public bool IsCorrect { get; set; }
+    public int Priority { get; set; }
+}
+
 public class CreateQuestionRequestValidator : AbstractValidator<CreateQuestionRequest>
 {
     public CreateQuestionRequestValidator()

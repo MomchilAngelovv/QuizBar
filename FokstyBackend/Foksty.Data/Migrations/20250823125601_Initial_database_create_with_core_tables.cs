@@ -243,10 +243,12 @@ namespace Foksty.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "QuizResults",
+                name: "TeamQuizResults",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
+                    Score = table.Column<double>(type: "float", nullable: false),
+                    TeamId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
                     QuizId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
@@ -259,36 +261,15 @@ namespace Foksty.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_QuizResults", x => x.Id);
+                    table.PrimaryKey("PK_TeamQuizResults", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_QuizResults_Quizzes_QuizId",
+                        name: "FK_TeamQuizResults_Quizzes_QuizId",
                         column: x => x.QuizId,
                         principalTable: "Quizzes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TeamResults",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
-                    Score = table.Column<double>(type: "float", nullable: false),
-                    TeamId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TeamResults", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TeamResults_Teams_TeamId",
+                        name: "FK_TeamQuizResults_Teams_TeamId",
                         column: x => x.TeamId,
                         principalTable: "Teams",
                         principalColumn: "Id",
@@ -320,38 +301,6 @@ namespace Foksty.Data.Migrations
                         name: "FK_Questions_Chapters_ChapterId",
                         column: x => x.ChapterId,
                         principalTable: "Chapters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TeamResultsQuizResults",
-                columns: table => new
-                {
-                    TeamResultId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
-                    QuizResultId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TeamResultsQuizResults", x => new { x.TeamResultId, x.QuizResultId });
-                    table.ForeignKey(
-                        name: "FK_TeamResultsQuizResults_QuizResults_QuizResultId",
-                        column: x => x.QuizResultId,
-                        principalTable: "QuizResults",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TeamResultsQuizResults_TeamResults_TeamResultId",
-                        column: x => x.TeamResultId,
-                        principalTable: "TeamResults",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -430,9 +379,21 @@ namespace Foksty.Data.Migrations
                 column: "QuizId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Chapters_Title",
+                table: "Chapters",
+                column: "Title",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PossibleAnswers_QuestionId",
                 table: "PossibleAnswers",
                 column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PossibleAnswers_Text",
+                table: "PossibleAnswers",
+                column: "Text",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Questions_ChapterId",
@@ -440,19 +401,26 @@ namespace Foksty.Data.Migrations
                 column: "ChapterId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuizResults_QuizId",
-                table: "QuizResults",
+                name: "IX_Questions_Text",
+                table: "Questions",
+                column: "Text",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Quizzes_Title",
+                table: "Quizzes",
+                column: "Title",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeamQuizResults_QuizId",
+                table: "TeamQuizResults",
                 column: "QuizId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TeamResults_TeamId",
-                table: "TeamResults",
+                name: "IX_TeamQuizResults_TeamId",
+                table: "TeamQuizResults",
                 column: "TeamId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TeamResultsQuizResults_QuizResultId",
-                table: "TeamResultsQuizResults",
-                column: "QuizResultId");
         }
 
         /// <inheritdoc />
@@ -477,7 +445,7 @@ namespace Foksty.Data.Migrations
                 name: "PossibleAnswers");
 
             migrationBuilder.DropTable(
-                name: "TeamResultsQuizResults");
+                name: "TeamQuizResults");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -489,16 +457,10 @@ namespace Foksty.Data.Migrations
                 name: "Questions");
 
             migrationBuilder.DropTable(
-                name: "QuizResults");
-
-            migrationBuilder.DropTable(
-                name: "TeamResults");
+                name: "Teams");
 
             migrationBuilder.DropTable(
                 name: "Chapters");
-
-            migrationBuilder.DropTable(
-                name: "Teams");
 
             migrationBuilder.DropTable(
                 name: "Quizzes");
