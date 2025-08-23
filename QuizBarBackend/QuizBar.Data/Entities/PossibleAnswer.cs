@@ -1,0 +1,31 @@
+﻿using QuizBar.Shared;
+
+namespace QuizBar.Data.Entities;
+
+public class PossibleAnswer : IEntityMetaData
+{
+    // Main
+    public required string Id { get; set; }
+    public required string Text { get; set; }
+    public required bool IsCorrect { get; set; }
+    public int Priority { get; set; }
+
+    // Foreign keys
+    public required string QuestionId { get; set; }
+
+    // Navigation properties
+    public virtual Question Question { get; set; }
+
+    // IEntityMetaData
+    public required Status Status { get; set; }
+    public string? Description { get; set; }
+
+    public required DateTime CreatedOn { get; set; }
+    public required string CreatedBy { get; set; }
+
+    public DateTime? ModifiedOn { get; set; }
+    public string? ModifiedBy { get; set; }
+
+    public DateTime? DeletedOn { get; set; }
+    public string? DeletedBy { get; set; }
+}

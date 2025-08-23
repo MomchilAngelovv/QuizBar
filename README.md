@@ -1,2 +1,2 @@
-# Foksty
+# QuizBar
 TBD
