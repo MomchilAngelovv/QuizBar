@@ -13,7 +13,7 @@ public class QuestionsController(
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<CreateQuestionResponse>))]
     public async Task<IActionResult> CreateQuestionAsync(
-        CreateQuestionRequest request, [FromServices] CreateQuestionRequestValidator requestValidator)
+        [FromBody] CreateQuestionRequest request, [FromServices] CreateQuestionRequestValidator requestValidator)
     {
         var validationResult = await requestValidator.ValidateAsync(request);
         if (!validationResult.IsValid)
