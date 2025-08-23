@@ -1,8 +1,6 @@
-﻿using QuizBar.Services.Inputs;
+﻿namespace QuizBar.Services.Inputs.Quizzes;
 
-namespace QuizBar.Services.Inputs.Quizzes;
-
-public class AddTeamsServiceInput : IServiceInput
+public class CreateQuizEventServiceInput : IServiceInput
 {
     public string QuizId { get; set; }
     public IEnumerable<string> TeamIds { get; set; }

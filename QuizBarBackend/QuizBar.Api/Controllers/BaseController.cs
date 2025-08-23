@@ -31,7 +31,6 @@ public class BaseController : ControllerBase
     }
 
     protected IActionResult ControllerResponse(
-        // bool success = false,
         string message = default,
         HttpStatusCode statusCode = HttpStatusCode.OK)
     {

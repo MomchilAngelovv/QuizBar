@@ -33,10 +33,10 @@ public class AuthController(
         var userExists = await userManager.FindByEmailAsync(request.Email);
         if (userExists is not null)
         {
-            return ControllerResponse(ValidationErrors.ErrorMessage(Entity.User, ValidationError.AlreadyExists), HttpStatusCode.BadRequest);
+            return ControllerResponse(ValidationErrors.AlreadyExists("User"), HttpStatusCode.BadRequest);
         }
 
-        FokstyUser user = new()
+        var user = new FokstyUser
         {
             Id = Guid.CreateVersion7().ToString(),
             Email = request.Email,
@@ -51,13 +51,13 @@ public class AuthController(
         var createUserResult = await userManager.CreateAsync(user, request.Password);
         if (!createUserResult.Succeeded)
         {
-            return ControllerResponse(ValidationErrors.ErrorMessage(Entity.User, ValidationError.FailedToCreate), HttpStatusCode.BadRequest);
+            return ControllerResponse(ValidationErrors.FailedToCreateUser(), HttpStatusCode.BadRequest);
         }
 
         var addUserToRoleResult = await userManager.AddToRoleAsync(user, Role.Default.ToString());
         if (!addUserToRoleResult.Succeeded)
         {
-            return ControllerResponse($"Failed to add user to role {Role.Default}", HttpStatusCode.BadRequest);
+            return ControllerResponse(ValidationErrors.FailedToAssignRole(), HttpStatusCode.BadRequest);
         }
 
         return ControllerResponse(new SignUpResponse

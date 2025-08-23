@@ -19,7 +19,7 @@ public class SeederService(
             return;
         }
 
-        var administrator = new FokstyUser()
+        var user = new FokstyUser
         {
             Id = Guid.CreateVersion7().ToString(),
             Email = "momchilangelov0040@gmail.com",
@@ -29,9 +29,8 @@ public class SeederService(
             CreatedOn = DateTime.UtcNow,
         };
 
-        await userManager.CreateAsync(administrator, "123456");
+        await userManager.CreateAsync(user, "123456");
     }
-
     public async Task SeedRolesAsync()
     {
         var hasRoles = await db.Roles.AnyAsync();
@@ -56,8 +55,7 @@ public class SeederService(
             await roleManager.CreateAsync(role);
         }
     }
-
-    public async Task AttachAdminstratorsToRolesAsync()
+    public async Task SeedUserRolesAsync()
     {
         var adminUser = await userManager.FindByEmailAsync("momchilangelov0040@gmail.com");
         if (adminUser is null)
@@ -65,10 +63,16 @@ public class SeederService(
             return;
         }
 
-        var isInRole = await userManager.IsInRoleAsync(adminUser, Role.Administrator.ToString());
-        if (!isInRole)
+        var isInDefaultRole = await userManager.IsInRoleAsync(adminUser, Role.Administrator.ToString());
+        if (!isInDefaultRole)
         {
-            await userManager.AddToRolesAsync(adminUser, [Role.Default.ToString(), Role.Administrator.ToString()]);
+            await userManager.AddToRolesAsync(adminUser, [Role.Default.ToString(), Role.Default.ToString()]);
+        }
+
+        var isInAdministratorRole = await userManager.IsInRoleAsync(adminUser, Role.Administrator.ToString());
+        if (!isInAdministratorRole)
+        {
+            await userManager.AddToRolesAsync(adminUser, [Role.Default.ToString(), Role.Default.ToString()]);
         }
     }
 }

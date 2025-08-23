@@ -16,7 +16,6 @@ public class TeamsService(
         var teams = await db.Teams.ToListAsync();
         return teams;
     }
-
     public async Task<ServiceResult<CreateTeamServiceResult>> CreateTeamAsync(CreateTeamServiceInput input)
     {
         var team = new Team

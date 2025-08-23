@@ -1,11 +1,14 @@
-﻿using QuizBar.Api.Responses;
-using QuizBar.Data.Entities;
-
-namespace QuizBar.Api.Responses.Teams;
+﻿namespace QuizBar.Api.Responses.Teams;
 
 public class GetTeamsResponse : IPaginationResponse
 {
-    public IEnumerable<Team> Teams { get; set; }
-    public int Page { get; set; }
-    public int TotalItems { get; set; }
+    public required IEnumerable<GetTeamsTeam> Teams { get; set; }
+    public required int Page { get; set; }
+    public required int TotalItems { get; set; }
+}
+
+public class GetTeamsTeam
+{
+    public required string Id { get; set; }
+    public required string Title { get; set; }
 }

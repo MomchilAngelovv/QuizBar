@@ -118,7 +118,7 @@ using var scope = app.Services.CreateScope();
     var seederService = scope.ServiceProvider.GetRequiredService<SeederService>();
     await seederService.SeedAdministratorsAsync();
     await seederService.SeedRolesAsync();
-    await seederService.AttachAdminstratorsToRolesAsync();
+    await seederService.SeedUserRolesAsync();
 }
 
 app.Run();

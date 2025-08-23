@@ -12,7 +12,8 @@ public class TeamsController(
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetTeamsResponse>))]
-    public async Task<IActionResult> GetTeamsAsync([FromQuery] GetTeamsRequest request, [FromServices] GetTeamsRequestValidator requestValidator)
+    public async Task<IActionResult> GetTeamsAsync(
+        [FromQuery] GetTeamsRequest request, [FromServices] GetTeamsRequestValidator requestValidator)
     {
         var validationResult = await requestValidator.ValidateAsync(request);
         if (!validationResult.IsValid)
@@ -24,7 +25,11 @@ public class TeamsController(
 
         return ControllerResponse(new GetTeamsResponse
         {
-            Teams = teams,
+            Teams = teams.Select(t => new GetTeamsTeam
+            {
+                Id = t.Id,
+                Title = t.Title,
+            }),
             Page = 1,
             TotalItems = 50
         });

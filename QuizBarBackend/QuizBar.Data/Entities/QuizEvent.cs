@@ -2,19 +2,17 @@
 
 namespace QuizBar.Data.Entities;
 
-public class TeamQuizResult : IEntityMetaData
+public class QuizEvent : IEntityMetaData
 {
     // Main
     public required string Id { get; set; }
-    public required double Score { get; set; }
 
     // Foreign keys
-    public required string TeamId { get; set; }
     public required string QuizId { get; set; }
 
     // Navigation properties
-    public virtual Team Team { get; set; }
     public virtual Quiz Quiz { get; set; }
+    public virtual IEnumerable<TeamResult> TeamsResults { get; set; }
 
     // IEntityMetaData
     public required Status Status { get; set; }

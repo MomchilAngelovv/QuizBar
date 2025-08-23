@@ -24,7 +24,7 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
     public DbSet<PossibleAnswer> PossibleAnswers { get; set; }
 
     // Results
-    public DbSet<TeamQuizResult> TeamQuizResults { get; set; }
+    public DbSet<TeamResult> TeamQuizResults { get; set; }
 
     // Teams
     public DbSet<Team> Teams { get; set; }
@@ -170,26 +170,26 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
     private static void AddTableTeamQuizResults(ModelBuilder builder)
     {
         // Main
-        builder.Entity<TeamQuizResult>().ToTable("TeamQuizResults").HasKey(op => op.Id);
-        builder.Entity<TeamQuizResult>().Property(p => p.Id).IsRequired().HasMaxLength(36);
-        builder.Entity<TeamQuizResult>().Property(p => p.Score).IsRequired();
+        builder.Entity<TeamResult>().ToTable("TeamQuizResults").HasKey(op => op.Id);
+        builder.Entity<TeamResult>().Property(p => p.Id).IsRequired().HasMaxLength(36);
+        builder.Entity<TeamResult>().Property(p => p.Score).IsRequired();
 
         // Foreign keys
-        builder.Entity<TeamQuizResult>().Property(p => p.TeamId).IsRequired().HasMaxLength(36);
-        builder.Entity<TeamQuizResult>().Property(p => p.QuizId).IsRequired().HasMaxLength(36);
+        builder.Entity<TeamResult>().Property(p => p.TeamId).IsRequired().HasMaxLength(36);
+        builder.Entity<TeamResult>().Property(p => p.QuizId).IsRequired().HasMaxLength(36);
 
         // IEntityMetaData
-        builder.Entity<TeamQuizResult>().Property(p => p.Status).IsRequired();
-        builder.Entity<TeamQuizResult>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
+        builder.Entity<TeamResult>().Property(p => p.Status).IsRequired();
+        builder.Entity<TeamResult>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
 
-        builder.Entity<TeamQuizResult>().Property(p => p.CreatedOn).IsRequired();
-        builder.Entity<TeamQuizResult>().Property(p => p.CreatedBy).IsRequired().HasMaxLength(100);
+        builder.Entity<TeamResult>().Property(p => p.CreatedOn).IsRequired();
+        builder.Entity<TeamResult>().Property(p => p.CreatedBy).IsRequired().HasMaxLength(100);
 
-        builder.Entity<TeamQuizResult>().Property(p => p.ModifiedOn).IsRequired(false);
-        builder.Entity<TeamQuizResult>().Property(p => p.ModifiedBy).IsRequired(false).HasMaxLength(100);
+        builder.Entity<TeamResult>().Property(p => p.ModifiedOn).IsRequired(false);
+        builder.Entity<TeamResult>().Property(p => p.ModifiedBy).IsRequired(false).HasMaxLength(100);
 
-        builder.Entity<TeamQuizResult>().Property(p => p.DeletedOn).IsRequired(false);
-        builder.Entity<TeamQuizResult>().Property(p => p.DeletedBy).IsRequired(false).HasMaxLength(100);
+        builder.Entity<TeamResult>().Property(p => p.DeletedOn).IsRequired(false);
+        builder.Entity<TeamResult>().Property(p => p.DeletedBy).IsRequired(false).HasMaxLength(100);
     }
     //private static void AddTableTeamResults(ModelBuilder builder)
     //{
@@ -243,7 +243,7 @@ public class ApplicationDbContextDesignFactory : IDesignTimeDbContextFactory<App
     public ApplicationDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseSqlServer("Server=.;Database=FokstyDb;Trusted_Connection=True;TrustServerCertificate=True");
+            .UseSqlServer("Server=.;Database=QuizBar;Trusted_Connection=True;TrustServerCertificate=True");
 
         return new ApplicationDbContext(optionsBuilder.Options);
     }

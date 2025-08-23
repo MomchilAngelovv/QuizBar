@@ -37,7 +37,7 @@ public class QuizzesController(
         });
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetQuizResponse>))]
     public async Task<IActionResult> GetQuizAsync(
         [FromRoute] GetQuizRequest request, [FromServices] GetQuizRequestValidator requestValidator)
@@ -51,7 +51,7 @@ public class QuizzesController(
         var serviceResult = await quizzesService.GetQuizAsync(request.Id);
         if (serviceResult.Data is null)
         {
-            return ControllerResponse(ValidationErrors.ErrorMessage(Entity.Quiz, ValidationError.NotFound), System.Net.HttpStatusCode.NotFound);
+            return ControllerResponse(ValidationErrors.NotFound("Quiz"), System.Net.HttpStatusCode.NotFound);
         }
 
         return ControllerResponse(new GetQuizResponse
@@ -97,10 +97,10 @@ public class QuizzesController(
         return null;
     }
 
-    [HttpPost("{quizId:required}/teams")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<AddTeamsResponse>))]
-    public async Task<IActionResult> AddTeamsAsync(
-       [FromRoute] string quizId, [FromBody] AddTeamsRequest request, [FromServices] AddTeamsRequestValidator requestValidator)
+    [HttpPost("{quizId:required}/events")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<CreateQuizEventResponse>))]
+    public async Task<IActionResult> AddTeamsToQuizAsync(
+       [FromRoute] string quizId, [FromBody] CreateQuizEventRequest request, [FromServices] CreateQuizEventRequestValidator requestValidator)
     {
         request.QuizId = quizId;
 
@@ -110,18 +110,18 @@ public class QuizzesController(
             return ValidationFailed(validationResult);
         }
 
-        var serviceInput = new AddTeamsServiceInput
+        var serviceInput = new CreateQuizEventServiceInput
         {
             QuizId = quizId,
             TeamIds = request.TeamIds,
             CreatedBy = UserId
         };
 
-        var serviceResult = await quizzesService.AddTeamsAsync(serviceInput);
+        var serviceResult = await quizzesService.CreateQuizEventAsync(serviceInput);
 
-        return ControllerResponse(new AddTeamsResponse
+        return ControllerResponse(new CreateQuizEventResponse
         {
-            Ids = serviceResult.Data.TeamIds
+            Id = serviceResult.Data.Id
         });
     }
 }
