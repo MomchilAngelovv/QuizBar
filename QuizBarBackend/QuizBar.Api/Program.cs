@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using QuizBar.Api.Utilities;
 using QuizBar.Data;
 using QuizBar.Data.Entities;
 using QuizBar.Services;
-using QuizBar.Shared;
 using Scalar.AspNetCore;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -58,7 +58,7 @@ builder.Services.AddIdentity<FokstyUser, FokstyRole>(options =>
 // Controllers
 builder.Services.AddControllers(options =>
 {
-    // options.Filters.Add<EndpointLoggerActionFilter>();
+    options.Filters.Add<ExceptionLogExceptionFilter>();
 })
 .AddJsonOptions(options =>
 {

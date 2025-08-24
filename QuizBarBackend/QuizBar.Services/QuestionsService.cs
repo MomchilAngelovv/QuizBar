@@ -12,6 +12,8 @@ public class QuestionsService(
 {
     public async Task<ServiceResult<CreateQuestionServiceResult>> CreateQuestionAsync(CreateQuestionServiceInput input)
     {
+        var serviceResult = new ServiceResult<CreateQuestionServiceResult>();
+
         var question = new Question
         {
             Id = Guid.CreateVersion7().ToString(),
@@ -45,13 +47,9 @@ public class QuestionsService(
         await db.Questions.AddAsync(question);
         await db.SaveChangesAsync();
 
-        var serviceResult = new ServiceResult<CreateQuestionServiceResult>
+        serviceResult.Result = new CreateQuestionServiceResult
         {
-            Success = true,
-            Data = new CreateQuestionServiceResult
-            {
-                Id = question.Id,
-            }
+            Id = question.Id,
         };
 
         return serviceResult;

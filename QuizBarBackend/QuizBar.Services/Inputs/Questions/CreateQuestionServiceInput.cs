@@ -1,5 +1,4 @@
-﻿using QuizBar.Services.Inputs;
-using QuizBar.Shared;
+﻿using QuizBar.Shared;
 
 namespace QuizBar.Services.Inputs.Questions;
 

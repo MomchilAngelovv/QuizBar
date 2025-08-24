@@ -4,7 +4,9 @@ using QuizBar.Api.Responses;
 using QuizBar.Api.Responses.Quizzes;
 using QuizBar.Services;
 using QuizBar.Services.Inputs.Quizzes;
+using QuizBar.Services.Results;
 using QuizBar.Shared;
+using System.Net;
 
 namespace QuizBar.Api.Controllers;
 
@@ -22,11 +24,16 @@ public class QuizzesController(
             return ValidationFailed(validationResult);
         }
 
-        var quizzes = await quizzesService.GetQuizzesAsync();
+        var filter = new QuizzesFilter
+        {
+            UserId = UserId
+        };
+
+        var servieResult = await quizzesService.GetQuizzesAsync(filter);
 
         return ControllerResponse(new GetQuizzesResponse
         {
-            Quizzes = quizzes.Select(q => new GetQuizzesQuiz
+            Quizzes = servieResult.Result.Quizzes.Select(q => new GetQuizzesQuiz
             {
                 Id = q.Id,
                 Title = q.Title,
@@ -49,18 +56,21 @@ public class QuizzesController(
         }
 
         var serviceResult = await quizzesService.GetQuizAsync(request.Id);
-        if (serviceResult.Data is null)
+        if (serviceResult.Reason != ErrorReason.None)
         {
-            return ControllerResponse(ValidationErrors.NotFound("Quiz"), System.Net.HttpStatusCode.NotFound);
+            if (serviceResult.Reason == ErrorReason.NotFound)
+            {
+                return ControllerResponse(ValidationErrors.NotFound("Quiz"), HttpStatusCode.NotFound);
+            }
         }
 
         return ControllerResponse(new GetQuizResponse
         {
             Quiz = new GetQuizQuiz 
             { 
-                Id = serviceResult.Data.Id,
-                Title = serviceResult.Data.Title,
-                Scope = serviceResult.Data.Scope,
+                Id = serviceResult.Result.Id,
+                Title = serviceResult.Result.Title,
+                Scope = serviceResult.Result.Scope,
                 Teams = []
             }
         });
@@ -88,7 +98,7 @@ public class QuizzesController(
 
         return ControllerResponse(new CreateQuizResponse
         {
-            Id = serviceResult.Data.Id
+            Id = serviceResult.Result.Id
         });
     }
 
@@ -123,7 +133,7 @@ public class QuizzesController(
 
         return ControllerResponse(new CreateQuizEventResponse
         {
-            Id = serviceResult.Data.Id
+            Id = serviceResult.Result.Id
         });
     }
 }

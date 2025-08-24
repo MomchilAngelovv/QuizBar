@@ -4,6 +4,9 @@ using QuizBar.Api.Responses;
 using QuizBar.Api.Responses.Teams;
 using QuizBar.Services;
 using QuizBar.Services.Inputs.Teams;
+using QuizBar.Services.Results;
+using QuizBar.Shared;
+using System.Net;
 
 namespace QuizBar.Api.Controllers;
 
@@ -52,11 +55,46 @@ public class TeamsController(
             UserId = UserId
         };
 
-        var team = await teamsService.CreateTeamAsync(serviceInput);
+        var serviceResult = await teamsService.CreateTeamAsync(serviceInput);
 
         return ControllerResponse(new CreateTeamResponse
         {
-            Id = team.Data.Id,
+            Id = serviceResult.Result.Id,
+        });
+    }
+
+    [HttpPut("{id:required}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<UpdateTeamResponse>))]
+    public async Task<IActionResult> UpdateTeamAsync(
+       [FromRoute] string id, [FromBody] UpdateTeamRequest request, [FromServices] UpdateTeamRequestValidator requestValidator)
+    {
+        request.Id = id;
+
+        var validationResult = await requestValidator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+        {
+            return ValidationFailed(validationResult);
+        }
+
+        var serviceInput = new UpdateTeamServiceInput
+        {
+            TeamId = request.Id,
+            Title = request.Title,
+            UserId = UserId
+        };
+
+        var serviceResult = await teamsService.UpdateTeamAsync(serviceInput);
+        if (serviceResult.Reason != ErrorReason.None)
+        {
+            if (serviceResult.Reason == ErrorReason.NotFound)
+            {
+                return ControllerResponse(ValidationErrors.NotFound("Team"), HttpStatusCode.NotFound);
+            }
+        }
+
+        return ControllerResponse(new UpdateTeamResponse
+        {
+            Id = serviceResult.Result.Id,
         });
     }
 }

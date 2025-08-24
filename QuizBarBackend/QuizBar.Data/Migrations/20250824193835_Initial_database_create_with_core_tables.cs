@@ -67,6 +67,25 @@ namespace QuizBar.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ExceptionLogs",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StackTrace = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Path = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RequestBody = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    QueryString = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RouteValues = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Headers = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExceptionLogs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Quizzes",
                 columns: table => new
                 {
@@ -472,6 +491,9 @@ namespace QuizBar.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "ExceptionLogs");
 
             migrationBuilder.DropTable(
                 name: "PossibleAnswers");

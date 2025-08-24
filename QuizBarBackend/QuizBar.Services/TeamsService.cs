@@ -18,6 +18,8 @@ public class TeamsService(
     }
     public async Task<ServiceResult<CreateTeamServiceResult>> CreateTeamAsync(CreateTeamServiceInput input)
     {
+        var serviceResult = new ServiceResult<CreateTeamServiceResult>();
+
         var team = new Team
         {
             Id = Guid.CreateVersion7().ToString(),
@@ -30,14 +32,34 @@ public class TeamsService(
         await db.Teams.AddAsync(team);
         await db.SaveChangesAsync();
 
-        var serviceResult = new ServiceResult<CreateTeamServiceResult>
+        serviceResult.Result = new CreateTeamServiceResult
         {
-            Success = true,
-            Data = new CreateTeamServiceResult
-            {
-                Id = team.Id,
-            }
+            Id = team.Id,
         };
+
+        return serviceResult;
+    }
+    public async Task<ServiceResult<UpdateTeamServiceResult>> UpdateTeamAsync(UpdateTeamServiceInput input)
+    {
+        var sada = 0;
+        var sadasd = 23 / sada;
+        var serviceResult = new ServiceResult<UpdateTeamServiceResult>();
+
+        var team = await db.Teams.FirstOrDefaultAsync(t => t.Id == input.TeamId);
+        if (team is null)
+        {
+            serviceResult.Reason = ErrorReason.NotFound;
+            return serviceResult;
+        }
+
+        if (!string.IsNullOrWhiteSpace(input.Title))
+        {
+            team.Title = input.Title;
+        }
+
+
+        db.Teams.Update(team);
+        await db.SaveChangesAsync();
 
         return serviceResult;
     }

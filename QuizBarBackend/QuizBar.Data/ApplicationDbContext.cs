@@ -27,6 +27,7 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
 
     public DbSet<Team> Teams { get; set; }
 
+    public DbSet<ExceptionLog> ExceptionLogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -41,6 +42,8 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
         AddTableTeamsQuizEvents(builder);
 
         AddTableTeams(builder);
+
+        AddTableExceptionLogs(builder);
     }
 
     private static void AddTableQuizzes(ModelBuilder builder)
@@ -209,6 +212,15 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
 
         builder.Entity<Team>().Property(p => p.DeletedOn).IsRequired(false);
         builder.Entity<Team>().Property(p => p.DeletedBy).IsRequired(false).HasMaxLength(100);
+    }
+
+    private static void AddTableExceptionLogs(ModelBuilder builder)
+    {
+        // Main
+        builder.Entity<ExceptionLog>().ToTable("ExceptionLogs").HasKey(p => p.Id);
+        builder.Entity<ExceptionLog>().Property(p => p.Id).IsRequired().HasMaxLength(36);
+        builder.Entity<ExceptionLog>().Property(p => p.Message).IsRequired();
+        builder.Entity<ExceptionLog>().Property(p => p.StackTrace).IsRequired();
     }
 }
 

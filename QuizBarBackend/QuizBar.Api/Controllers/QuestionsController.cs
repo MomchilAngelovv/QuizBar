@@ -4,6 +4,7 @@ using QuizBar.Api.Responses;
 using QuizBar.Api.Responses.Questions;
 using QuizBar.Services;
 using QuizBar.Services.Inputs.Questions;
+using QuizBar.Services.Results;
 
 namespace QuizBar.Api.Controllers;
 
@@ -37,14 +38,14 @@ public class QuestionsController(
         };
 
         var serviceResult = await questionsService.CreateQuestionAsync(serviceInput);
-        if (!serviceResult.Success)
+        if (serviceResult.Reason != ErrorReason.None)
         {
             // Handle error
         }
 
         return ControllerResponse(new CreateQuestionResponse
         {
-            Id = serviceResult.Data.Id
+            Id = serviceResult.Result.Id
         });
     }
 }

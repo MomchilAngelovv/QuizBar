@@ -190,6 +190,48 @@ namespace QuizBar.Data.Migrations
                     b.ToTable("Chapters", (string)null);
                 });
 
+            modelBuilder.Entity("QuizBar.Data.Entities.ExceptionLog", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Headers")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("QueryString")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RequestBody")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RouteValues")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StackTrace")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ExceptionLogs", (string)null);
+                });
+
             modelBuilder.Entity("QuizBar.Data.Entities.FokstyRole", b =>
                 {
                     b.Property<string>("Id")
@@ -756,7 +798,7 @@ namespace QuizBar.Data.Migrations
             modelBuilder.Entity("QuizBar.Data.Entities.TeamQuizEvent", b =>
                 {
                     b.HasOne("QuizBar.Data.Entities.QuizEvent", "QuizEvent")
-                        .WithMany("TeamScores")
+                        .WithMany("TeamsQuizEvents")
                         .HasForeignKey("QuizEventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -791,7 +833,7 @@ namespace QuizBar.Data.Migrations
 
             modelBuilder.Entity("QuizBar.Data.Entities.QuizEvent", b =>
                 {
-                    b.Navigation("TeamScores");
+                    b.Navigation("TeamsQuizEvents");
                 });
 
             modelBuilder.Entity("QuizBar.Data.Entities.Team", b =>

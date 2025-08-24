@@ -13,34 +13,59 @@ public class QuizzesService(
 {
     public async Task<ServiceResult<GetQuizServiceResult>> GetQuizAsync(string id)
     {
+        var serviceResult = new ServiceResult<GetQuizServiceResult>();
+
         var quiz = await db.Quizzes.FirstOrDefaultAsync(q => q.Id == id);
-
-        var serviceResult = new ServiceResult<GetQuizServiceResult>
+        if (quiz is null)
         {
-            Success = true
-        };
-
-        if (quiz is not null)
-        {
-            serviceResult.Data = new GetQuizServiceResult
-            {
-                Id = quiz.Id,
-                Title = quiz.Title,
-                Scope = quiz.Scope
-            };
+            serviceResult.Reason = ErrorReason.NotFound;
+            return serviceResult;
         }
+
+        serviceResult.Result = new GetQuizServiceResult
+        {
+            Id = quiz.Id,
+            Title = quiz.Title,
+            Scope = quiz.Scope
+        };
 
         return serviceResult;
     }
 
-    public async Task<IEnumerable<Quiz>> GetQuizzesAsync()
+    public async Task<ServiceResult<GetQuizzesServiceResult>> GetQuizzesAsync(QuizzesFilter filter = null)
     {
-        var quizzes = await db.Quizzes.ToListAsync();
-        return quizzes;
+        var serviceResult = new ServiceResult<GetQuizzesServiceResult>();
+
+        var quizzesQuery = db.Quizzes.AsQueryable();
+
+        if (filter is not null)
+        {
+            if (string.IsNullOrWhiteSpace(filter.UserId))
+            {
+                quizzesQuery = quizzesQuery.Where(q => q.CreatedBy == filter.UserId);
+            }
+        }
+
+        var quizzes = await quizzesQuery.ToListAsync();
+
+        serviceResult.Result = new GetQuizzesServiceResult
+        {
+            Quizzes = quizzes.Select(q => new GetQuizzesQuiz
+            {
+                Id = q.Id,
+                Title = q.Title,
+                Scope = q.Scope,
+                Status = q.Status
+            })
+        };
+
+        return serviceResult;
     }
 
     public async Task<ServiceResult<CreateQuizServiceResult>> CreateQuizAsync(CreateQuizServiceInput input)
     {
+        var serviceResult = new ServiceResult<CreateQuizServiceResult>();
+
         var quiz = new Quiz
         {
             Id = Guid.CreateVersion7().ToString(),
@@ -65,13 +90,9 @@ public class QuizzesService(
         await db.Chapters.AddAsync(chapter);
         await db.SaveChangesAsync();
 
-        var serviceResult = new ServiceResult<CreateQuizServiceResult>
+        serviceResult.Result = new CreateQuizServiceResult
         {
-            Success = true,
-            Data = new CreateQuizServiceResult
-            {
-                Id = quiz.Id,
-            }
+            Id = quiz.Id,
         };
 
         return serviceResult;
@@ -84,14 +105,13 @@ public class QuizzesService(
 
     public async Task<ServiceResult<CreateQuizEventServiceResult>> CreateQuizEventAsync(CreateQuizEventServiceInput input)
     {
+        var serviceResult = new ServiceResult<CreateQuizEventServiceResult>();
+
         var quiz = await db.Quizzes.FirstOrDefaultAsync(q => q.Id == input.QuizId);
         if (quiz is null)
         {
-            return new ServiceResult<CreateQuizEventServiceResult>
-            {
-                Success = false,
-                Message = "Quiz not found"
-            };
+            serviceResult.Reason = ErrorReason.NotFound;
+            return serviceResult;
         }
 
         var quizEvent = new QuizEvent
@@ -125,15 +145,11 @@ public class QuizzesService(
         await db.QuizEvents.AddAsync(quizEvent);
         await db.SaveChangesAsync();
 
-        var serviceResult = new ServiceResult<CreateQuizEventServiceResult>
+        serviceResult.Result = new CreateQuizEventServiceResult
         {
-            Success = true,
-            Data = new CreateQuizEventServiceResult
-            {
-                Id = quizEvent.Id
-            }
+            Id = quizEvent.Id
         };
-
+        
         return serviceResult;
     }
 }

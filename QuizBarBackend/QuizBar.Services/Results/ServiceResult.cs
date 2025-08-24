@@ -2,7 +2,12 @@
 
 public class ServiceResult<TServiceResult> where TServiceResult : class
 {
-    public required bool Success { get; set; }
-    public string? Message { get; set; }
-    public TServiceResult? Data { get; set; }
+    public ErrorReason Reason { get; set; }
+    public TServiceResult? Result { get; set; }
+}
+
+public enum ErrorReason 
+{
+    None = 0,
+    NotFound = 1
 }
