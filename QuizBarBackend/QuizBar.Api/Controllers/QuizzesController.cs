@@ -98,12 +98,12 @@ public class QuizzesController(
         return null;
     }
 
-    [HttpPost("{quizId:required}/events")]
+    [HttpPost("{id:required}/events")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<CreateQuizEventResponse>))]
     public async Task<IActionResult> AddTeamsToQuizAsync(
-       [FromRoute] string quizId, [FromBody] CreateQuizEventRequest request, [FromServices] CreateQuizEventRequestValidator requestValidator)
+       [FromRoute] string id, [FromBody] CreateQuizEventRequest request, [FromServices] CreateQuizEventRequestValidator requestValidator)
     {
-        request.QuizId = quizId;
+        request.QuizId = id;
 
         var validationResult = await requestValidator.ValidateAsync(request);
         if (!validationResult.IsValid)
@@ -113,7 +113,7 @@ public class QuizzesController(
 
         var serviceInput = new CreateQuizEventServiceInput
         {
-            QuizId = quizId,
+            QuizId = id,
             ScheduledOn = request.ScheduledOn,
             TeamIds = request.TeamIds,
             UserId = UserId
