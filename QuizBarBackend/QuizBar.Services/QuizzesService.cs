@@ -102,7 +102,7 @@ public class QuizzesService(
             Status = Status.Active,
             CreatedOn = DateTime.UtcNow,
             CreatedBy = input.UserId,
-            TeamScores = []
+            TeamsQuizEvents = []
         };
 
         var teams = await db.Teams.Where(t => input.TeamIds.Contains(t.Id)).ToListAsync();
@@ -122,6 +122,7 @@ public class QuizzesService(
             await db.TeamsQuizEvents.AddAsync(teamQuizEvent);
         }
 
+        await db.QuizEvents.AddAsync(quizEvent);
         await db.SaveChangesAsync();
 
         var serviceResult = new ServiceResult<CreateQuizEventServiceResult>

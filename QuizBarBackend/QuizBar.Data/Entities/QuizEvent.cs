@@ -13,7 +13,7 @@ public class QuizEvent : IEntityMetaData
 
     // Navigation properties
     public virtual Quiz Quiz { get; set; }
-    public virtual IEnumerable<TeamQuizEvent> TeamScores { get; set; }
+    public virtual ICollection<TeamQuizEvent> TeamsQuizEvents { get; set; }
 
     // IEntityMetaData
     public required Status Status { get; set; }
