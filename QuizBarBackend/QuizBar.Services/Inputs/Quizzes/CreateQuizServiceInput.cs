@@ -1,6 +1,4 @@
-﻿using QuizBar.Services.Inputs;
-
-namespace QuizBar.Services.Inputs.Quizzes;
+﻿namespace QuizBar.Services.Inputs.Quizzes;
 
 public class CreateQuizServiceInput : IServiceInput
 {
@@ -8,5 +6,5 @@ public class CreateQuizServiceInput : IServiceInput
     public string? Scope { get; set; }
 
     //IServiceInput
-    public required string CreatedBy { get; set; }
+    public required string UserId { get; set; }
 }

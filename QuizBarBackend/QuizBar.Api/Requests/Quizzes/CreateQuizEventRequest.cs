@@ -5,7 +5,7 @@ namespace QuizBar.Api.Requests.Quizzes;
 public class CreateQuizEventRequest
 {
     public string? QuizId { get; set; }
-    public string? Location { get; set; }
+    public required DateTime ScheduledOn { get; set; }
     public IEnumerable<string> TeamIds { get; set; }
 }
 

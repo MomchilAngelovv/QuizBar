@@ -1,11 +1,9 @@
-﻿using QuizBar.Services.Inputs;
-
-namespace QuizBar.Services.Inputs.Teams;
+﻿namespace QuizBar.Services.Inputs.Teams;
 
 public class CreateTeamServiceInput : IServiceInput
 {
     public required string Title { get; set; }
 
     //IServiceInput
-    public required string CreatedBy { get; set; }
+    public required string UserId { get; set; }
 }

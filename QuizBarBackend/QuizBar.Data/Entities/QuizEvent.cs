@@ -6,13 +6,14 @@ public class QuizEvent : IEntityMetaData
 {
     // Main
     public required string Id { get; set; }
+    public required DateTime ScheduledOn { get; set; }
 
     // Foreign keys
     public required string QuizId { get; set; }
 
     // Navigation properties
     public virtual Quiz Quiz { get; set; }
-    public virtual IEnumerable<TeamResult> TeamsResults { get; set; }
+    public virtual IEnumerable<TeamQuizEvent> TeamScores { get; set; }
 
     // IEntityMetaData
     public required Status Status { get; set; }

@@ -48,7 +48,7 @@ public class QuizzesService(
             Scope = input.Scope,
             Status = Status.Active,
             CreatedOn = DateTime.UtcNow,
-            CreatedBy = input.CreatedBy
+            CreatedBy = input.UserId
         };
 
         var chapter = new Chapter
@@ -58,7 +58,7 @@ public class QuizzesService(
             QuizId = quiz.Id,
             Status = Status.Active,
             CreatedOn = DateTime.UtcNow,
-            CreatedBy = input.CreatedBy
+            CreatedBy = input.UserId
         };
 
         await db.Quizzes.AddAsync(quiz);
@@ -94,21 +94,32 @@ public class QuizzesService(
             };
         }
 
+        var quizEvent = new QuizEvent
+        {
+            Id = Guid.CreateVersion7().ToString(),
+            ScheduledOn = input.ScheduledOn,
+            QuizId = quiz.Id,
+            Status = Status.Active,
+            CreatedOn = DateTime.UtcNow,
+            CreatedBy = input.UserId,
+            TeamScores = []
+        };
+
         var teams = await db.Teams.Where(t => input.TeamIds.Contains(t.Id)).ToListAsync();
         foreach (var team in teams)
         {
-            var teamQuizResult = new TeamResult
+            var teamQuizEvent = new TeamQuizEvent
             {
                 Id = Guid.CreateVersion7().ToString(),
                 Score = 0,
                 TeamId = team.Id,
-                QuizId = quiz.Id,
+                QuizEventId = quizEvent.Id,
                 Status = Status.Active,
                 CreatedOn = DateTime.UtcNow,
-                CreatedBy = input.CreatedBy
+                CreatedBy = input.UserId
             };
 
-            await db.TeamQuizResults.AddAsync(teamQuizResult);
+            await db.TeamsQuizEvents.AddAsync(teamQuizEvent);
         }
 
         await db.SaveChangesAsync();
@@ -118,7 +129,7 @@ public class QuizzesService(
             Success = true,
             Data = new CreateQuizEventServiceResult
             {
-                TeamIds = db.TeamQuizResults.Local.Select(tqr => tqr.Id)
+                Id = quizEvent.Id
             }
         };
 

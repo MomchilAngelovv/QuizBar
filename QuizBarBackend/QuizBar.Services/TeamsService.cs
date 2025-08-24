@@ -24,7 +24,7 @@ public class TeamsService(
             Title = input.Title,
             Status = Status.Active,
             CreatedOn = DateTime.UtcNow,
-            CreatedBy = input.CreatedBy,
+            CreatedBy = input.UserId,
         };
         
         await db.Teams.AddAsync(team);

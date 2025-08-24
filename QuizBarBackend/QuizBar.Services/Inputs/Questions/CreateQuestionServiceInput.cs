@@ -12,7 +12,7 @@ public class CreateQuestionServiceInput : IServiceInput
     public IEnumerable<CreateQuestionPossibleAnswerServiceInput> PossibleAnswers { get; set; }
 
     //IServiceInput
-    public required string CreatedBy { get; set; }
+    public required string UserId { get; set; }
 }
 
 public class CreateQuestionPossibleAnswerServiceInput

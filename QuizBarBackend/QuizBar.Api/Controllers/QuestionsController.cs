@@ -27,14 +27,13 @@ public class QuestionsController(
             Type = request.Type,
             Priority = request.Priority,
             ChapterId = request.ChapterId,
-            PossibleAnswers = request.PossibleAnswers.Select(pa => 
-                new CreateQuestionPossibleAnswerServiceInput
-                {
-                    Text = pa.Text,
-                    IsCorrect = pa.IsCorrect,
-                    Priority = pa.Priority
-                }),
-            CreatedBy = UserId
+            PossibleAnswers = request.PossibleAnswers.Select(pa => new CreateQuestionPossibleAnswerServiceInput
+            {
+                Text = pa.Text,
+                IsCorrect = pa.IsCorrect,
+                Priority = pa.Priority
+            }),
+            UserId = UserId
         };
 
         var serviceResult = await questionsService.CreateQuestionAsync(serviceInput);

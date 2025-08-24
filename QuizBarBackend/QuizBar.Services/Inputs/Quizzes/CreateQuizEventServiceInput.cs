@@ -2,9 +2,10 @@
 
 public class CreateQuizEventServiceInput : IServiceInput
 {
-    public string QuizId { get; set; }
+    public required string QuizId { get; set; }
+    public required DateTime ScheduledOn { get; set; }
     public IEnumerable<string> TeamIds { get; set; }
 
     //IServiceInput
-    public required string CreatedBy { get; set; }
+    public required string UserId { get; set; }
 }

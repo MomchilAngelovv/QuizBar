@@ -61,6 +61,7 @@ public class QuizzesController(
                 Id = serviceResult.Data.Id,
                 Title = serviceResult.Data.Title,
                 Scope = serviceResult.Data.Scope,
+                Teams = []
             }
         });
     }
@@ -80,7 +81,7 @@ public class QuizzesController(
         {
             Title = request.Title,
             Scope = request.Scope,
-            CreatedBy = UserId
+            UserId = UserId
         };
 
         var serviceResult = await quizzesService.CreateQuizAsync(serviceInput);
@@ -113,8 +114,9 @@ public class QuizzesController(
         var serviceInput = new CreateQuizEventServiceInput
         {
             QuizId = quizId,
+            ScheduledOn = request.ScheduledOn,
             TeamIds = request.TeamIds,
-            CreatedBy = UserId
+            UserId = UserId
         };
 
         var serviceResult = await quizzesService.CreateQuizEventAsync(serviceInput);

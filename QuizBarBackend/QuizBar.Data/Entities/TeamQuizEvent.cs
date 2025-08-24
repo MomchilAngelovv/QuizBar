@@ -2,7 +2,7 @@
 
 namespace QuizBar.Data.Entities;
 
-public class TeamResult : IEntityMetaData
+public class TeamQuizEvent : IEntityMetaData
 {
     // Main
     public required string Id { get; set; }

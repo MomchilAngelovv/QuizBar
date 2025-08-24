@@ -21,7 +21,7 @@ public class QuestionsService(
             ChapterId = input.ChapterId,
             Status = Status.Active,
             CreatedOn = DateTime.UtcNow,
-            CreatedBy = input.CreatedBy,
+            CreatedBy = input.UserId,
             PossibleAnswers = []
         };
 
@@ -36,7 +36,7 @@ public class QuestionsService(
                 QuestionId = question.Id,
                 Status = Status.Active,
                 CreatedOn = DateTime.UtcNow,
-                CreatedBy = input.CreatedBy
+                CreatedBy = input.UserId
             };
 
             question.PossibleAnswers.Add(possibleAnswer);

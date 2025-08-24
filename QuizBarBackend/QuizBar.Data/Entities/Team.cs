@@ -9,7 +9,7 @@ public class Team : IEntityMetaData
     public required string Title { get; set; }
 
     // Navigation properties
-    public virtual ICollection<TeamResult> Results { get; set; }
+    public virtual ICollection<TeamQuizEvent> Results { get; set; }
 
     // IEntityMetaData
     public required Status Status { get; set; }

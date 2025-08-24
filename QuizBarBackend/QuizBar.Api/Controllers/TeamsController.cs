@@ -49,7 +49,7 @@ public class TeamsController(
         var serviceInput = new CreateTeamServiceInput
         {
             Title = request.Title,
-            CreatedBy = UserId
+            UserId = UserId
         };
 
         var team = await teamsService.CreateTeamAsync(serviceInput);
