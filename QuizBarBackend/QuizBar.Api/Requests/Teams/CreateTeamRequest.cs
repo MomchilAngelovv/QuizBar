@@ -4,7 +4,7 @@ namespace QuizBar.Api.Requests.Teams;
 
 public class CreateTeamRequest
 {
-    public string Title { get; set; } 
+    public required string Title { get; set; } 
 }
 
 public class CreateTeamRequestValidator : AbstractValidator<CreateTeamRequest>

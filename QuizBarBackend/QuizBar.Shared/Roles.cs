@@ -1,6 +1,6 @@
 ﻿namespace QuizBar.Shared;
 
-public enum Role
+public enum Roles
 {
     None = 0,
     Default = 1,

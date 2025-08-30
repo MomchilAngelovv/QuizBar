@@ -9,7 +9,7 @@ public class CreateQuestionRequest
     public QuestionType Type { get; set; }
     public int Priority { get; set; }
     public string ChapterId { get; set; }
-    public IEnumerable<CreateQuestionPossibleAnswer> PossibleAnswers { get; set; }
+    public IEnumerable<CreateQuestionPossibleAnswer>? PossibleAnswers { get; set; }
 }
 
 public class CreateQuestionPossibleAnswer

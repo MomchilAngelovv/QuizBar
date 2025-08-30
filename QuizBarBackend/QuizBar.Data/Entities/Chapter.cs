@@ -18,7 +18,7 @@ public class Chapter : IEntityMetaData
     public virtual ICollection<Question> Questions { get; set; }
 
     // IEntityMetaData
-    public required Status Status { get; set; }
+    public required Statuses Status { get; set; }
     public string? Description { get; set; }
 
     public required DateTime CreatedOn { get; set; }

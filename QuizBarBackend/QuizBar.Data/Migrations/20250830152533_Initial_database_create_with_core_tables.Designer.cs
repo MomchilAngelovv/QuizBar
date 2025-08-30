@@ -12,7 +12,7 @@ using QuizBar.Data;
 namespace QuizBar.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250824193835_Initial_database_create_with_core_tables")]
+    [Migration("20250830152533_Initial_database_create_with_core_tables")]
     partial class Initial_database_create_with_core_tables
     {
         /// <inheritdoc />
@@ -199,9 +199,6 @@ namespace QuizBar.Data.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Headers")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -210,15 +207,14 @@ namespace QuizBar.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("OccurredOn")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Path")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("QueryString")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RequestBody")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -588,6 +584,10 @@ namespace QuizBar.Data.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
+                    b.Property<string>("QuizLocationId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<DateTime>("ScheduledOn")
                         .HasColumnType("datetime2");
 
@@ -598,7 +598,53 @@ namespace QuizBar.Data.Migrations
 
                     b.HasIndex("QuizId");
 
+                    b.HasIndex("QuizLocationId");
+
                     b.ToTable("QuizEvents", (string)null);
+                });
+
+            modelBuilder.Entity("QuizBar.Data.Entities.QuizLocation", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Site")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("QuizLocations", (string)null);
                 });
 
             modelBuilder.Entity("QuizBar.Data.Entities.Team", b =>
@@ -795,7 +841,15 @@ namespace QuizBar.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("QuizBar.Data.Entities.QuizLocation", "QuizLocation")
+                        .WithMany("QuizEvents")
+                        .HasForeignKey("QuizLocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Quiz");
+
+                    b.Navigation("QuizLocation");
                 });
 
             modelBuilder.Entity("QuizBar.Data.Entities.TeamQuizEvent", b =>
@@ -837,6 +891,11 @@ namespace QuizBar.Data.Migrations
             modelBuilder.Entity("QuizBar.Data.Entities.QuizEvent", b =>
                 {
                     b.Navigation("TeamsQuizEvents");
+                });
+
+            modelBuilder.Entity("QuizBar.Data.Entities.QuizLocation", b =>
+                {
+                    b.Navigation("QuizEvents");
                 });
 
             modelBuilder.Entity("QuizBar.Data.Entities.Team", b =>

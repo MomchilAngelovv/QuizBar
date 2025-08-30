@@ -44,18 +44,25 @@ public class QuizzesController(
         });
     }
 
-    [HttpGet("{id:required}")]
+    [HttpGet("{quizId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetQuizResponse>))]
     public async Task<IActionResult> GetQuizAsync(
-        [FromRoute] GetQuizRequest request, [FromServices] GetQuizRequestValidator requestValidator)
+        [FromRoute] string quizId, [FromBody] GetQuizRequest request, [FromServices] GetQuizRequestValidator requestValidator)
     {
+        request.QuizId = quizId;
+
         var validationResult = await requestValidator.ValidateAsync(request);
         if (!validationResult.IsValid)
         {
             return ValidationFailed(validationResult);
         }
 
-        var serviceResult = await quizzesService.GetQuizAsync(request.Id);
+        var filter = new QuizzesFilter
+        {
+            QuizId = request.QuizId
+        };
+
+        var serviceResult = await quizzesService.GetQuizAsync(filter);
         if (serviceResult.Reason != ErrorReason.None)
         {
             if (serviceResult.Reason == ErrorReason.NotFound)
@@ -66,13 +73,9 @@ public class QuizzesController(
 
         return ControllerResponse(new GetQuizResponse
         {
-            Quiz = new GetQuizQuiz 
-            { 
-                Id = serviceResult.Result.Id,
-                Title = serviceResult.Result.Title,
-                Scope = serviceResult.Result.Scope,
-                Teams = []
-            }
+            Id = serviceResult.Result.Id,
+            Title = serviceResult.Result.Title,
+            Scope = serviceResult.Result.Scope
         });
     }
 
@@ -102,18 +105,12 @@ public class QuizzesController(
         });
     }
 
-    [HttpPost("{id}/start")]
-    public async Task<ActionResult<object>> StartQuizAsync(string id)
-    {
-        return null;
-    }
-
-    [HttpPost("{id:required}/events")]
+    [HttpPost("{quizId:required}/events")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<CreateQuizEventResponse>))]
-    public async Task<IActionResult> AddTeamsToQuizAsync(
-       [FromRoute] string id, [FromBody] CreateQuizEventRequest request, [FromServices] CreateQuizEventRequestValidator requestValidator)
+    public async Task<IActionResult> CreateQuizEventAsync(
+        [FromRoute] string quizId, [FromBody] CreateQuizEventRequest request, [FromServices] CreateQuizEventRequestValidator requestValidator)
     {
-        request.QuizId = id;
+        request.QuizId = quizId;
 
         var validationResult = await requestValidator.ValidateAsync(request);
         if (!validationResult.IsValid)
@@ -123,8 +120,9 @@ public class QuizzesController(
 
         var serviceInput = new CreateQuizEventServiceInput
         {
-            QuizId = id,
+            QuizId = quizId,
             ScheduledOn = request.ScheduledOn,
+            QuizLocationId = request.QuizLocationId,
             TeamIds = request.TeamIds,
             UserId = UserId
         };
@@ -135,5 +133,11 @@ public class QuizzesController(
         {
             Id = serviceResult.Result.Id
         });
+    }
+
+    [HttpPost("{quizId:required}/events/{eventId}/start")]
+    public async Task<ActionResult<object>> StartQuizEventAsync(string id)
+    {
+        return null;
     }
 }

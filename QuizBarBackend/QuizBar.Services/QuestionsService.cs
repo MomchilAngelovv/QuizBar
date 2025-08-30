@@ -21,7 +21,7 @@ public class QuestionsService(
             Text = input.Text,
             Priority = input.Priority,
             ChapterId = input.ChapterId,
-            Status = Status.Active,
+            Status = Statuses.Active,
             CreatedOn = DateTime.UtcNow,
             CreatedBy = input.UserId,
             PossibleAnswers = []
@@ -36,7 +36,7 @@ public class QuestionsService(
                 IsCorrect = pa.IsCorrect,
                 Priority = pa.Priority,
                 QuestionId = question.Id,
-                Status = Status.Active,
+                Status = Statuses.Active,
                 CreatedOn = DateTime.UtcNow,
                 CreatedBy = input.UserId
             };

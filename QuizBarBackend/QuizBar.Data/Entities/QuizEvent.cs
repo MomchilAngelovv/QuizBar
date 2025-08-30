@@ -10,13 +10,15 @@ public class QuizEvent : IEntityMetaData
 
     // Foreign keys
     public required string QuizId { get; set; }
+    public required string QuizLocationId { get; set; }
 
     // Navigation properties
     public virtual Quiz Quiz { get; set; }
+    public virtual QuizLocation QuizLocation { get; set; }
     public virtual ICollection<TeamQuizEvent> TeamsQuizEvents { get; set; }
 
     // IEntityMetaData
-    public required Status Status { get; set; }
+    public required Statuses Status { get; set; }
     public string? Description { get; set; }
 
     public required DateTime CreatedOn { get; set; }

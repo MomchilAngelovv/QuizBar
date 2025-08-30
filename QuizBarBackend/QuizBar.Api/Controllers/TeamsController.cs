@@ -63,12 +63,12 @@ public class TeamsController(
         });
     }
 
-    [HttpPut("{id:required}")]
+    [HttpPut("{teamId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<UpdateTeamResponse>))]
     public async Task<IActionResult> UpdateTeamAsync(
-       [FromRoute] string id, [FromBody] UpdateTeamRequest request, [FromServices] UpdateTeamRequestValidator requestValidator)
+        [FromRoute] string teamId, [FromBody] UpdateTeamRequest request, [FromServices] UpdateTeamRequestValidator requestValidator)
     {
-        request.Id = id;
+        request.TeamId = teamId;
 
         var validationResult = await requestValidator.ValidateAsync(request);
         if (!validationResult.IsValid)
@@ -78,7 +78,7 @@ public class TeamsController(
 
         var serviceInput = new UpdateTeamServiceInput
         {
-            TeamId = request.Id,
+            TeamId = request.TeamId,
             Title = request.Title,
             UserId = UserId
         };

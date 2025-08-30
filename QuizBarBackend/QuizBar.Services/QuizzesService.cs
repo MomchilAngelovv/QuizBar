@@ -11,11 +11,11 @@ namespace QuizBar.Services;
 public class QuizzesService(
     ApplicationDbContext db)
 {
-    public async Task<ServiceResult<GetQuizServiceResult>> GetQuizAsync(string id)
+    public async Task<ServiceResult<GetQuizServiceResult>> GetQuizAsync(QuizzesFilter filter)
     {
         var serviceResult = new ServiceResult<GetQuizServiceResult>();
 
-        var quiz = await db.Quizzes.FirstOrDefaultAsync(q => q.Id == id);
+        var quiz = await db.Quizzes.FirstOrDefaultAsync(q => q.Id == filter.QuizId);
         if (quiz is null)
         {
             serviceResult.Reason = ErrorReason.NotFound;
@@ -71,7 +71,7 @@ public class QuizzesService(
             Id = Guid.CreateVersion7().ToString(),
             Title = input.Title,
             Scope = input.Scope,
-            Status = Status.Active,
+            Status = Statuses.Active,
             CreatedOn = DateTime.UtcNow,
             CreatedBy = input.UserId
         };
@@ -81,7 +81,7 @@ public class QuizzesService(
             Id = Guid.CreateVersion7().ToString(),
             Title = input.Title,
             QuizId = quiz.Id,
-            Status = Status.Active,
+            Status = Statuses.Active,
             CreatedOn = DateTime.UtcNow,
             CreatedBy = input.UserId
         };
@@ -113,13 +113,14 @@ public class QuizzesService(
             serviceResult.Reason = ErrorReason.NotFound;
             return serviceResult;
         }
-
+        
         var quizEvent = new QuizEvent
         {
             Id = Guid.CreateVersion7().ToString(),
             ScheduledOn = input.ScheduledOn,
+            QuizLocationId = input.QuizLocationId,
             QuizId = quiz.Id,
-            Status = Status.Active,
+            Status = Statuses.Active,
             CreatedOn = DateTime.UtcNow,
             CreatedBy = input.UserId,
             TeamsQuizEvents = []
@@ -134,7 +135,7 @@ public class QuizzesService(
                 Score = 0,
                 TeamId = team.Id,
                 QuizEventId = quizEvent.Id,
-                Status = Status.Active,
+                Status = Statuses.Active,
                 CreatedOn = DateTime.UtcNow,
                 CreatedBy = input.UserId
             };

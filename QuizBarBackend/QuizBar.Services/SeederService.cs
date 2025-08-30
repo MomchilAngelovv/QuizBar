@@ -21,11 +21,11 @@ public class SeederService(
 
         var user = new FokstyUser
         {
-            Id = Guid.CreateVersion7().ToString(),
+            Id = ApplicationConstants.AdminUserId,
             Email = "momchilangelov0040@gmail.com",
             UserName = "momchilangelov0040@gmail.com",
-            CreatedBy = "momchilangelov0040@gmail.com",
-            Status = Status.Active,
+            CreatedBy = ApplicationConstants.AdminUserId,
+            Status = Statuses.Active,
             CreatedOn = DateTime.UtcNow,
         };
 
@@ -39,7 +39,7 @@ public class SeederService(
             return;
         }
 
-        var roles = new List<Role> { Role.Default, Role.Administrator };
+        var roles = new List<Roles> { Roles.Default, Roles.Administrator };
         foreach (var r in roles)
         {
             var role = new FokstyRole
@@ -47,9 +47,9 @@ public class SeederService(
                 Id = Guid.CreateVersion7().ToString(),
                 Name = r.ToString(),
                 Description = r.ToString(),
-                Status = Status.Active,
+                Status = Statuses.Active,
                 CreatedOn = DateTime.UtcNow,
-                CreatedBy = "momchilangelov0040@gmail.com",
+                CreatedBy = ApplicationConstants.AdminUserId,
             };
 
             await roleManager.CreateAsync(role);
@@ -63,16 +63,36 @@ public class SeederService(
             return;
         }
 
-        var isInDefaultRole = await userManager.IsInRoleAsync(adminUser, Role.Administrator.ToString());
+        var isInDefaultRole = await userManager.IsInRoleAsync(adminUser, Roles.Administrator.ToString());
         if (!isInDefaultRole)
         {
-            await userManager.AddToRolesAsync(adminUser, [Role.Default.ToString(), Role.Default.ToString()]);
+            await userManager.AddToRolesAsync(adminUser, [Roles.Default.ToString(), Roles.Default.ToString()]);
         }
 
-        var isInAdministratorRole = await userManager.IsInRoleAsync(adminUser, Role.Administrator.ToString());
+        var isInAdministratorRole = await userManager.IsInRoleAsync(adminUser, Roles.Administrator.ToString());
         if (!isInAdministratorRole)
         {
-            await userManager.AddToRolesAsync(adminUser, [Role.Default.ToString(), Role.Default.ToString()]);
+            await userManager.AddToRolesAsync(adminUser, [Roles.Default.ToString(), Roles.Default.ToString()]);
         }
+    }
+    public async Task SeedQuizLocationsAsync()
+    {
+        var hasQuizLocations = await db.QuizLocations.AnyAsync();
+        if (hasQuizLocations)
+        {
+            return;
+        }
+
+        var quizLocation = new QuizLocation
+        {
+            Id = Guid.CreateVersion7().ToString(),
+            Site = "Stage bar",
+            Status = Statuses.Active,
+            CreatedOn = DateTime.UtcNow,
+            CreatedBy = ApplicationConstants.AdminUserId
+        };
+
+        await db.QuizLocations.AddAsync(quizLocation);
+        await db.SaveChangesAsync();
     }
 }

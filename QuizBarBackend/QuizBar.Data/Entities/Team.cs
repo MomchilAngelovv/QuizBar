@@ -12,7 +12,7 @@ public class Team : IEntityMetaData
     public virtual ICollection<TeamQuizEvent> Results { get; set; }
 
     // IEntityMetaData
-    public required Status Status { get; set; }
+    public required Statuses Status { get; set; }
     public string? Description { get; set; }
 
     public required DateTime CreatedOn { get; set; }

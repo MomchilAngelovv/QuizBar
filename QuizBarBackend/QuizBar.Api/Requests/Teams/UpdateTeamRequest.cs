@@ -6,14 +6,15 @@ namespace QuizBar.Api.Requests.Teams;
 public class UpdateTeamRequest
 {
     [JsonIgnore]
-    public string? Id { get; set; }
-    public string? Title { get; set; }
+    public string? TeamId { get; set; }
+    public required string Title { get; set; }
 }
 
 public class UpdateTeamRequestValidator : AbstractValidator<UpdateTeamRequest>
 {
     public UpdateTeamRequestValidator()
     {
-        RuleFor(t => t.Id).NotEmpty();
+        RuleFor(t => t.TeamId).NotEmpty();
+        RuleFor(t => t.Title).NotEmpty();
     }
 }

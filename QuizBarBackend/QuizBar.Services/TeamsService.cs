@@ -24,7 +24,7 @@ public class TeamsService(
         {
             Id = Guid.CreateVersion7().ToString(),
             Title = input.Title,
-            Status = Status.Active,
+            Status = Statuses.Active,
             CreatedOn = DateTime.UtcNow,
             CreatedBy = input.UserId,
         };

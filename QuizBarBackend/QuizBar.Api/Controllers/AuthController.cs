@@ -43,7 +43,7 @@ public class AuthController(
             SecurityStamp = Guid.NewGuid().ToString(),
             UserName = request.Email,
             EmailConfirmed = true,
-            Status = Status.Active,
+            Status = Statuses.Active,
             CreatedBy = request.Email,
             CreatedOn = DateTime.UtcNow
         };
@@ -54,7 +54,7 @@ public class AuthController(
             return ControllerResponse(ValidationErrors.FailedToCreateUser(), HttpStatusCode.BadRequest);
         }
 
-        var addUserToRoleResult = await userManager.AddToRoleAsync(user, Role.Default.ToString());
+        var addUserToRoleResult = await userManager.AddToRoleAsync(user, Roles.Default.ToString());
         if (!addUserToRoleResult.Succeeded)
         {
             return ControllerResponse(ValidationErrors.FailedToAssignRole(), HttpStatusCode.BadRequest);

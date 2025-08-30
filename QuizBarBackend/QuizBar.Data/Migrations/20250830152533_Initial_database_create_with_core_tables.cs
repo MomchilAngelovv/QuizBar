@@ -74,15 +74,34 @@ namespace QuizBar.Data.Migrations
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StackTrace = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Path = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RequestBody = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     QueryString = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RouteValues = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Headers = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    OccurredOn = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ExceptionLogs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "QuizLocations",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Site = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuizLocations", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -268,6 +287,7 @@ namespace QuizBar.Data.Migrations
                     Id = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
                     ScheduledOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     QuizId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
+                    QuizLocationId = table.Column<string>(type: "nvarchar(200)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -280,6 +300,12 @@ namespace QuizBar.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_QuizEvents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_QuizEvents_QuizLocations_QuizLocationId",
+                        column: x => x.QuizLocationId,
+                        principalTable: "QuizLocations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_QuizEvents_Quizzes_QuizId",
                         column: x => x.QuizId,
@@ -458,6 +484,11 @@ namespace QuizBar.Data.Migrations
                 column: "QuizId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_QuizEvents_QuizLocationId",
+                table: "QuizEvents",
+                column: "QuizLocationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Quizzes_Title",
                 table: "Quizzes",
                 column: "Title",
@@ -518,6 +549,9 @@ namespace QuizBar.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Chapters");
+
+            migrationBuilder.DropTable(
+                name: "QuizLocations");
 
             migrationBuilder.DropTable(
                 name: "Quizzes");

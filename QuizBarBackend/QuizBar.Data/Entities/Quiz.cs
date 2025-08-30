@@ -9,12 +9,14 @@ public class Quiz : IEntityMetaData
     public required string Title { get; set; }
     public string Scope { get; set; }
 
+    // Foreign keys
+
     // Navigation properties
     public virtual ICollection<Chapter> Chapters { get; set; }
     public virtual ICollection<QuizEvent> Events { get; set; }
 
     // IEntityMetaData
-    public required Status Status { get; set; }
+    public required Statuses Status { get; set; }
     public string? Description { get; set; }
 
     public required DateTime CreatedOn { get; set; }

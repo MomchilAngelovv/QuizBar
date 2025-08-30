@@ -23,6 +23,7 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
     public DbSet<PossibleAnswer> PossibleAnswers { get; set; }
 
     public DbSet<QuizEvent> QuizEvents { get; set; }
+    public DbSet<QuizLocation> QuizLocations { get; set; }
     public DbSet<TeamQuizEvent> TeamsQuizEvents { get; set; }
 
     public DbSet<Team> Teams { get; set; }
@@ -39,6 +40,7 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
         AddTablePossibleAnswer(builder);
 
         AddTableQuizEvents(builder);
+        AddTableQuizLocations(builder);
         AddTableTeamsQuizEvents(builder);
 
         AddTableTeams(builder);
@@ -167,6 +169,28 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
         builder.Entity<QuizEvent>().Property(p => p.DeletedOn).IsRequired(false);
         builder.Entity<QuizEvent>().Property(p => p.DeletedBy).IsRequired(false).HasMaxLength(100);
     }
+    private static void AddTableQuizLocations(ModelBuilder builder)
+    {
+        // Main
+        builder.Entity<QuizLocation>().ToTable("QuizLocations").HasKey(p => p.Id);
+        builder.Entity<QuizLocation>().Property(p => p.Id).IsRequired().HasMaxLength(36);
+        builder.Entity<QuizLocation>().Property(p => p.Id).IsRequired().HasMaxLength(200);
+
+        // Foreign keys
+
+        // IEntityMetaData
+        builder.Entity<QuizLocation>().Property(p => p.Status).IsRequired();
+        builder.Entity<QuizLocation>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
+
+        builder.Entity<QuizLocation>().Property(p => p.CreatedOn).IsRequired();
+        builder.Entity<QuizLocation>().Property(p => p.CreatedBy).IsRequired().HasMaxLength(100);
+
+        builder.Entity<QuizLocation>().Property(p => p.ModifiedOn).IsRequired(false);
+        builder.Entity<QuizLocation>().Property(p => p.ModifiedBy).IsRequired(false).HasMaxLength(100);
+
+        builder.Entity<QuizLocation>().Property(p => p.DeletedOn).IsRequired(false);
+        builder.Entity<QuizLocation>().Property(p => p.DeletedBy).IsRequired(false).HasMaxLength(100);
+    }
     private static void AddTableTeamsQuizEvents(ModelBuilder builder)
     {
         // Main
@@ -213,7 +237,6 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
         builder.Entity<Team>().Property(p => p.DeletedOn).IsRequired(false);
         builder.Entity<Team>().Property(p => p.DeletedBy).IsRequired(false).HasMaxLength(100);
     }
-
     private static void AddTableExceptionLogs(ModelBuilder builder)
     {
         // Main

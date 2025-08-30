@@ -1,6 +1,6 @@
 ﻿namespace QuizBar.Shared;
 
-public enum Status
+public enum Statuses
 {
     None = 0,
     Pending = 1,

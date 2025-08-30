@@ -3,4 +3,5 @@
 public static class ApplicationConstants
 {
     public static readonly string ApplicationName = "QuizBar";
+    public static readonly string AdminUserId = "39e5145e-bcc4-49a4-9759-8bfbebcc0397";
 }

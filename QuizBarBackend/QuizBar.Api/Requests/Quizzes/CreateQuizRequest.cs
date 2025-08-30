@@ -4,7 +4,7 @@ namespace QuizBar.Api.Requests.Quizzes;
 
 public class CreateQuizRequest
 {
-    public string Title { get; set; }
+    public required string Title { get; set; }
     public string? Scope { get; set; }
 }
 

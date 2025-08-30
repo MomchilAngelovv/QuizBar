@@ -6,7 +6,7 @@ namespace QuizBar.Data.Entities;
 public class FokstyUser : IdentityUser<string>, IEntityMetaData
 {
     // IEntityMetaData
-    public required Status Status { get; set; }
+    public required Statuses Status { get; set; }
     public string? Description { get; set; }
 
     public required DateTime CreatedOn { get; set; }
