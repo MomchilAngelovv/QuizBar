@@ -11,7 +11,6 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
     {
 
     }
-
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
 

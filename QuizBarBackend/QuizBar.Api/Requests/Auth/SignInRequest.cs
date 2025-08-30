@@ -4,8 +4,8 @@ namespace QuizBar.Api.Requests.Auth;
 
 public class SignInRequest
 {
-    public string Email { get; set; }
-    public string Password { get; set; }
+    public required string Email { get; set; }
+    public required string Password { get; set; }
 }
 
 public class SignInRequestValidator : AbstractValidator<SignInRequest>

@@ -91,6 +91,8 @@ builder.Services.AddTransient<SeederService>();
 builder.Services.AddTransient<QuizzesService>();
 builder.Services.AddTransient<TeamsService>();
 builder.Services.AddTransient<QuestionsService>();
+builder.Services.AddTransient<QuizLocationsService>();
+builder.Services.AddTransient<ExceptionLogsService>();
 
 var app = builder.Build();
 
@@ -101,13 +103,13 @@ app.UseRouting();
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapHealthChecks("api/health/ready");
 app.MapOpenApi("/api/openapi.json");
 app.MapScalarApiReference("/api/scalar", options =>
 {
     options.OpenApiRoutePattern = "/api/openapi.json";
 });
 app.MapControllers();
-app.MapHealthChecks("api/health/ready");
 
 // Executed once just before application starts
 using var scope = app.Services.CreateScope();
@@ -119,6 +121,7 @@ using var scope = app.Services.CreateScope();
     await seederService.SeedAdministratorsAsync();
     await seederService.SeedRolesAsync();
     await seederService.SeedUserRolesAsync();
+    await seederService.SeedQuizLocationsAsync();
 }
 
 app.Run();

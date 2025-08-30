@@ -31,7 +31,6 @@ public class QuizzesService(
 
         return serviceResult;
     }
-
     public async Task<ServiceResult<GetQuizzesServiceResult>> GetQuizzesAsync(QuizzesFilter filter = null)
     {
         var serviceResult = new ServiceResult<GetQuizzesServiceResult>();
@@ -61,7 +60,6 @@ public class QuizzesService(
 
         return serviceResult;
     }
-
     public async Task<ServiceResult<CreateQuizServiceResult>> CreateQuizAsync(CreateQuizServiceInput input)
     {
         var serviceResult = new ServiceResult<CreateQuizServiceResult>();
@@ -97,12 +95,10 @@ public class QuizzesService(
 
         return serviceResult;
     }
-
     public string StartQuizAsync(string id)
     {
         return null;
     }
-
     public async Task<ServiceResult<CreateQuizEventServiceResult>> CreateQuizEventAsync(CreateQuizEventServiceInput input)
     {
         var serviceResult = new ServiceResult<CreateQuizEventServiceResult>();
@@ -113,7 +109,14 @@ public class QuizzesService(
             serviceResult.Reason = ErrorReason.NotFound;
             return serviceResult;
         }
-        
+
+        var quizLocation = await db.QuizLocations.FirstOrDefaultAsync(ql => ql.Id == input.QuizLocationId);
+        if (quizLocation is null)
+        {
+            serviceResult.Reason = ErrorReason.NotFound;
+            return serviceResult;
+        }
+
         var quizEvent = new QuizEvent
         {
             Id = Guid.CreateVersion7().ToString(),
@@ -122,25 +125,29 @@ public class QuizzesService(
             QuizId = quiz.Id,
             Status = Statuses.Active,
             CreatedOn = DateTime.UtcNow,
-            CreatedBy = input.UserId,
-            TeamsQuizEvents = []
+            CreatedBy = input.UserId
         };
 
         var teams = await db.Teams.Where(t => input.TeamIds.Contains(t.Id)).ToListAsync();
-        foreach (var team in teams)
+        if (teams.Count > 0)
         {
-            var teamQuizEvent = new TeamQuizEvent
-            {
-                Id = Guid.CreateVersion7().ToString(),
-                Score = 0,
-                TeamId = team.Id,
-                QuizEventId = quizEvent.Id,
-                Status = Statuses.Active,
-                CreatedOn = DateTime.UtcNow,
-                CreatedBy = input.UserId
-            };
+            quizEvent.TeamsQuizEvents = [];
 
-            await db.TeamsQuizEvents.AddAsync(teamQuizEvent);
+            foreach (var team in teams)
+            {
+                var teamQuizEvent = new TeamQuizEvent
+                {
+                    Id = Guid.CreateVersion7().ToString(),
+                    Score = 0,
+                    TeamId = team.Id,
+                    QuizEventId = quizEvent.Id,
+                    Status = Statuses.Active,
+                    CreatedOn = DateTime.UtcNow,
+                    CreatedBy = input.UserId
+                };
+
+                await db.TeamsQuizEvents.AddAsync(teamQuizEvent);
+            }
         }
 
         await db.QuizEvents.AddAsync(quizEvent);
