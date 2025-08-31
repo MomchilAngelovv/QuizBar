@@ -1,9 +1,11 @@
 ﻿using FluentValidation;
+using System.Text.Json.Serialization;
 
 namespace QuizBar.Api.Requests.Quizzes;
 
 public class CreateQuizEventRequest
 {
+    [JsonIgnore]
     public string? QuizId { get; set; }
     public required DateTime ScheduledOn { get; set; }
     public required string QuizLocationId { get; set; }

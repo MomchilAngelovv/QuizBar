@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using QuizBar.Api.Requests.ExceptionLogs;
 using QuizBar.Api.Responses;
 using QuizBar.Api.Responses.ExceptionLogs;
@@ -16,8 +17,9 @@ public class ExceptionLogsController(
     [HttpGet("{exceptionLogId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetExceptionLogResponse>))]
     public async Task<IActionResult> GetExceptionLogAsync(
-        [FromRoute] string exceptionLogId, [FromBody] GetExceptionLogRequest request, [FromServices] GetExceptionLogRequestValidator requestValidator)
+        [FromRoute] string exceptionLogId, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetExceptionLogRequest? request, [FromServices] GetExceptionLogRequestValidator requestValidator)
     {
+        request ??= new GetExceptionLogRequest();
         request.ExceptionLogId = exceptionLogId;
 
         var validationResult = await requestValidator.ValidateAsync(request);

@@ -1,9 +1,11 @@
 ﻿using FluentValidation;
+using System.Text.Json.Serialization;
 
 namespace QuizBar.Api.Requests.ExceptionLogs;
 
 public class GetExceptionLogRequest
 {
+    [JsonIgnore]
     public string? ExceptionLogId { get; set; }
 }
 

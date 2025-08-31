@@ -32,7 +32,6 @@ public class CreateQuestionRequestValidator : AbstractValidator<CreateQuestionRe
             RuleForEach(x => x.PossibleAnswers).ChildRules(order =>
             {
                 order.RuleFor(x => x.Text).NotEmpty();
-                order.RuleFor(x => x.IsCorrect).NotEmpty();
             });
         });
     }
