@@ -1,9 +1,11 @@
 ﻿using FluentValidation;
+using System.Text.Json.Serialization;
 
 namespace QuizBar.Api.Requests.Quizzes;
 
 public class GetQuizRequest
 {
+    [JsonIgnore]
     public string? QuizId { get; set; }
 }
 

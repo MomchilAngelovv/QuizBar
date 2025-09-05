@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using QuizBar.Api.Requests.Quizzes;
 using QuizBar.Api.Responses;
 using QuizBar.Api.Responses.Quizzes;
@@ -47,8 +48,9 @@ public class QuizzesController(
     [HttpGet("{quizId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetQuizResponse>))]
     public async Task<IActionResult> GetQuizAsync(
-        [FromRoute] string quizId, [FromBody] GetQuizRequest request, [FromServices] GetQuizRequestValidator requestValidator)
+        [FromRoute] string quizId, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetQuizRequest? request, [FromServices] GetQuizRequestValidator requestValidator)
     {
+        request ??= new GetQuizRequest();
         request.QuizId = quizId;
 
         var validationResult = await requestValidator.ValidateAsync(request);
