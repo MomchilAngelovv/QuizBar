@@ -7,6 +7,6 @@ public class CreateQuizEventServiceInput : IServiceInput
     public required string QuizLocationId { get; set; }
     public IEnumerable<string>? TeamIds { get; set; }
 
-    //IServiceInput
+    // IServiceInput
     public required string UserId { get; set; }
 }

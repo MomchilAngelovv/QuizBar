@@ -10,28 +10,31 @@ namespace QuizBar.Services;
 public class ExceptionLogsService(
     ApplicationDbContext db)
 {
-    public async Task<ServiceResult<CreateExceptionLogServiceResult>> CreateExceptionLogAsync(CreateExceptionLogServiceInput input)
+    public async Task<ServiceResult<GetExceptionLogsServiceResult>> GetExceptionLogsAsync(GetExceptionLogsServiceInput input)
     {
-        var serviceResult = new ServiceResult<CreateExceptionLogServiceResult>();
+        var serviceResult = new ServiceResult<GetExceptionLogsServiceResult>();
 
-        var exceptionLog = new ExceptionLog
+        var exceptionLogs = await db.ExceptionLogs
+            .Skip((input.Page - 1) * 10)
+            .Take(10)
+            .ToListAsync();
+
+        var exceptionLogsTotalItems = await db.ExceptionLogs.CountAsync();
+
+        serviceResult.Result = new GetExceptionLogsServiceResult
         {
-            Id = Guid.CreateVersion7().ToString(),
-            Message = input.Message,
-            StackTrace = input.StackTrace,
-            Path = input.Path,
-            QueryString = input.QueryString,
-            RouteValues = input.RouteValues,
-            Headers = input.Headers,
-            OccurredOn = DateTime.UtcNow
-        };
-
-        await db.ExceptionLogs.AddAsync(exceptionLog);
-        await db.SaveChangesAsync();
-
-        serviceResult.Result = new CreateExceptionLogServiceResult
-        { 
-            Id = exceptionLog.Id 
+           Exceptions = exceptionLogs.Select(el => new GetExceptionLogsException
+           {
+               Id = el.Id,
+               Message = el.Message,
+               Path = el.Path,
+               QueryString = el.QueryString,
+               RouteValues = el.RouteValues,
+               Headers = el.Headers,
+               OccurredOn = el.OccurredOn
+           }),
+           Page = input.Page,
+           TotalItems = exceptionLogsTotalItems
         };
 
         return serviceResult;
@@ -57,6 +60,32 @@ public class ExceptionLogsService(
             RouteValues= exceptionLog.RouteValues,
             Headers = exceptionLog.Headers,
             OccurredOn = exceptionLog.OccurredOn
+        };
+
+        return serviceResult;
+    }
+    public async Task<ServiceResult<CreateExceptionLogServiceResult>> CreateExceptionLogAsync(CreateExceptionLogServiceInput input)
+    {
+        var serviceResult = new ServiceResult<CreateExceptionLogServiceResult>();
+
+        var exceptionLog = new ExceptionLog
+        {
+            Id = Guid.CreateVersion7().ToString(),
+            Message = input.Message,
+            StackTrace = input.StackTrace,
+            Path = input.Path,
+            QueryString = input.QueryString,
+            RouteValues = input.RouteValues,
+            Headers = input.Headers,
+            OccurredOn = DateTime.UtcNow
+        };
+
+        await db.ExceptionLogs.AddAsync(exceptionLog);
+        await db.SaveChangesAsync();
+
+        serviceResult.Result = new CreateExceptionLogServiceResult
+        { 
+            Id = exceptionLog.Id 
         };
 
         return serviceResult;

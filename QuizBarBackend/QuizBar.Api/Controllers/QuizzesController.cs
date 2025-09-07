@@ -30,15 +30,37 @@ public class QuizzesController(
             UserId = UserId
         };
 
-        var servieResult = await quizzesService.GetQuizzesAsync(filter);
+        var serviceResult = await quizzesService.GetQuizzesAsync(filter);
 
         return ControllerResponse(new GetQuizzesResponse
         {
-            Quizzes = servieResult.Result.Quizzes.Select(q => new GetQuizzesQuiz
+            Quizzes = serviceResult.Result.Quizzes.Select(q => new GetQuizzesQuiz
             {
                 Id = q.Id,
                 Title = q.Title,
-                Status = q.Status
+                Status = q.Status,
+                Chapters = q.Chapters.Select(ch => new GetQuizzesChapter 
+                {
+                    Id = ch.Id,
+                    Title = ch.Title,
+                    Status = ch.Status,
+                    Questions = ch.Questions.Select(ch => new GetQuizzesChapterQuestion 
+                    { 
+                        Id = ch.Id,
+                        Type = ch.Type,
+                        Text = ch.Text,
+                        Priority = ch.Priority,
+                        Status = ch.Status,
+                        Answers = ch.Answers.Select(a => new GetQuizzesChapterQuestionAnswer 
+                        { 
+                            Id = a.Id,
+                            Text = a.Text,
+                            IsCorrect = a.IsCorrect,
+                            Priority = a.Priority,
+                            Status = a.Status,
+                        })
+                    }) 
+                })
             }),
             Page = 1,
             TotalItems = 50

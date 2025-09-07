@@ -5,6 +5,8 @@ using QuizBar.Api.Responses.Questions;
 using QuizBar.Services;
 using QuizBar.Services.Inputs.Questions;
 using QuizBar.Services.Results;
+using QuizBar.Shared;
+using System.Net;
 
 namespace QuizBar.Api.Controllers;
 
@@ -28,10 +30,11 @@ public class QuestionsController(
             Type = request.Type,
             Priority = request.Priority,
             ChapterId = request.ChapterId,
-            PossibleAnswers = request.PossibleAnswers.Select(pa => new CreateQuestionPossibleAnswerServiceInput
+            IsTrue = request.IsTrue,
+            PossibleAnswers = request.PossibleAnswers?.Select(pa => new CreateQuestionPossibleAnswerServiceInput
             {
                 Text = pa.Text,
-                IsCorrect = pa.IsCorrect,
+                IsCorrect = pa.IsCorrect.GetValueOrDefault(),
                 Priority = pa.Priority
             }),
             UserId = UserId
@@ -40,7 +43,16 @@ public class QuestionsController(
         var serviceResult = await questionsService.CreateQuestionAsync(serviceInput);
         if (serviceResult.Reason != ErrorReason.None)
         {
-            // Handle error
+            // TODO: This can be done with 1 geneic method and code sohuld look like Return COntrollerRespnse (serviceResult.Reason)
+            if (serviceResult.Reason == ErrorReason.QuestionAlreadyExists)
+            {
+                return ControllerResponse(ValidationErrors.AlreadyExists("Question"), HttpStatusCode.Conflict);
+            }
+
+            if (serviceResult.Reason == ErrorReason.ChapterNotFound)
+            {
+                return ControllerResponse(ValidationErrors.NotFound("Chapter"), HttpStatusCode.NotFound);
+            }
         }
 
         return ControllerResponse(new CreateQuestionResponse

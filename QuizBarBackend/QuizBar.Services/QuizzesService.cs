@@ -45,7 +45,12 @@ public class QuizzesService(
             }
         }
 
-        var quizzes = await quizzesQuery.ToListAsync();
+        // TODO make the query not take everything, just the things we need
+        var quizzes = await quizzesQuery
+            .Include(q => q.Chapters)
+                .ThenInclude(ch => ch.Questions)
+                    .ThenInclude(ch => ch.Answers)
+            .ToListAsync();
 
         serviceResult.Result = new GetQuizzesServiceResult
         {
@@ -54,7 +59,29 @@ public class QuizzesService(
                 Id = q.Id,
                 Title = q.Title,
                 Scope = q.Scope,
-                Status = q.Status
+                Status = q.Status,
+                Chapters = q.Chapters.Select(ch => new GetQuizzesChapter
+                {
+                    Id = ch.Id,
+                    Title = ch.Title,
+                    Status = ch.Status,
+                    Questions = ch.Questions.Select(q => new GetQuizzesChapterQuestion 
+                    {
+                        Id = q.Id,
+                        Type = q.Type,
+                        Text = q.Text,
+                        Priority = q.Priority,
+                        Status = q.Status,
+                        Answers = q.Answers.Select(a => new GetQuizzesChapterQuestionAnswer 
+                        { 
+                            Id = a.Id,
+                            Text = a.Text,
+                            IsCorrect = a.IsCorrect,
+                            Priority = a.Priority,
+                            Status = a.Status,
+                        })
+                    })
+                })
             })
         };
 
@@ -77,7 +104,7 @@ public class QuizzesService(
         var chapter = new Chapter
         {
             Id = Guid.CreateVersion7().ToString(),
-            Title = input.Title,
+            Title = ApplicationConstants.DefaultChapter,
             QuizId = quiz.Id,
             Status = Statuses.Active,
             CreatedOn = DateTime.UtcNow,

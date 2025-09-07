@@ -14,6 +14,41 @@ namespace QuizBar.Api.Controllers;
 public class ExceptionLogsController(
     ExceptionLogsService exceptionLogsService) : BaseController
 {
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetExceptionLogsResponse>))]
+    public async Task<IActionResult> GetQuizzesAsync(
+        [FromQuery] GetExceptionLogsRequest request, [FromServices] GetExceptionLogsRequestValidator requestValidator)
+    {
+        var validationResult = await requestValidator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+        {
+            return ValidationFailed(validationResult);
+        }
+
+        var serviceInput = new GetExceptionLogsServiceInput 
+        { 
+            Page = request.Page.Value
+        };
+
+        var servieResult = await exceptionLogsService.GetExceptionLogsAsync(serviceInput);
+
+        return ControllerResponse(new GetExceptionLogsResponse
+        {
+             Exceptions = servieResult.Result.Exceptions.Select(e => new GetExceptionLogsException 
+             { 
+                 Id = e.Id,
+                 Message = e.Message,
+                 Path = e.Path,
+                 QueryString = e.QueryString,
+                 RouteValues = e.RouteValues,
+                 Headers = e.Headers,
+                 OccurredOn = e.OccurredOn,
+             }),
+             Page = servieResult.Result.Page,
+             TotalItems = servieResult.Result.TotalItems
+        });
+    }
+
     [HttpGet("{exceptionLogId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetExceptionLogResponse>))]
     public async Task<IActionResult> GetExceptionLogAsync(

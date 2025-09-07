@@ -4,10 +4,9 @@ public enum QuestionType
 {
     None = 0,
     SingleChoice = 1,
-    MultipleChoice = 2
-    //TrueFalse = 2,
-    //Visual = 3,
-    //FreeText = 4,
-    //Ordering = 5
-    //Matching = 5
+    MultiChoice = 2,
+    TrueFalse = 3,
+    FreeText = 4,
+    // Visual = 5,
+    // Ordering = 6
 }

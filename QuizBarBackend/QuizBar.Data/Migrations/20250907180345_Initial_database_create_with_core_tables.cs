@@ -378,7 +378,7 @@ namespace QuizBar.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PossibleAnswers",
+                name: "Answers",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
@@ -397,14 +397,19 @@ namespace QuizBar.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PossibleAnswers", x => x.Id);
+                    table.PrimaryKey("PK_Answers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PossibleAnswers_Questions_QuestionId",
+                        name: "FK_Answers_Questions_QuestionId",
                         column: x => x.QuestionId,
                         principalTable: "Questions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Answers_QuestionId",
+                table: "Answers",
+                column: "QuestionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -457,26 +462,9 @@ namespace QuizBar.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_PossibleAnswers_QuestionId",
-                table: "PossibleAnswers",
-                column: "QuestionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PossibleAnswers_Text",
-                table: "PossibleAnswers",
-                column: "Text",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Questions_ChapterId",
                 table: "Questions",
                 column: "ChapterId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Questions_Text",
-                table: "Questions",
-                column: "Text",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_QuizEvents_QuizId",
@@ -509,6 +497,9 @@ namespace QuizBar.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Answers");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
             migrationBuilder.DropTable(
@@ -527,19 +518,16 @@ namespace QuizBar.Data.Migrations
                 name: "ExceptionLogs");
 
             migrationBuilder.DropTable(
-                name: "PossibleAnswers");
+                name: "TeamsQuizEvents");
 
             migrationBuilder.DropTable(
-                name: "TeamsQuizEvents");
+                name: "Questions");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Questions");
 
             migrationBuilder.DropTable(
                 name: "QuizEvents");

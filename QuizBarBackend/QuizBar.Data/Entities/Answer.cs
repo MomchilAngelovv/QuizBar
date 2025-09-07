@@ -2,7 +2,7 @@
 
 namespace QuizBar.Data.Entities;
 
-public class PossibleAnswer : IEntityMetaData
+public class Answer : IEntityMetaData
 {
     // Main
     public required string Id { get; set; }

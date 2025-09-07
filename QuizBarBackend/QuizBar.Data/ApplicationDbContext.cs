@@ -19,7 +19,7 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
     public DbSet<Quiz> Quizzes { get; set; }
     public DbSet<Chapter> Chapters { get; set; }
     public DbSet<Question> Questions { get; set; }
-    public DbSet<PossibleAnswer> PossibleAnswers { get; set; }
+    public DbSet<Answer> Answers { get; set; }
 
     public DbSet<QuizEvent> QuizEvents { get; set; }
     public DbSet<QuizLocation> QuizLocations { get; set; }
@@ -101,7 +101,6 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
         builder.Entity<Question>().ToTable("Questions").HasKey(p => p.Id);
         builder.Entity<Question>().Property(p => p.Id).IsRequired().HasMaxLength(36);
         builder.Entity<Question>().Property(p => p.Text).IsRequired().HasMaxLength(500);
-        builder.Entity<Question>().HasIndex(p => p.Text).IsUnique();
         builder.Entity<Question>().Property(p => p.Priority).IsRequired();
 
         // Foreign keys
@@ -123,28 +122,27 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
     private static void AddTablePossibleAnswer(ModelBuilder builder)
     {
         // Main
-        builder.Entity<PossibleAnswer>().ToTable("PossibleAnswers").HasKey(p => p.Id);
-        builder.Entity<PossibleAnswer>().Property(p => p.Id).IsRequired().HasMaxLength(36);
-        builder.Entity<PossibleAnswer>().Property(p => p.Text).IsRequired().HasMaxLength(500);
-        builder.Entity<PossibleAnswer>().HasIndex(p => p.Text).IsUnique();
-        builder.Entity<PossibleAnswer>().Property(p => p.IsCorrect).IsRequired();
-        builder.Entity<PossibleAnswer>().Property(p => p.Priority).IsRequired();
+        builder.Entity<Answer>().ToTable("Answers").HasKey(p => p.Id);
+        builder.Entity<Answer>().Property(p => p.Id).IsRequired().HasMaxLength(36);
+        builder.Entity<Answer>().Property(p => p.Text).IsRequired().HasMaxLength(500);
+        builder.Entity<Answer>().Property(p => p.IsCorrect).IsRequired();
+        builder.Entity<Answer>().Property(p => p.Priority).IsRequired();
 
         // Foreign keys
-        builder.Entity<PossibleAnswer>().Property(p => p.QuestionId).IsRequired().HasMaxLength(36);
+        builder.Entity<Answer>().Property(p => p.QuestionId).IsRequired().HasMaxLength(36);
 
         // IEntityMetaData
-        builder.Entity<PossibleAnswer>().Property(p => p.Status).IsRequired();
-        builder.Entity<PossibleAnswer>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
+        builder.Entity<Answer>().Property(p => p.Status).IsRequired();
+        builder.Entity<Answer>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
 
-        builder.Entity<PossibleAnswer>().Property(p => p.CreatedOn).IsRequired();
-        builder.Entity<PossibleAnswer>().Property(p => p.CreatedBy).IsRequired().HasMaxLength(100);
+        builder.Entity<Answer>().Property(p => p.CreatedOn).IsRequired();
+        builder.Entity<Answer>().Property(p => p.CreatedBy).IsRequired().HasMaxLength(100);
 
-        builder.Entity<PossibleAnswer>().Property(p => p.ModifiedOn).IsRequired(false);
-        builder.Entity<PossibleAnswer>().Property(p => p.ModifiedBy).IsRequired(false).HasMaxLength(100);
+        builder.Entity<Answer>().Property(p => p.ModifiedOn).IsRequired(false);
+        builder.Entity<Answer>().Property(p => p.ModifiedBy).IsRequired(false).HasMaxLength(100);
 
-        builder.Entity<PossibleAnswer>().Property(p => p.DeletedOn).IsRequired(false);
-        builder.Entity<PossibleAnswer>().Property(p => p.DeletedBy).IsRequired(false).HasMaxLength(100);
+        builder.Entity<Answer>().Property(p => p.DeletedOn).IsRequired(false);
+        builder.Entity<Answer>().Property(p => p.DeletedBy).IsRequired(false).HasMaxLength(100);
     }
     private static void AddTableQuizEvents(ModelBuilder builder)
     {
