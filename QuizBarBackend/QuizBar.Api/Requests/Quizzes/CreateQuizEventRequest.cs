@@ -16,8 +16,13 @@ public class CreateQuizEventRequestValidator : AbstractValidator<CreateQuizEvent
 {
     public CreateQuizEventRequestValidator()
     {
-        RuleFor(atq => atq.QuizId).NotEmpty();
-        RuleFor(atq => atq.ScheduledOn).NotEmpty();
-        RuleFor(atq => atq.QuizLocationId).NotEmpty();
+        RuleFor(qe => qe.QuizId).NotEmpty();
+        RuleFor(qe => qe.ScheduledOn).NotEmpty();
+        RuleFor(qe => qe.QuizLocationId).NotEmpty();
+
+        RuleForEach(q => q.TeamIds).ChildRules(tid =>
+        {
+            tid.RuleFor(pa => pa).NotEmpty();
+        });
     }
 }

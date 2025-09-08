@@ -15,7 +15,7 @@ public class WelcomeController(
         
         return Ok(new
         {
-            Text = $"{DateTime.UtcNow} - Foksty Api is working",
+            Text = $"{DateTime.UtcNow} - QuizBar.Api is working",
             EnvVar = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"),
             //Conf = configuration.AsEnumerable().Select(kvp => $"{kvp.Key}:{kvp.Value}"),
             //Users = db.Users.ToList()

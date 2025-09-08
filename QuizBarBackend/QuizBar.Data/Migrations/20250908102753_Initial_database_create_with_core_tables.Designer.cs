@@ -12,7 +12,7 @@ using QuizBar.Data;
 namespace QuizBar.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250907180345_Initial_database_create_with_core_tables")]
+    [Migration("20250908102753_Initial_database_create_with_core_tables")]
     partial class Initial_database_create_with_core_tables
     {
         /// <inheritdoc />
@@ -244,9 +244,6 @@ namespace QuizBar.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("QuizId");
-
-                    b.HasIndex("Title")
-                        .IsUnique();
 
                     b.ToTable("Chapters", (string)null);
                 });
@@ -535,9 +532,6 @@ namespace QuizBar.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Title")
-                        .IsUnique();
-
                     b.ToTable("Quizzes", (string)null);
                 });
 
@@ -797,7 +791,7 @@ namespace QuizBar.Data.Migrations
             modelBuilder.Entity("QuizBar.Data.Entities.Answer", b =>
                 {
                     b.HasOne("QuizBar.Data.Entities.Question", "Question")
-                        .WithMany("PossibleAnswers")
+                        .WithMany("Answers")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -872,7 +866,7 @@ namespace QuizBar.Data.Migrations
 
             modelBuilder.Entity("QuizBar.Data.Entities.Question", b =>
                 {
-                    b.Navigation("PossibleAnswers");
+                    b.Navigation("Answers");
                 });
 
             modelBuilder.Entity("QuizBar.Data.Entities.Quiz", b =>

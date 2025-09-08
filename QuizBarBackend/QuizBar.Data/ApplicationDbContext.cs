@@ -53,8 +53,9 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
         builder.Entity<Quiz>().ToTable("Quizzes").HasKey(p => p.Id);
         builder.Entity<Quiz>().Property(p => p.Id).IsRequired().HasMaxLength(36);
         builder.Entity<Quiz>().Property(p => p.Title).IsRequired().HasMaxLength(200);
-        builder.Entity<Quiz>().HasIndex(p => p.Title).IsUnique();
         builder.Entity<Quiz>().Property(p => p.Scope).IsRequired(false).HasMaxLength(200);
+
+        // Foreign keys
 
         // IEntityMetaData
         builder.Entity<Quiz>().Property(p => p.Status).IsRequired();
@@ -75,7 +76,6 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
         builder.Entity<Chapter>().ToTable("Chapters").HasKey(p => p.Id);
         builder.Entity<Chapter>().Property(p => p.Id).IsRequired().HasMaxLength(36);
         builder.Entity<Chapter>().Property(p => p.Title).IsRequired().HasMaxLength(200);
-        builder.Entity<Chapter>().HasIndex(p => p.Title).IsUnique();
         builder.Entity<Chapter>().Property(p => p.Scope).IsRequired(false).HasMaxLength(200);
         builder.Entity<Chapter>().Property(p => p.Priority).IsRequired();
 

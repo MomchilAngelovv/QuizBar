@@ -41,8 +41,6 @@ public class TeamsService(
     }
     public async Task<ServiceResult<UpdateTeamServiceResult>> UpdateTeamAsync(UpdateTeamServiceInput input)
     {
-        var sada = 0;
-        var sadasd = 23 / sada;
         var serviceResult = new ServiceResult<UpdateTeamServiceResult>();
 
         var team = await db.Teams.FirstOrDefaultAsync(t => t.Id == input.TeamId);
@@ -57,9 +55,16 @@ public class TeamsService(
             team.Title = input.Title;
         }
 
+        team.ModifiedOn = DateTime.UtcNow;
+        team.ModifiedBy = input.UserId;
 
         db.Teams.Update(team);
         await db.SaveChangesAsync();
+
+        serviceResult.Result = new UpdateTeamServiceResult
+        {
+            Id = team.Id
+        };
 
         return serviceResult;
     }

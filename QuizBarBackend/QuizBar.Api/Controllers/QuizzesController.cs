@@ -122,6 +122,16 @@ public class QuizzesController(
         };
 
         var serviceResult = await quizzesService.CreateQuizAsync(serviceInput);
+        if (serviceResult.Reason != ErrorReason.None)
+        {
+            // TODO: make 1 generic method
+            if (serviceResult.Reason == ErrorReason.QuizAlreadyExists)
+            {
+                return ControllerResponse(ValidationErrors.AlreadyExists("Quiz"), HttpStatusCode.Conflict);
+            }
+        }
+
+
 
         return ControllerResponse(new CreateQuizResponse
         {
@@ -129,39 +139,6 @@ public class QuizzesController(
         });
     }
 
-    [HttpPost("{quizId:required}/events")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<CreateQuizEventResponse>))]
-    public async Task<IActionResult> CreateQuizEventAsync(
-        [FromRoute] string quizId, [FromBody] CreateQuizEventRequest request, [FromServices] CreateQuizEventRequestValidator requestValidator)
-    {
-        request.QuizId = quizId;
 
-        var validationResult = await requestValidator.ValidateAsync(request);
-        if (!validationResult.IsValid)
-        {
-            return ValidationFailed(validationResult);
-        }
 
-        var serviceInput = new CreateQuizEventServiceInput
-        {
-            QuizId = quizId,
-            ScheduledOn = request.ScheduledOn,
-            QuizLocationId = request.QuizLocationId,
-            TeamIds = request.TeamIds,
-            UserId = UserId
-        };
-
-        var serviceResult = await quizzesService.CreateQuizEventAsync(serviceInput);
-
-        return ControllerResponse(new CreateQuizEventResponse
-        {
-            Id = serviceResult.Result.Id
-        });
-    }
-
-    [HttpPost("{quizId:required}/events/{eventId}/start")]
-    public async Task<ActionResult<object>> StartQuizEventAsync(string id)
-    {
-        return null;
-    }
 }

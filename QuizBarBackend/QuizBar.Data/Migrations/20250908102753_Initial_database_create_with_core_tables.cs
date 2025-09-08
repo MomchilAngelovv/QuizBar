@@ -456,12 +456,6 @@ namespace QuizBar.Data.Migrations
                 column: "QuizId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Chapters_Title",
-                table: "Chapters",
-                column: "Title",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Questions_ChapterId",
                 table: "Questions",
                 column: "ChapterId");
@@ -475,12 +469,6 @@ namespace QuizBar.Data.Migrations
                 name: "IX_QuizEvents_QuizLocationId",
                 table: "QuizEvents",
                 column: "QuizLocationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Quizzes_Title",
-                table: "Quizzes",
-                column: "Title",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_TeamsQuizEvents_QuizEventId",

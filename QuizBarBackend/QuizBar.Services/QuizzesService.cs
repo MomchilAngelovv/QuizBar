@@ -91,6 +91,13 @@ public class QuizzesService(
     {
         var serviceResult = new ServiceResult<CreateQuizServiceResult>();
 
+        var quizExists = await db.Quizzes.FirstOrDefaultAsync(q => q.Title == input.Title && q.CreatedBy == input.UserId);
+        if (quizExists is not null)
+        {
+            serviceResult.Reason = ErrorReason.QuizAlreadyExists;
+            return serviceResult;
+        }
+
         var quiz = new Quiz
         {
             Id = Guid.CreateVersion7().ToString(),
@@ -121,10 +128,6 @@ public class QuizzesService(
         };
 
         return serviceResult;
-    }
-    public string StartQuizAsync(string id)
-    {
-        return null;
     }
     public async Task<ServiceResult<CreateQuizEventServiceResult>> CreateQuizEventAsync(CreateQuizEventServiceInput input)
     {
@@ -185,6 +188,49 @@ public class QuizzesService(
             Id = quizEvent.Id
         };
         
+        return serviceResult;
+    }
+    public async Task<ServiceResult<UpdateQuizEventScoresServiceResult>> UpdateQuizEventScoresAsync(UpdateQuizEventScoresServiceInput input)
+    {
+        var serviceResult = new ServiceResult<UpdateQuizEventScoresServiceResult>();
+
+        var quizEvent = await db.QuizEvents.FirstOrDefaultAsync(qe => qe.Id == input.QuizEventId);
+        if (quizEvent is null)
+        {
+            serviceResult.Reason = ErrorReason.QuizEventNotFound;
+            return serviceResult;
+        }
+
+        var teamsQuizEvents = await db.TeamsQuizEvents
+            .Include(tqe => tqe.Team)
+            .Where(tqe => tqe.QuizEventId == quizEvent.Id)
+            .ToListAsync();
+        
+        var inputContainsCorrectIds = new HashSet<string>(input.TeamsScores.Select(ts => ts.TeamId)).SetEquals(new HashSet<string>(teamsQuizEvents.Select(tqe => tqe.TeamId)));
+        if (!inputContainsCorrectIds)
+        {
+            serviceResult.Reason = ErrorReason.IncompatibleData;
+            return serviceResult;
+        }
+
+        foreach (var teamsQuizEvent in teamsQuizEvents)
+        {
+            var teamScore = input.TeamsScores.First(ts => ts.TeamId == teamsQuizEvent.TeamId);
+            teamsQuizEvent.Score += teamScore.Score;
+        }
+
+        db.TeamsQuizEvents.UpdateRange(teamsQuizEvents);
+        await db.SaveChangesAsync();
+
+        serviceResult.Result = new UpdateQuizEventScoresServiceResult
+        {
+            TeamsScores = teamsQuizEvents.Select(tqe => new Results.Quizzes.UpdateQuizEventResultsTeamResult 
+            { 
+                TeamId = tqe.TeamId,
+                Score = tqe.Score
+            })
+        };
+
         return serviceResult;
     }
 }
