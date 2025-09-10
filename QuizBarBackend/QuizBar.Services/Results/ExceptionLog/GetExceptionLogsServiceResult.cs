@@ -1,6 +1,6 @@
 ﻿namespace QuizBar.Services.Results.ExceptionLog;
 
-public class GetExceptionLogsServiceResult : IPaginationServiceResponse
+public class GetExceptionLogsServiceResult : IPaginatedServiceResult
 {
     public required IEnumerable<GetExceptionLogsException> Exceptions { get; set; }
 

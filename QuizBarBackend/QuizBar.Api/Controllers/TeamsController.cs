@@ -86,10 +86,7 @@ public class TeamsController(
         var serviceResult = await teamsService.UpdateTeamAsync(serviceInput);
         if (serviceResult.Reason != ErrorReason.None)
         {
-            if (serviceResult.Reason == ErrorReason.NotFound)
-            {
-                return ControllerResponse(ValidationErrors.NotFound("Team"), HttpStatusCode.NotFound);
-            }
+            return ControllerResponse(serviceResult.Reason);
         }
 
         return ControllerResponse(new UpdateTeamResponse

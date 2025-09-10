@@ -15,7 +15,11 @@ public class QuizzesService(
     {
         var serviceResult = new ServiceResult<GetQuizServiceResult>();
 
-        var quiz = await db.Quizzes.FirstOrDefaultAsync(q => q.Id == filter.QuizId);
+        var quiz = await db.Quizzes
+                               .Include(q => q.Chapters)
+                                   .ThenInclude(ch => ch.Questions)
+                                       .ThenInclude(ch => ch.Answers)
+                                           .FirstOrDefaultAsync(q => q.Id == filter.QuizId);
         if (quiz is null)
         {
             serviceResult.Reason = ErrorReason.NotFound;
@@ -26,7 +30,29 @@ public class QuizzesService(
         {
             Id = quiz.Id,
             Title = quiz.Title,
-            Scope = quiz.Scope
+            Scope = quiz.Scope,
+            Chapters = quiz.Chapters.Select(ch => new GetQuizzesChapter
+            {
+                Id = ch.Id,
+                Title = ch.Title,
+                Status = ch.Status,
+                Questions = ch.Questions.Select(q => new GetQuizzesChapterQuestion
+                {
+                    Id = q.Id,
+                    Type = q.Type,
+                    Text = q.Text,
+                    Priority = q.Priority,
+                    Status = q.Status,
+                    Answers = q.Answers.Select(a => new GetQuizzesChapterQuestionAnswer
+                    {
+                        Id = a.Id,
+                        Text = a.Text,
+                        IsCorrect = a.IsCorrect,
+                        Priority = a.Priority,
+                        Status = a.Status,
+                    })
+                })
+            })
         };
 
         return serviceResult;
@@ -46,11 +72,7 @@ public class QuizzesService(
         }
 
         // TODO make the query not take everything, just the things we need
-        var quizzes = await quizzesQuery
-            .Include(q => q.Chapters)
-                .ThenInclude(ch => ch.Questions)
-                    .ThenInclude(ch => ch.Answers)
-            .ToListAsync();
+        var quizzes = await quizzesQuery.ToListAsync();
 
         serviceResult.Result = new GetQuizzesServiceResult
         {
@@ -60,28 +82,7 @@ public class QuizzesService(
                 Title = q.Title,
                 Scope = q.Scope,
                 Status = q.Status,
-                Chapters = q.Chapters.Select(ch => new GetQuizzesChapter
-                {
-                    Id = ch.Id,
-                    Title = ch.Title,
-                    Status = ch.Status,
-                    Questions = ch.Questions.Select(q => new GetQuizzesChapterQuestion 
-                    {
-                        Id = q.Id,
-                        Type = q.Type,
-                        Text = q.Text,
-                        Priority = q.Priority,
-                        Status = q.Status,
-                        Answers = q.Answers.Select(a => new GetQuizzesChapterQuestionAnswer 
-                        { 
-                            Id = a.Id,
-                            Text = a.Text,
-                            IsCorrect = a.IsCorrect,
-                            Priority = a.Priority,
-                            Status = a.Status,
-                        })
-                    })
-                })
+                
             })
         };
 

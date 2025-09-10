@@ -57,25 +57,25 @@ public class QuizEventsController(
         var serviceInput = new UpdateQuizEventScoresServiceInput
         {
             QuizEventId = request.QuizEventId,
-            TeamsScores = request.TeamsScores.Select(ts => new Services.Inputs.Quizzes.UpdateQuizEventResultsTeamResult
+            TeamsScores = request.TeamsScores.Select(teamScore => new Services.Inputs.Quizzes.UpdateQuizEventResultsTeamResult
             {
-                TeamId = ts.TeamId,
-                Score = ts.Score
+                TeamId = teamScore.TeamId,
+                Score = teamScore.Score
             })
         };
 
         var serviceResult = await quizzesService.UpdateQuizEventScoresAsync(serviceInput);
         if (serviceResult.Reason != ErrorReason.None)
         {
-            // Handle errors
+            return ControllerResponse(serviceResult.Reason);
         }
 
         return ControllerResponse(new UpdateQuizEventScoresResponse
         {
-            TeamsScores = serviceResult.Result.TeamsScores.Select(ts => new Responses.Quizzes.UpdateQuizEventResultsTeamResult 
+            TeamsScores = serviceResult.Result.TeamsScores.Select(teamScore => new Responses.Quizzes.UpdateQuizEventResultsTeamResult 
             {
-                TeamId = ts.TeamId,
-                Score = ts.Score
+                TeamId = teamScore.TeamId,
+                Score = teamScore.Score
             })
         });
     }

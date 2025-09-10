@@ -7,6 +7,7 @@ using QuizBar.Services;
 using QuizBar.Services.Inputs.ExceptionLogs;
 using QuizBar.Services.Results;
 using QuizBar.Shared;
+using System;
 using System.Net;
 
 namespace QuizBar.Api.Controllers;
@@ -16,7 +17,7 @@ public class ExceptionLogsController(
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetExceptionLogsResponse>))]
-    public async Task<IActionResult> GetQuizzesAsync(
+    public async Task<IActionResult> GetExceptionLogsAsync(
         [FromQuery] GetExceptionLogsRequest request, [FromServices] GetExceptionLogsRequestValidator requestValidator)
     {
         var validationResult = await requestValidator.ValidateAsync(request);
@@ -34,15 +35,15 @@ public class ExceptionLogsController(
 
         return ControllerResponse(new GetExceptionLogsResponse
         {
-             Exceptions = servieResult.Result.Exceptions.Select(e => new GetExceptionLogsException 
+             Exceptions = servieResult.Result.Exceptions.Select(exception => new GetExceptionLogsException 
              { 
-                 Id = e.Id,
-                 Message = e.Message,
-                 Path = e.Path,
-                 QueryString = e.QueryString,
-                 RouteValues = e.RouteValues,
-                 Headers = e.Headers,
-                 OccurredOn = e.OccurredOn,
+                 Id = exception.Id,
+                 Message = exception.Message,
+                 Path = exception.Path,
+                 QueryString = exception.QueryString,
+                 RouteValues = exception.RouteValues,
+                 Headers = exception.Headers,
+                 OccurredOn = exception.OccurredOn,
              }),
              Page = servieResult.Result.Page,
              TotalItems = servieResult.Result.TotalItems

@@ -39,28 +39,6 @@ public class QuizzesController(
                 Id = q.Id,
                 Title = q.Title,
                 Status = q.Status,
-                Chapters = q.Chapters.Select(ch => new GetQuizzesChapter 
-                {
-                    Id = ch.Id,
-                    Title = ch.Title,
-                    Status = ch.Status,
-                    Questions = ch.Questions.Select(ch => new GetQuizzesChapterQuestion 
-                    { 
-                        Id = ch.Id,
-                        Type = ch.Type,
-                        Text = ch.Text,
-                        Priority = ch.Priority,
-                        Status = ch.Status,
-                        Answers = ch.Answers.Select(a => new GetQuizzesChapterQuestionAnswer 
-                        { 
-                            Id = a.Id,
-                            Text = a.Text,
-                            IsCorrect = a.IsCorrect,
-                            Priority = a.Priority,
-                            Status = a.Status,
-                        })
-                    }) 
-                })
             }),
             Page = 1,
             TotalItems = 50
@@ -89,17 +67,36 @@ public class QuizzesController(
         var serviceResult = await quizzesService.GetQuizAsync(filter);
         if (serviceResult.Reason != ErrorReason.None)
         {
-            if (serviceResult.Reason == ErrorReason.NotFound)
-            {
-                return ControllerResponse(ValidationErrors.NotFound("Quiz"), HttpStatusCode.NotFound);
-            }
+            return ControllerResponse(serviceResult.Reason);
         }
 
         return ControllerResponse(new GetQuizResponse
         {
             Id = serviceResult.Result.Id,
             Title = serviceResult.Result.Title,
-            Scope = serviceResult.Result.Scope
+            Scope = serviceResult.Result.Scope,
+            Chapters = serviceResult.Result.Chapters.Select(chapter => new GetQuizzesChapter
+            {
+                Id = chapter.Id,
+                Title = chapter.Title,
+                Status = chapter.Status,
+                Questions = chapter.Questions.Select(question => new GetQuizzesChapterQuestion
+                {
+                    Id = question.Id,
+                    Type = question.Type,
+                    Text = question.Text,
+                    Priority = question.Priority,
+                    Status = question.Status,
+                    Answers = question.Answers.Select(answer => new GetQuizzesChapterQuestionAnswer
+                    {
+                        Id = answer.Id,
+                        Text = answer.Text,
+                        IsCorrect = answer.IsCorrect,
+                        Priority = answer.Priority,
+                        Status = answer.Status,
+                    })
+                })
+            })
         });
     }
 
@@ -124,21 +121,12 @@ public class QuizzesController(
         var serviceResult = await quizzesService.CreateQuizAsync(serviceInput);
         if (serviceResult.Reason != ErrorReason.None)
         {
-            // TODO: make 1 generic method
-            if (serviceResult.Reason == ErrorReason.QuizAlreadyExists)
-            {
-                return ControllerResponse(ValidationErrors.AlreadyExists("Quiz"), HttpStatusCode.Conflict);
-            }
+            return ControllerResponse(serviceResult.Reason);
         }
-
-
 
         return ControllerResponse(new CreateQuizResponse
         {
             Id = serviceResult.Result.Id
         });
     }
-
-
-
 }

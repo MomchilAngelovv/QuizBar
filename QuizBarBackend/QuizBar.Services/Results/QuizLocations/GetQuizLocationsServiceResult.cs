@@ -2,9 +2,13 @@
 
 namespace QuizBar.Services.Results.QuizLocations;
 
-public class GetQuizLocationsServiceResult
+public class GetQuizLocationsServiceResult : IPaginatedServiceResult
 {
     public required IEnumerable<GetQuizLocationsLocation> QuizLocations { get; set; }
+
+    // IPaginationServiceResponse
+    public required int Page { get; set ; }
+    public required int TotalItems { get; set ; }
 }
 
 public class GetQuizLocationsLocation

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuizBar.Api.Responses;
+using QuizBar.Services.Results;
+using QuizBar.Shared;
 using System.Net;
 using System.Security.Claims;
 
@@ -54,6 +56,69 @@ public class BaseController : ControllerBase
             Success = success,
             Message = message,
             Data = data
+        };
+
+        return StatusCode((int)statusCode, controllerResult);
+    }
+
+    protected IActionResult ControllerResponse(
+        ErrorReason errorReason)
+    {
+        var message = string.Empty;
+        var statusCode = default(HttpStatusCode);
+
+        switch (errorReason)
+        {
+            case ErrorReason.None:
+                break;
+            case ErrorReason.NotFound:
+                break;
+            case ErrorReason.QuestionNotFound:
+                message = ValidationErrors.NotFound("Question");
+                statusCode = HttpStatusCode.NotFound;
+                break;
+            case ErrorReason.ChapterNotFound:
+                message = ValidationErrors.NotFound("Chapter");
+                statusCode = HttpStatusCode.NotFound;
+                break;
+            case ErrorReason.QuizNotFound:
+                message = ValidationErrors.NotFound("Quiz");
+                statusCode = HttpStatusCode.NotFound;
+                break;
+            case ErrorReason.QuizEventNotFound:
+                message = ValidationErrors.NotFound("Quiz event");
+                statusCode = HttpStatusCode.NotFound;
+                break;
+            case ErrorReason.AlreadyExists:
+                break;
+            case ErrorReason.QuestionAlreadyExists:
+                message = ValidationErrors.AlreadyExists("Question");
+                statusCode = HttpStatusCode.Conflict;
+                break;
+            case ErrorReason.ChapterAlreadyExists:
+                message = ValidationErrors.AlreadyExists("Chapter");
+                statusCode = HttpStatusCode.Conflict;
+                break;
+            case ErrorReason.QuizAlreadyExists:
+                message = ValidationErrors.AlreadyExists("Quiz");
+                statusCode = HttpStatusCode.Conflict;
+                break;
+            case ErrorReason.QuizEventAlreadyExists:
+                message = ValidationErrors.AlreadyExists("Quiz event");
+                statusCode = HttpStatusCode.Conflict;
+                break;
+            case ErrorReason.IncompatibleData:
+                message = ValidationErrors.AlreadyExists("INCOMBATIBLE DATA NEED TO FINISH THIS PART");
+                break;
+            default:
+                message = "Unknown error - need to add this in the method for errros";
+                break;
+        }
+
+        var controllerResult = new ControllerResponse
+        {
+            Success = false,
+            Message = message,
         };
 
         return StatusCode((int)statusCode, controllerResult);
