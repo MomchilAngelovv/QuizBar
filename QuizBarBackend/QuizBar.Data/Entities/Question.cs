@@ -8,7 +8,8 @@ public class Question : IEntityMetaData
     public required string Id { get; set; }
     public required QuestionType Type { get; set; }
     public required string Text { get; set; }
-    public int Priority { get; set; }
+	public string ResourceUrl { get; set; }
+	public int Priority { get; set; }
 
     // Foreign keys
     public required string ChapterId { get; set; }

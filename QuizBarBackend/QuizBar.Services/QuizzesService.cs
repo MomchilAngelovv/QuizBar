@@ -31,25 +31,25 @@ public class QuizzesService(
             Id = quiz.Id,
             Title = quiz.Title,
             Scope = quiz.Scope,
-            Chapters = quiz.Chapters.Select(ch => new GetQuizzesChapter
+            Chapters = quiz.Chapters.Select(chapter => new GetQuizzesChapter
             {
-                Id = ch.Id,
-                Title = ch.Title,
-                Status = ch.Status,
-                Questions = ch.Questions.Select(q => new GetQuizzesChapterQuestion
+                Id = chapter.Id,
+                Title = chapter.Title,
+                Status = chapter.Status,
+                Questions = chapter.Questions.Select(question => new GetQuizzesChapterQuestion
                 {
-                    Id = q.Id,
-                    Type = q.Type,
-                    Text = q.Text,
-                    Priority = q.Priority,
-                    Status = q.Status,
-                    Answers = q.Answers.Select(a => new GetQuizzesChapterQuestionAnswer
+                    Id = question.Id,
+                    Type = question.Type,
+                    Text = question.Text,
+                    Priority = question.Priority,
+                    Status = question.Status,
+                    Answers = question.Answers.Select(answer => new GetQuizzesChapterQuestionAnswer
                     {
-                        Id = a.Id,
-                        Text = a.Text,
-                        IsCorrect = a.IsCorrect,
-                        Priority = a.Priority,
-                        Status = a.Status,
+                        Id = answer.Id,
+                        Text = answer.Text,
+                        IsCorrect = answer.IsCorrect,
+                        Priority = answer.Priority,
+                        Status = answer.Status,
                     })
                 })
             })

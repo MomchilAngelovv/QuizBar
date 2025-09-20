@@ -38,78 +38,29 @@ public class QuestionsService(
             ChapterId = input.ChapterId,
             Status = Statuses.Active,
             CreatedOn = DateTime.UtcNow,
-            CreatedBy = input.UserId
+            CreatedBy = input.UserId,
+            Answers = []
         };
 
-        if (input.Type == QuestionType.SingleChoice || input.Type == QuestionType.MultiChoice)
+        foreach (var answer in input.Answers)
         {
-            question.Answers = [];
-
-            foreach (var pa in input.PossibleAnswers)
+            question.Answers.Add(new Answer
             {
-                var possibleAnswer = new Answer
-                {
-                    Id = Guid.CreateVersion7().ToString(),
-                    Text = pa.Text,
-                    IsCorrect = pa.IsCorrect,
-                    Priority = pa.Priority,
-                    QuestionId = question.Id,
-                    Status = Statuses.Active,
-                    CreatedOn = DateTime.UtcNow,
-                    CreatedBy = input.UserId
-                };
-
-                question.Answers.Add(possibleAnswer);
-            }
+                Id = Guid.CreateVersion7().ToString(),
+                Text = answer.Text,
+                IsCorrect = answer.IsCorrect,
+                Priority = answer.Priority,
+                QuestionId = question.Id,
+                Status = Statuses.Active,
+                CreatedOn = DateTime.UtcNow,
+                CreatedBy = input.UserId
+            });
         }
-        if (input.Type == QuestionType.TrueFalse)
+
+        if (input.Type == QuestionType.Video || 
+            input.Type == QuestionType.Sound)
         {
-            question.Answers = [];
-
-            var truePossibleAnswer = new Answer
-            {
-                Id = Guid.CreateVersion7().ToString(),
-                Text = "True",
-                IsCorrect = input.IsTrue.Value == true,
-                Priority = 1,
-                QuestionId = question.Id,
-                Status = Statuses.Active,
-                CreatedOn = DateTime.UtcNow,
-                CreatedBy = input.UserId
-            };
-
-            var falsePossibleAnswer = new Answer
-            {
-                Id = Guid.CreateVersion7().ToString(),
-                Text = "False",
-                IsCorrect = input.IsTrue.Value == false,
-                Priority = 2,
-                QuestionId = question.Id,
-                Status = Statuses.Active,
-                CreatedOn = DateTime.UtcNow,
-                CreatedBy = input.UserId
-            };
-
-            question.Answers.Add(truePossibleAnswer);
-            question.Answers.Add(falsePossibleAnswer);
-        }
-        if (input.Type == QuestionType.FreeText)
-        {
-            question.Answers = [];
-
-            var correctAnswer = new Answer
-            {
-                Id = Guid.CreateVersion7().ToString(),
-                Text = input.PossibleAnswers.First().Text,
-                IsCorrect = true,
-                Priority = 1,
-                QuestionId = question.Id,
-                Status = Statuses.Active,
-                CreatedOn = DateTime.UtcNow,
-                CreatedBy = input.UserId
-            };
-
-            question.Answers.Add(correctAnswer);
+            question.ResourceUrl = input.ResourceUrl;
         }
 
         await db.Questions.AddAsync(question);

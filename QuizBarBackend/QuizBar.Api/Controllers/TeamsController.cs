@@ -5,8 +5,6 @@ using QuizBar.Api.Responses.Teams;
 using QuizBar.Services;
 using QuizBar.Services.Inputs.Teams;
 using QuizBar.Services.Results;
-using QuizBar.Shared;
-using System.Net;
 
 namespace QuizBar.Api.Controllers;
 

@@ -321,6 +321,7 @@ namespace QuizBar.Data.Migrations
                     Id = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
                     Text = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    ResourceUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     ChapterId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),

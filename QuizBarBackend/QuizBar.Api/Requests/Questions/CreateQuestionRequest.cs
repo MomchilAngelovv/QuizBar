@@ -6,17 +6,17 @@ namespace QuizBar.Api.Requests.Questions;
 public class CreateQuestionRequest
 {
     public required string Text { get; set; }
+    public string ResourceUrl { get; set; }
     public required QuestionType Type { get; set; }
-    public int Priority { get; set; }
     public required string ChapterId { get; set; }
-    public bool? IsTrue { get; set; }
-    public IEnumerable<CreateQuestionPossibleAnswer>? PossibleAnswers { get; set; }
+    public int Priority { get; set; }
+    public IEnumerable<CreateQuestionAnswer>? Answers { get; set; }
 }
 
-public class CreateQuestionPossibleAnswer
+public class CreateQuestionAnswer
 {
     public required string Text { get; set; }
-    public bool? IsCorrect { get; set; }
+    public bool IsCorrect { get; set; }
     public int Priority { get; set; }
 }
 
@@ -24,48 +24,42 @@ public class CreateQuestionRequestValidator : AbstractValidator<CreateQuestionRe
 {
     public CreateQuestionRequestValidator()
     {
-        RuleFor(q => q.Text).NotEmpty();
-        RuleFor(q => q.Type).NotEmpty().IsInEnum();
+        RuleFor(question => question.Text).NotEmpty();
+        RuleFor(question => question.Type).NotEmpty().IsInEnum();
+        RuleFor(question => question.Answers).NotEmpty();
 
-        When(q => q.Type == QuestionType.SingleChoice || q.Type == QuestionType.MultiChoice, () =>
+        RuleForEach(question => question.Answers).ChildRules(pa =>
         {
-            RuleFor(q => q.IsTrue).Empty();
-            RuleFor(q => q.PossibleAnswers).NotEmpty();
-
-            When(q => q.Type == QuestionType.SingleChoice, () =>
-            {
-                RuleFor(q => q.PossibleAnswers.Count(pa => pa.IsCorrect == true)).Equal(1);
-            });
-
-            When(q => q.Type == QuestionType.MultiChoice, () =>
-            {
-                RuleFor(q => q.PossibleAnswers.Count(pa => pa.IsCorrect == true)).GreaterThan(1);
-            });
-
-            RuleForEach(q => q.PossibleAnswers).ChildRules(pa =>
-            {
-                pa.RuleFor(pa => pa.Text).NotEmpty();
-            });
+            pa.RuleFor(possibleAnswer => possibleAnswer.Text).NotEmpty();
         });
 
-        When(q => q.Type == QuestionType.TrueFalse, () =>
+        When(question => question.Type == QuestionType.SingleChoice, () =>
         {
-            RuleFor(q => q.IsTrue).NotEmpty();
-            RuleFor(q => q.PossibleAnswers).Empty();
+            RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.IsCorrect == true)).Equal(1);
         });
 
-        When(q => q.Type == QuestionType.FreeText, () =>
+        When(question => question.Type == QuestionType.MultiChoice, () =>
         {
-            RuleFor(q => q.IsTrue).Empty();
-            RuleFor(q => q.PossibleAnswers).NotEmpty();
+            RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.IsCorrect == true)).GreaterThan(1);
+        });
 
-            RuleFor(q => q.PossibleAnswers.Count()).Equal(1);
+        When(question => question.Type == QuestionType.TrueFalse, () =>
+        {
+			RuleFor(question => question.Answers.Count()).Equal(2);
+			RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.IsCorrect == true)).Equal(1);
+			RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.IsCorrect == false)).Equal(1);
+		});
 
-            RuleForEach(q => q.PossibleAnswers).ChildRules(pa =>
-            {
-                pa.RuleFor(pa => pa.Text).NotEmpty();
-                pa.RuleFor(pa => pa.IsCorrect).Empty();
-            });
+        When(question => question.Type == QuestionType.FreeText, () =>
+        {
+            RuleFor(question => question.Answers.Count()).Equal(1);
+			RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.IsCorrect == true)).Equal(1);
+        });
+
+        When(question => question.Type == QuestionType.Video || question.Type == QuestionType.Sound, () =>
+        {
+            RuleFor(question => question.Answers.Count()).Equal(1);
+            RuleFor(question => question.ResourceUrl).NotEmpty();
         });
     }
 }

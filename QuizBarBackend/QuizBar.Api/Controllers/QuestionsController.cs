@@ -25,15 +25,15 @@ public class QuestionsController(
         var serviceInput = new CreateQuestionServiceInput
         {
             Text = request.Text,
+            ResourceUrl = request.ResourceUrl,
             Type = request.Type,
             Priority = request.Priority,
             ChapterId = request.ChapterId,
-            IsTrue = request.IsTrue,
-            PossibleAnswers = request.PossibleAnswers?.Select(possibleAnswer => new CreateQuestionPossibleAnswerServiceInput
+            Answers = request.Answers.Select(answer => new CreateQuestionAnswerServiceInput
             {
-                Text = possibleAnswer.Text,
-                IsCorrect = possibleAnswer.IsCorrect.GetValueOrDefault(),
-                Priority = possibleAnswer.Priority
+                Text = answer.Text,
+                IsCorrect = answer.IsCorrect,
+                Priority = answer.Priority
             }),
             UserId = UserId
         };

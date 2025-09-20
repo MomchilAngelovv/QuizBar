@@ -12,7 +12,7 @@ using QuizBar.Data;
 namespace QuizBar.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250908102753_Initial_database_create_with_core_tables")]
+    [Migration("20250920133231_Initial_database_create_with_core_tables")]
     partial class Initial_database_create_with_core_tables
     {
         /// <inheritdoc />
@@ -467,6 +467,10 @@ namespace QuizBar.Data.Migrations
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
+
+                    b.Property<string>("ResourceUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
