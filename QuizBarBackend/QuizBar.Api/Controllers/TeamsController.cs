@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using QuizBar.Api.Requests.Teams;
 using QuizBar.Api.Responses;
 using QuizBar.Api.Responses.Teams;
@@ -14,25 +15,77 @@ public class TeamsController(
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetTeamsResponse>))]
     public async Task<IActionResult> GetTeamsAsync(
-        [FromQuery] GetTeamsRequest request, [FromServices] GetTeamsRequestValidator requestValidator)
+        [FromQuery] int? page, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetTeamsRequest? request, [FromServices] GetTeamsRequestValidator requestValidator)
     {
+        request ??= new GetTeamsRequest();
+        request.Page = page ?? 1;
+
         var validationResult = await requestValidator.ValidateAsync(request);
         if (!validationResult.IsValid)
         {
             return ValidationFailed(validationResult);
         }
 
-        var teams = await teamsService.GetTeamsAsync();
+        var serviceInput = new GetTeamsServiceInput
+        {
+            Page = request.Page,
+            Filter = new TeamsFilter
+            {
+                UserId = UserId
+            }
+        };
+
+        var serviceResult = await teamsService.GetTeamsAsync(serviceInput);
 
         return ControllerResponse(new GetTeamsResponse
         {
-            Teams = teams.Select(t => new GetTeamsTeam
+            Teams = serviceResult.Result.Teams.Select(t => new GetTeamsTeam
             {
                 Id = t.Id,
                 Title = t.Title,
             }),
-            Page = 1,
-            TotalItems = 50
+            Page = serviceResult.Result.Page,
+            TotalItems = serviceResult.Result.TotalItems
+        });
+    }
+
+    [HttpGet("{teamId:required}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetTeamResponse>))]
+    public async Task<IActionResult> GetTeamAsync(
+        [FromRoute] string teamId, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetTeamRequest? request, [FromServices] GetTeamRequestValidator requestValidator)
+    {
+        request ??= new GetTeamRequest();
+        request.TeamId = teamId;
+
+        var validationResult = await requestValidator.ValidateAsync(request);
+        if (!validationResult.IsValid)
+        {
+            return ValidationFailed(validationResult);
+        }
+
+        var serviceInput = new GetTeamServiceInput
+        {
+            TeamId = request.TeamId,
+            UserId = UserId
+        };
+
+        var serviceResult = await teamsService.GetTeamAsync(serviceInput);
+        if (serviceResult.Reason != ErrorReason.None)
+        {
+            return ControllerResponse(serviceResult.Reason);
+        }
+
+        return ControllerResponse(new GetTeamResponse
+        {
+            Id = serviceResult.Result.Id,
+            Title = serviceResult.Result.Title,
+            Status = serviceResult.Result.Status,
+            Results = serviceResult.Result.Results.Select(r => new GetTeamResultServiceResult
+            {
+                Score = r.Score,
+                TeamId = r.TeamId,
+                QuizEventId = r.QuizEventId
+            })
         });
     }
 

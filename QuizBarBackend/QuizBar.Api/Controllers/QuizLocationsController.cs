@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using QuizBar.Api.Requests.QuizLocations;
-using QuizBar.Api.Requests.Quizzes;
 using QuizBar.Api.Responses;
 using QuizBar.Api.Responses.QuizLocations;
 using QuizBar.Api.Responses.Quizzes;
 using QuizBar.Services;
 using QuizBar.Services.Inputs.QuizLocations;
-using QuizBar.Services.Inputs.Quizzes;
 using QuizBar.Services.Results;
 
 namespace QuizBar.Api.Controllers;

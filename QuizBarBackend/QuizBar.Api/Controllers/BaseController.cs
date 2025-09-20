@@ -89,6 +89,10 @@ public class BaseController : ControllerBase
                 message = ValidationErrors.NotFound("Quiz event");
                 statusCode = HttpStatusCode.NotFound;
                 break;
+            case ErrorReason.TeamNotFound:
+                message = ValidationErrors.NotFound("Team");
+                statusCode = HttpStatusCode.NotFound;
+                break;
             case ErrorReason.AlreadyExists:
                 break;
             case ErrorReason.QuestionAlreadyExists:
@@ -105,6 +109,10 @@ public class BaseController : ControllerBase
                 break;
             case ErrorReason.QuizEventAlreadyExists:
                 message = ValidationErrors.AlreadyExists("Quiz event");
+                statusCode = HttpStatusCode.Conflict;
+                break;
+            case ErrorReason.TeamAlreadyExists:
+                message = ValidationErrors.AlreadyExists("Team");
                 statusCode = HttpStatusCode.Conflict;
                 break;
             case ErrorReason.IncompatibleData:

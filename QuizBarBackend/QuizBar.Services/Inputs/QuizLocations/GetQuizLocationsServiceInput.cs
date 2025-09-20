@@ -2,6 +2,6 @@
 
 public class GetQuizLocationsServiceInput
 {
-    public int Page { get; set; } = 1;
+    public required int Page { get; set; }
     public QuizLocationsFilter Filter { get; set; }
 }

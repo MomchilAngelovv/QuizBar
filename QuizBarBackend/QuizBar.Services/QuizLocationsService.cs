@@ -16,24 +16,25 @@ public class QuizLocationsService(
         var serviceResult = new ServiceResult<GetQuizLocationsServiceResult>();
 
         var quizLocationsQuery = db.QuizLocations
-                                       .AsQueryable();
+            .AsQueryable();
 
         if (input.Filter is not null)
         {
             if (!string.IsNullOrWhiteSpace(input.Filter.UserId))
             {
                 quizLocationsQuery = quizLocationsQuery
-                                        .Where(ql => ql.CreatedBy == input.Filter.UserId);
+                    .Where(ql => ql.CreatedBy == input.Filter.UserId);
             }
         }
 
         var quizLocations = await quizLocationsQuery
-                                     .Skip((input.Page - 1) * 10)
-                                        .Take(10)
-                                            .ToListAsync();
+            .OrderBy(q => q.Site)
+            .Skip((input.Page - 1) * 10)
+            .Take(10)
+            .ToListAsync();
 
         var quizLocationsTotalItems = await db.ExceptionLogs
-                                                  .CountAsync();
+            .CountAsync();
 
         serviceResult.Result = new GetQuizLocationsServiceResult
         {

@@ -6,8 +6,6 @@ using QuizBar.Api.Responses.Quizzes;
 using QuizBar.Services;
 using QuizBar.Services.Inputs.Quizzes;
 using QuizBar.Services.Results;
-using QuizBar.Shared;
-using System.Net;
 
 namespace QuizBar.Api.Controllers;
 

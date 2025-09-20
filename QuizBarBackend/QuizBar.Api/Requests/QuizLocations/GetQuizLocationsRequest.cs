@@ -4,7 +4,7 @@ namespace QuizBar.Api.Requests.QuizLocations;
 
 public class GetQuizLocationsRequest
 {
-    public int Page { get; set; } = 1;
+    public int Page { get; set; }
 }
 
 public class GetQuizLocationsRequestValidator : AbstractValidator<GetQuizLocationsRequest>

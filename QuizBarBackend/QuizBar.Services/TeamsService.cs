@@ -11,10 +11,73 @@ namespace QuizBar.Services;
 public class TeamsService(
     ApplicationDbContext db)
 {
-    public async Task<IEnumerable<Team>> GetTeamsAsync()
+    public async Task<ServiceResult<GetTeamsServiceResult>> GetTeamsAsync(GetTeamsServiceInput input)
     {
-        var teams = await db.Teams.ToListAsync();
-        return teams;
+        var serviceResult = new ServiceResult<GetTeamsServiceResult>();
+
+        var teamsQuery = db.Teams
+            .AsQueryable();
+
+        if (input.Filter is not null)
+        {
+            if (!string.IsNullOrWhiteSpace(input.Filter.UserId))
+            {
+                teamsQuery = teamsQuery
+                    .Where(team => team.CreatedBy == input.Filter.UserId);
+            }
+        }
+
+        var teams = await teamsQuery
+            .OrderBy(q => q.Title)
+            .Skip((input.Page - 1) * 10)
+            .Take(10)
+            .ToListAsync();
+
+        var teamsTotalItems = await db.Teams
+            .CountAsync();
+
+        serviceResult.Result = new GetTeamsServiceResult
+        {
+            Teams = teams.Select(team => new GetTeamsTeam
+            {
+                Id = team.Id,
+                Title = team.Title,
+                Status = team.Status
+            }),
+            Page = input.Page,
+            TotalItems = teamsTotalItems
+        };
+
+        return serviceResult;
+    }
+    public async Task<ServiceResult<GetTeamServiceResult>> GetTeamAsync(GetTeamServiceInput input)
+    {
+        var serviceResult = new ServiceResult<GetTeamServiceResult>();
+
+        var team = await db.Teams
+            .Include(team => team.Results)
+            .FirstOrDefaultAsync(t => t.Id == input.TeamId);
+
+        if (team is null)
+        {
+            serviceResult.Reason = ErrorReason.TeamNotFound;
+            return serviceResult;
+        }
+
+        serviceResult.Result = new GetTeamServiceResult
+        {
+            Id = team.Id,
+            Title = team.Title,
+            Status = team.Status,
+            Results = team.Results.Select(result => new GetTeamResultServiceResult
+            {
+                Score = result.Score,
+                TeamId = result.TeamId,
+                QuizEventId = result.QuizEventId
+            })
+        };
+
+        return serviceResult;
     }
     public async Task<ServiceResult<CreateTeamServiceResult>> CreateTeamAsync(CreateTeamServiceInput input)
     {
