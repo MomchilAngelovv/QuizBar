@@ -15,14 +15,16 @@ public class QuestionsService(
     {
         var serviceResult = new ServiceResult<CreateQuestionServiceResult>();
 
-        var questionExists = await db.Questions.FirstOrDefaultAsync(q => q.Text == input.Text && q.CreatedBy == input.UserId);
+        var questionExists = await db.Questions
+            .FirstOrDefaultAsync(q => q.Text == input.Text && q.CreatedBy == input.UserId);
         if (questionExists is not null)
         {
             serviceResult.Reason = ErrorReason.QuestionAlreadyExists;
             return serviceResult;
         }
 
-        var chapter = await db.Chapters.FirstOrDefaultAsync(ch => ch.Id == input.ChapterId && ch.CreatedBy == input.UserId);
+        var chapter = await db.Chapters
+            .FirstOrDefaultAsync(ch => ch.Id == input.ChapterId && ch.CreatedBy == input.UserId);
         if (chapter is null)
         {
             serviceResult.Reason = ErrorReason.ChapterNotFound;

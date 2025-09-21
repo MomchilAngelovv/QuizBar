@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using QuizBar.Api.Requests.QuizLocations;
 using QuizBar.Api.Responses;
 using QuizBar.Api.Responses.QuizLocations;

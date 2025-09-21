@@ -101,6 +101,7 @@ public class ApplicationDbContext : IdentityDbContext<FokstyUser, FokstyRole, st
         builder.Entity<Question>().ToTable("Questions").HasKey(p => p.Id);
         builder.Entity<Question>().Property(p => p.Id).IsRequired().HasMaxLength(36);
         builder.Entity<Question>().Property(p => p.Text).IsRequired().HasMaxLength(500);
+        builder.Entity<Question>().Property(p => p.ResourceUrl).IsRequired(false);
         builder.Entity<Question>().Property(p => p.Priority).IsRequired();
 
         // Foreign keys

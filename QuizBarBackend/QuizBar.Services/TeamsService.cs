@@ -109,7 +109,7 @@ public class TeamsService(
         var team = await db.Teams.FirstOrDefaultAsync(t => t.Id == input.TeamId);
         if (team is null)
         {
-            serviceResult.Reason = ErrorReason.NotFound;
+            serviceResult.Reason = ErrorReason.TeamNotFound;
             return serviceResult;
         }
 

@@ -466,7 +466,6 @@ namespace QuizBar.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ResourceUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
