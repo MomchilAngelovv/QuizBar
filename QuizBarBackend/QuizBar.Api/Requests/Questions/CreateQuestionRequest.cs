@@ -46,7 +46,9 @@ public class CreateQuestionRequestValidator : AbstractValidator<CreateQuestionRe
         When(question => question.Type == QuestionType.TrueFalse, () =>
         {
 			RuleFor(question => question.Answers.Count()).Equal(2);
-			RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.IsCorrect == true)).Equal(1);
+            RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.Text == "True")).Equal(1);
+            RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.Text == "False")).Equal(1);
+            RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.IsCorrect == true)).Equal(1);
 			RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.IsCorrect == false)).Equal(1);
 		});
 
@@ -59,6 +61,7 @@ public class CreateQuestionRequestValidator : AbstractValidator<CreateQuestionRe
         When(question => question.Type == QuestionType.Video || question.Type == QuestionType.Sound, () =>
         {
             RuleFor(question => question.Answers.Count()).Equal(1);
+            RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.IsCorrect == true)).Equal(1);
             RuleFor(question => question.ResourceUrl).NotEmpty();
         });
     }

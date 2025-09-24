@@ -82,6 +82,7 @@ public class QuizzesController(
                 {
                     Id = question.Id,
                     Type = question.Type,
+                    ResourceUrl = question.ResourceUrl,
                     Text = question.Text,
                     Priority = question.Priority,
                     Status = question.Status,

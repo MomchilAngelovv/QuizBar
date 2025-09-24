@@ -26,6 +26,7 @@ public class GetQuizzesChapterQuestion
     public required string Id { get; set; }
     public required QuestionType Type { get; set; }
     public required string Text { get; set; }
+    public string ResourceUrl { get; set; }
     public int Priority { get; set; }
     public required Statuses Status { get; set; }
 

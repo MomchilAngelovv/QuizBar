@@ -16,10 +16,10 @@ public class QuizzesService(
         var serviceResult = new ServiceResult<GetQuizServiceResult>();
 
         var quiz = await db.Quizzes
-                               .Include(q => q.Chapters)
-                                   .ThenInclude(ch => ch.Questions)
-                                       .ThenInclude(ch => ch.Answers)
-                                           .FirstOrDefaultAsync(q => q.Id == filter.QuizId);
+            .Include(q => q.Chapters)
+                .ThenInclude(ch => ch.Questions)
+                .ThenInclude(ch => ch.Answers)
+            .FirstOrDefaultAsync(q => q.Id == filter.QuizId);
         if (quiz is null)
         {
             serviceResult.Reason = ErrorReason.NotFound;
@@ -41,6 +41,7 @@ public class QuizzesService(
                     Id = question.Id,
                     Type = question.Type,
                     Text = question.Text,
+                    ResourceUrl = question.ResourceUrl,
                     Priority = question.Priority,
                     Status = question.Status,
                     Answers = question.Answers.Select(answer => new GetQuizzesChapterQuestionAnswer
