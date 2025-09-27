@@ -36,6 +36,10 @@ public class TeamsController(
         };
 
         var serviceResult = await teamsService.GetTeamsAsync(serviceInput);
+        if (serviceResult.Reason != ErrorReason.None)
+        {
+            return ControllerResponse(serviceResult.Reason);
+        }
 
         return ControllerResponse(new GetTeamsResponse
         {
@@ -107,6 +111,10 @@ public class TeamsController(
         };
 
         var serviceResult = await teamsService.CreateTeamAsync(serviceInput);
+        if (serviceResult.Reason != ErrorReason.None)
+        {
+            return ControllerResponse(serviceResult.Reason);
+        }
 
         return ControllerResponse(new CreateTeamResponse
         {

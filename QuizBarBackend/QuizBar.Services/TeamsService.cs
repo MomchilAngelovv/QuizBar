@@ -83,6 +83,13 @@ public class TeamsService(
     {
         var serviceResult = new ServiceResult<CreateTeamServiceResult>();
 
+        var teamExists = await db.Teams.AnyAsync(team => team.Title == input.Title && team.CreatedBy == input.UserId);
+        if (teamExists)
+        {
+            serviceResult.Reason = ErrorReason.TeamAlreadyExists;
+            return serviceResult;
+        }
+
         var team = new Team
         {
             Id = Guid.CreateVersion7().ToString(),

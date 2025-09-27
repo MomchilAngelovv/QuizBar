@@ -11,6 +11,6 @@ public class GetTeamsRequestValidator : AbstractValidator<GetTeamsRequest>
 {
     public GetTeamsRequestValidator()
     {
-        RuleFor(r => r.Page).NotEmpty();
+        RuleFor(quiz => quiz.Page).NotEmpty().GreaterThan(0);
     }
 }

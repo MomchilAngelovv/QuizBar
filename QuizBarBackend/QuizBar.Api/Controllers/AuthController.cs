@@ -113,7 +113,6 @@ public class AuthController(
             UserClaims = userClaims
         };
     }
-
     private string CreateToken(FokstyUser user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();

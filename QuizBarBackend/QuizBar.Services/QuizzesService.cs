@@ -58,22 +58,29 @@ public class QuizzesService(
 
         return serviceResult;
     }
-    public async Task<ServiceResult<GetQuizzesServiceResult>> GetQuizzesAsync(QuizzesFilter filter = null)
+    public async Task<ServiceResult<GetQuizzesServiceResult>> GetQuizzesAsync(GetQuizzesServiceInput input)
     {
         var serviceResult = new ServiceResult<GetQuizzesServiceResult>();
 
         var quizzesQuery = db.Quizzes.AsQueryable();
 
-        if (filter is not null)
+        if (input.Filter is not null)
         {
-            if (string.IsNullOrWhiteSpace(filter.UserId))
+            if (!string.IsNullOrWhiteSpace(input.Filter.UserId))
             {
-                quizzesQuery = quizzesQuery.Where(q => q.CreatedBy == filter.UserId);
+                quizzesQuery = quizzesQuery
+                    .Where(team => team.CreatedBy == input.Filter.UserId);
             }
         }
 
-        // TODO make the query not take everything, just the things we need
-        var quizzes = await quizzesQuery.ToListAsync();
+        var quizzes = await quizzesQuery
+            .OrderBy(q => q.Title)
+            .Skip((input.Page - 1) * 10)
+            .Take(10)
+            .ToListAsync();
+
+        var quizzesTotalItems = await db.Quizzes
+            .CountAsync();
 
         serviceResult.Result = new GetQuizzesServiceResult
         {
@@ -84,7 +91,9 @@ public class QuizzesService(
                 Scope = q.Scope,
                 Status = q.Status,
                 
-            })
+            }),
+            Page = input.Page,
+            TotalItems = quizzesTotalItems
         };
 
         return serviceResult;

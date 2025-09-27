@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using QuizBar.Api.Requests.QuizLocations;
 using QuizBar.Api.Responses;
 using QuizBar.Api.Responses.QuizLocations;
@@ -15,7 +16,7 @@ public class QuizLocationsController(
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetQuizzesResponse>))]
     public async Task<IActionResult> GetQuizLocationsAsync(
-        [FromQuery] int? page, [FromBody] GetQuizLocationsRequest? request, [FromServices] GetQuizLocationsRequestValidator requestValidator)
+        [FromQuery] int? page, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetQuizLocationsRequest? request, [FromServices] GetQuizLocationsRequestValidator requestValidator)
     {
         request ??= new GetQuizLocationsRequest();
         request.Page = page ?? 1;

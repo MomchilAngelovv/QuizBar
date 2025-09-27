@@ -15,20 +15,27 @@ public class QuizzesController(
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetQuizzesResponse>))]
     public async Task<IActionResult> GetQuizzesAsync(
-        [FromQuery] GetQuizzesRequest request, [FromServices] GetQuizzesRequestValidator requestValidator)
+        [FromQuery] int? page, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetQuizzesRequest? request, [FromServices] GetQuizzesRequestValidator requestValidator)
     {
+        request ??= new GetQuizzesRequest();
+        request.Page = page ?? 1;
+
         var validationResult = await requestValidator.ValidateAsync(request);
         if (!validationResult.IsValid)
         {
             return ValidationFailed(validationResult);
         }
 
-        var filter = new QuizzesFilter
+        var serviceInput = new GetQuizzesServiceInput
         {
-            UserId = UserId
+            Page = request.Page,
+            Filter = new QuizzesFilter
+            {
+                UserId = UserId
+            }
         };
 
-        var serviceResult = await quizzesService.GetQuizzesAsync(filter);
+        var serviceResult = await quizzesService.GetQuizzesAsync(serviceInput);
 
         return ControllerResponse(new GetQuizzesResponse
         {
@@ -38,8 +45,8 @@ public class QuizzesController(
                 Title = q.Title,
                 Status = q.Status,
             }),
-            Page = 1,
-            TotalItems = 50
+            Page = serviceResult.Result.Page,
+            TotalItems = serviceResult.Result.TotalItems
         });
     }
 
