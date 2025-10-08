@@ -75,4 +75,75 @@ public class QuestionsService(
 
         return serviceResult;
     }
+    public async Task<ServiceResult<UpdateQuestionServiceResult>> UpdateQuestionAsync(UpdateQuestionServiceInput input)
+    {
+        var serviceResult = new ServiceResult<UpdateQuestionServiceResult>();
+
+        var question = await db.Questions
+            .FirstOrDefaultAsync(question => question.Id == input.QuestionId);
+        if (question is not null)
+        {
+            serviceResult.Reason = ErrorReason.QuestionNotFound;
+            return serviceResult;
+        }
+
+        if (input.ChapterId is not null)
+        {
+            var chapter = await db.Chapters
+                .FirstOrDefaultAsync(ch => ch.Id == input.ChapterId && ch.CreatedBy == input.UserId);
+            if (chapter is null)
+            {
+                serviceResult.Reason = ErrorReason.ChapterNotFound;
+                return serviceResult;
+            }
+        }
+
+        if (!string.IsNullOrWhiteSpace(input.Text))
+        {
+            question.Text = input.Text;
+        }
+
+        if (!string.IsNullOrWhiteSpace(input.ResourceUrl))
+        {
+            question.ResourceUrl = input.ResourceUrl;
+        }
+
+        if (input.Type is not null)
+        {
+            question.Type = input.Type.Value;
+        }
+
+        if (input.Priority is not null)
+        {
+            question.Priority = input.Priority.Value;
+        }
+
+        if (input.Answers is not null && input.Answers.Any())
+        {
+            foreach (var answer in input.Answers)
+            {
+                question.Answers.Add(new Answer
+                {
+                    Id = Guid.CreateVersion7().ToString(),
+                    Text = answer.Text,
+                    IsCorrect = answer.IsCorrect,
+                    Priority = answer.Priority,
+                    QuestionId = question.Id,
+                    Status = Statuses.Active,
+                    CreatedOn = DateTime.UtcNow,
+                    CreatedBy = input.UserId
+                });
+            }
+        }
+
+        db.Questions.Update(question);
+        await db.SaveChangesAsync();
+
+        serviceResult.Result = new UpdateQuestionServiceResult
+        {
+             Test = "саддса" 
+        };
+
+        return serviceResult;
+    }
 }
