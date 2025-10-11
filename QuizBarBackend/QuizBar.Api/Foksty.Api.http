@@ -1,6 +1,6 @@
-@Foksty.Api_HostAddress = http://localhost:5177
+@Foksty.Api_HostAddress = https://localhost:60010
 
-GET {{Foksty.Api_HostAddress}}/weatherforecast/
+GET {{Foksty.Api_HostAddress}}/api/welcome
 Accept: application/json
 
 ###
