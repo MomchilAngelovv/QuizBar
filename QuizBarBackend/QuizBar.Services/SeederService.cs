@@ -8,8 +8,8 @@ namespace QuizBar.Services;
 
 public class SeederService(
     ApplicationDbContext db,
-    UserManager<FokstyUser> userManager,
-    RoleManager<FokstyRole> roleManager)
+    UserManager<QuizBarUser> userManager,
+    RoleManager<QuizBarRole> roleManager)
 {
     public async Task SeedAdministratorsAsync()
     {
@@ -19,7 +19,7 @@ public class SeederService(
             return;
         }
 
-        var user = new FokstyUser
+        var user = new QuizBarUser
         {
             Id = ApplicationConstants.AdminUserId,
             Email = "momchilangelov0040@gmail.com",
@@ -42,7 +42,7 @@ public class SeederService(
         var roles = new List<Roles> { Roles.Default, Roles.Administrator };
         foreach (var r in roles)
         {
-            var role = new FokstyRole
+            var role = new QuizBarRole
             {
                 Id = Guid.CreateVersion7().ToString(),
                 Name = r.ToString(),
@@ -75,24 +75,24 @@ public class SeederService(
             await userManager.AddToRolesAsync(adminUser, [Roles.Default.ToString(), Roles.Default.ToString()]);
         }
     }
-    public async Task SeedQuizLocationsAsync()
+    public async Task SeedSitesAsync()
     {
-        var hasQuizLocations = await db.QuizLocations.AnyAsync();
-        if (hasQuizLocations)
+        var hasSites = await db.Sites.AnyAsync();
+        if (hasSites)
         {
             return;
         }
 
-        var quizLocation = new QuizLocation
+        var site = new Site
         {
             Id = Guid.CreateVersion7().ToString(),
-            Site = "Stage bar",
+            Title = "Stage bar",
             Status = Statuses.Active,
             CreatedOn = DateTime.UtcNow,
             CreatedBy = ApplicationConstants.AdminUserId
         };
 
-        await db.QuizLocations.AddAsync(quizLocation);
+        await db.Sites.AddAsync(site);
         await db.SaveChangesAsync();
     }
 }

@@ -1,21 +1,20 @@
-﻿using QuizBar.Shared;
+﻿namespace QuizBar.Data.Entities;
 
-namespace QuizBar.Data.Entities;
+using QuizBar.Shared;
 
-public class QuizEvent : IEntityMetaData
+public class QuizTeam : IEntityMetaData
 {
     // Main
     public required string Id { get; set; }
-    public required DateTime ScheduledOn { get; set; }
+    public required double Score { get; set; }
 
     // Foreign keys
     public required string QuizId { get; set; }
-    public required string QuizLocationId { get; set; }
+    public required string TeamId { get; set; }
 
     // Navigation properties
     public virtual Quiz Quiz { get; set; }
-    public virtual QuizLocation QuizLocation { get; set; }
-    public virtual ICollection<TeamQuizEvent> TeamsQuizEvents { get; set; }
+    public virtual Team Team { get; set; }
 
     // IEntityMetaData
     public required Statuses Status { get; set; }

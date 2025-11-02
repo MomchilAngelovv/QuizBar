@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿namespace QuizBar.Api.Controllers;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -12,10 +14,8 @@ using System.Net;
 using System.Security.Claims;
 using System.Text;
 
-namespace QuizBar.Api.Controllers;
-
 public class AuthController(
-    UserManager<FokstyUser> userManager,
+    UserManager<QuizBarUser> userManager,
     IConfiguration configuration) : BaseController
 {
     [AllowAnonymous]
@@ -36,7 +36,7 @@ public class AuthController(
             return ControllerResponse(ValidationErrors.AlreadyExists("User"), HttpStatusCode.BadRequest);
         }
 
-        var user = new FokstyUser
+        var user = new QuizBarUser
         {
             Id = Guid.CreateVersion7().ToString(),
             Email = request.Email,
@@ -113,7 +113,7 @@ public class AuthController(
             UserClaims = userClaims
         };
     }
-    private string CreateToken(FokstyUser user)
+    private string CreateToken(QuizBarUser user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(configuration["JWT:Secret"]);

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿namespace QuizBar.Api.Controllers;
+
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using QuizBar.Api.Requests.Teams;
 using QuizBar.Api.Responses;
@@ -6,8 +8,6 @@ using QuizBar.Api.Responses.Teams;
 using QuizBar.Services;
 using QuizBar.Services.Inputs.Teams;
 using QuizBar.Services.Results;
-
-namespace QuizBar.Api.Controllers;
 
 public class TeamsController(
     TeamsService teamsService) : BaseController
@@ -87,8 +87,7 @@ public class TeamsController(
             Results = serviceResult.Result.Results.Select(r => new GetTeamResultServiceResult
             {
                 Score = r.Score,
-                TeamId = r.TeamId,
-                QuizEventId = r.QuizEventId
+                TeamId = r.TeamId
             })
         });
     }

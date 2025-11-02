@@ -40,14 +40,14 @@ public class QuizzesService(
                 {
                     Id = question.Id,
                     Type = question.Type,
-                    Text = question.Text,
-                    ResourceUrl = question.ResourceUrl,
+                    Title = question.Title,
+                    Resource = question.Resource,
                     Priority = question.Priority,
                     Status = question.Status,
                     Answers = question.Answers.Select(answer => new GetQuizzesChapterQuestionAnswer
                     {
                         Id = answer.Id,
-                        Text = answer.Text,
+                        Title = answer.Title,
                         IsCorrect = answer.IsCorrect,
                         Priority = answer.Priority,
                         Status = answer.Status,
@@ -140,102 +140,35 @@ public class QuizzesService(
 
         return serviceResult;
     }
-    public async Task<ServiceResult<CreateQuizEventServiceResult>> CreateQuizEventAsync(CreateQuizEventServiceInput input)
+    
+    public async Task<ServiceResult<UpdateQuizScoresServiceResult>> UpdateQuizScoresAsync(UpdateQuizScoresServiceInput input)
     {
-        var serviceResult = new ServiceResult<CreateQuizEventServiceResult>();
+        var serviceResult = new ServiceResult<UpdateQuizScoresServiceResult>();
 
-        var quiz = await db.Quizzes.FirstOrDefaultAsync(q => q.Id == input.QuizId);
+        var quiz = await db.Quizzes.FirstOrDefaultAsync(qe => qe.Id == input.QuizId);
         if (quiz is null)
         {
-            serviceResult.Reason = ErrorReason.NotFound;
+            serviceResult.Reason = ErrorReason.QuizNotFound;
             return serviceResult;
         }
 
-        var quizLocation = await db.QuizLocations.FirstOrDefaultAsync(ql => ql.Id == input.QuizLocationId);
-        if (quizLocation is null)
-        {
-            serviceResult.Reason = ErrorReason.NotFound;
-            return serviceResult;
-        }
-
-        var quizEvent = new QuizEvent
-        {
-            Id = Guid.CreateVersion7().ToString(),
-            ScheduledOn = input.ScheduledOn,
-            QuizLocationId = input.QuizLocationId,
-            QuizId = quiz.Id,
-            Status = Statuses.Active,
-            CreatedOn = DateTime.UtcNow,
-            CreatedBy = input.UserId
-        };
-
-        var teams = await db.Teams.Where(t => input.TeamIds.Contains(t.Id)).ToListAsync();
-        if (teams.Count > 0)
-        {
-            quizEvent.TeamsQuizEvents = [];
-
-            foreach (var team in teams)
-            {
-                var teamQuizEvent = new TeamQuizEvent
-                {
-                    Id = Guid.CreateVersion7().ToString(),
-                    Score = 0,
-                    TeamId = team.Id,
-                    QuizEventId = quizEvent.Id,
-                    Status = Statuses.Active,
-                    CreatedOn = DateTime.UtcNow,
-                    CreatedBy = input.UserId
-                };
-
-                await db.TeamsQuizEvents.AddAsync(teamQuizEvent);
-            }
-        }
-
-        await db.QuizEvents.AddAsync(quizEvent);
-        await db.SaveChangesAsync();
-
-        serviceResult.Result = new CreateQuizEventServiceResult
-        {
-            Id = quizEvent.Id
-        };
-        
-        return serviceResult;
-    }
-    public async Task<ServiceResult<UpdateQuizEventScoresServiceResult>> UpdateQuizEventScoresAsync(UpdateQuizEventScoresServiceInput input)
-    {
-        var serviceResult = new ServiceResult<UpdateQuizEventScoresServiceResult>();
-
-        var quizEvent = await db.QuizEvents.FirstOrDefaultAsync(qe => qe.Id == input.QuizEventId);
-        if (quizEvent is null)
-        {
-            serviceResult.Reason = ErrorReason.QuizEventNotFound;
-            return serviceResult;
-        }
-
-        var teamsQuizEvents = await db.TeamsQuizEvents
+        var quizzesTeams = await db.QuizzesTeams
             .Include(tqe => tqe.Team)
-            .Where(tqe => tqe.QuizEventId == quizEvent.Id)
+            .Where(tqe => tqe.QuizId == quiz.Id)
             .ToListAsync();
-        
-        var inputContainsCorrectIds = new HashSet<string>(input.TeamsScores.Select(ts => ts.TeamId)).SetEquals(new HashSet<string>(teamsQuizEvents.Select(tqe => tqe.TeamId)));
-        if (!inputContainsCorrectIds)
-        {
-            serviceResult.Reason = ErrorReason.IncompatibleData;
-            return serviceResult;
-        }
 
-        foreach (var teamsQuizEvent in teamsQuizEvents)
+        foreach (var teamsQuizEvent in quizzesTeams)
         {
             var teamScore = input.TeamsScores.First(ts => ts.TeamId == teamsQuizEvent.TeamId);
             teamsQuizEvent.Score += teamScore.Score;
         }
 
-        db.TeamsQuizEvents.UpdateRange(teamsQuizEvents);
+        db.QuizzesTeams.UpdateRange(quizzesTeams);
         await db.SaveChangesAsync();
 
-        serviceResult.Result = new UpdateQuizEventScoresServiceResult
+        serviceResult.Result = new UpdateQuizScoresServiceResult
         {
-            TeamsScores = teamsQuizEvents.Select(tqe => new Results.Quizzes.UpdateQuizEventResultsTeamResult 
+            TeamsScores = quizzesTeams.Select(tqe => new Results.Quizzes.UpdateQuizScoreTeamTeamResult
             { 
                 TeamId = tqe.TeamId,
                 Score = tqe.Score

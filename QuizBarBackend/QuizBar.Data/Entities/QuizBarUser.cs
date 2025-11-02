@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿namespace QuizBar.Data.Entities;
+
+using Microsoft.AspNetCore.Identity;
 using QuizBar.Shared;
 
-namespace QuizBar.Data.Entities;
 
-public class FokstyRole : IdentityRole<string>, IEntityMetaData
+public class QuizBarUser : IdentityUser<string>, IEntityMetaData
 {
     // IEntityMetaData
     public required Statuses Status { get; set; }

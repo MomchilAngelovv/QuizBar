@@ -73,7 +73,6 @@ public class TeamsService(
             {
                 Score = result.Score,
                 TeamId = result.TeamId,
-                QuizEventId = result.QuizEventId
             })
         };
 

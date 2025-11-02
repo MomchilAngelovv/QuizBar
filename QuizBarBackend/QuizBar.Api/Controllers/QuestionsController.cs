@@ -1,15 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿namespace QuizBar.Api.Controllers;
+
+using Microsoft.AspNetCore.Mvc;
 using QuizBar.Api.Requests.Questions;
-using QuizBar.Api.Requests.Quizzes;
 using QuizBar.Api.Responses;
 using QuizBar.Api.Responses.Questions;
-using QuizBar.Api.Responses.Quizzes;
 using QuizBar.Services;
 using QuizBar.Services.Inputs.Questions;
-using QuizBar.Services.Inputs.Quizzes;
 using QuizBar.Services.Results;
-
-namespace QuizBar.Api.Controllers;
 
 public class QuestionsController(
     QuestionsService questionsService) : BaseController
@@ -27,14 +24,14 @@ public class QuestionsController(
 
         var serviceInput = new CreateQuestionServiceInput
         {
-            Text = request.Text,
-            ResourceUrl = request.ResourceUrl,
+            Title = request.Title,
+            Resource = request.Resource,
             Type = request.Type,
             Priority = request.Priority,
             ChapterId = request.ChapterId,
             Answers = request.Answers.Select(answer => new CreateQuestionAnswerServiceInput
             {
-                Text = answer.Text,
+                Title = answer.Title,
                 IsCorrect = answer.IsCorrect,
                 Priority = answer.Priority
             }),
@@ -69,14 +66,14 @@ public class QuestionsController(
         var serviceInput = new UpdateQuestionServiceInput
         {
             QuestionId = request.QuestionId,
-            Text = request.Text,
-            ResourceUrl = request.ResourceUrl,
+            Title = request.Title,
+            Resource = request.Resource,
             Type = request.Type,
             Priority = request.Priority,
             ChapterId = request.ChapterId,
             Answers = request.Answers.Select(answer => new UpdateQuestionAnswerServiceInput
             {
-                Text = answer.Text,
+                Title = answer.Title,
                 IsCorrect = answer.IsCorrect,
                 Priority = answer.Priority
             }),

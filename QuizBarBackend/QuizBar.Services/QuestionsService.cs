@@ -16,7 +16,7 @@ public class QuestionsService(
         var serviceResult = new ServiceResult<CreateQuestionServiceResult>();
 
         var questionExists = await db.Questions
-            .FirstOrDefaultAsync(q => q.Text == input.Text && q.CreatedBy == input.UserId);
+            .FirstOrDefaultAsync(q => q.Title == input.Title && q.CreatedBy == input.UserId);
         if (questionExists is not null)
         {
             serviceResult.Reason = ErrorReason.QuestionAlreadyExists;
@@ -35,7 +35,7 @@ public class QuestionsService(
         {
             Id = Guid.CreateVersion7().ToString(),
             Type = input.Type,
-            Text = input.Text,
+            Title = input.Title,
             Priority = input.Priority,
             ChapterId = input.ChapterId,
             Status = Statuses.Active,
@@ -49,7 +49,7 @@ public class QuestionsService(
             question.Answers.Add(new Answer
             {
                 Id = Guid.CreateVersion7().ToString(),
-                Text = answer.Text,
+                Title = answer.Title,
                 IsCorrect = answer.IsCorrect,
                 Priority = answer.Priority,
                 QuestionId = question.Id,
@@ -62,7 +62,7 @@ public class QuestionsService(
         if (input.Type == QuestionType.Video || 
             input.Type == QuestionType.Sound)
         {
-            question.ResourceUrl = input.ResourceUrl;
+            question.Resource = input.Resource;
         }
 
         await db.Questions.AddAsync(question);
@@ -98,14 +98,14 @@ public class QuestionsService(
             }
         }
 
-        if (!string.IsNullOrWhiteSpace(input.Text))
+        if (!string.IsNullOrWhiteSpace(input.Title))
         {
-            question.Text = input.Text;
+            question.Title = input.Title;
         }
 
-        if (!string.IsNullOrWhiteSpace(input.ResourceUrl))
+        if (!string.IsNullOrWhiteSpace(input.Resource))
         {
-            question.ResourceUrl = input.ResourceUrl;
+            question.Resource = input.Resource;
         }
 
         if (input.Type is not null)
@@ -125,7 +125,7 @@ public class QuestionsService(
                 question.Answers.Add(new Answer
                 {
                     Id = Guid.CreateVersion7().ToString(),
-                    Text = answer.Text,
+                    Title = answer.Title,
                     IsCorrect = answer.IsCorrect,
                     Priority = answer.Priority,
                     QuestionId = question.Id,
@@ -141,7 +141,7 @@ public class QuestionsService(
 
         serviceResult.Result = new UpdateQuestionServiceResult
         {
-             Test = "саддса" 
+             Test = "TestDontForgetThis" 
         };
 
         return serviceResult;

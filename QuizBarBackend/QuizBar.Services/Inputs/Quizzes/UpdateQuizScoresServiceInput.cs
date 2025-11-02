@@ -1,8 +1,8 @@
 ﻿namespace QuizBar.Services.Inputs.Quizzes;
 
-public class UpdateQuizEventScoresServiceInput
+public class UpdateQuizScoresServiceInput
 {
-    public required string QuizEventId { get; set; }
+    public required string QuizId { get; set; }
     public required IEnumerable<UpdateQuizEventResultsTeamResult> TeamsScores { get; set; }
 }
 

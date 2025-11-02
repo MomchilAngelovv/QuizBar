@@ -3,7 +3,7 @@ using QuizBar.Shared;
 
 namespace QuizBar.Data.Entities;
 
-public class FokstyUser : IdentityUser<string>, IEntityMetaData
+public class QuizBarRole : IdentityRole<string>, IEntityMetaData
 {
     // IEntityMetaData
     public required Statuses Status { get; set; }

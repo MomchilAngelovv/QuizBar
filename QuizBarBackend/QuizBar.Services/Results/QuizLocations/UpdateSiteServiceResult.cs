@@ -1,6 +1,6 @@
 ﻿namespace QuizBar.Services.Results.QuizLocations;
 
-public class UpdateQuizLocationServiceResult
+public class UpdateSiteServiceResult
 {
     public required string Id { get; set; }
 }

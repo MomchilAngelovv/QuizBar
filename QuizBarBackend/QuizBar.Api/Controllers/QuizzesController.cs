@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿namespace QuizBar.Api.Controllers;
+
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using QuizBar.Api.Requests.Quizzes;
 using QuizBar.Api.Responses;
@@ -6,8 +8,6 @@ using QuizBar.Api.Responses.Quizzes;
 using QuizBar.Services;
 using QuizBar.Services.Inputs.Quizzes;
 using QuizBar.Services.Results;
-
-namespace QuizBar.Api.Controllers;
 
 public class QuizzesController(
     QuizzesService quizzesService) : BaseController
@@ -89,14 +89,14 @@ public class QuizzesController(
                 {
                     Id = question.Id,
                     Type = question.Type,
-                    ResourceUrl = question.ResourceUrl,
-                    Text = question.Text,
+                    Resource = question.Resource,
+                    Title = question.Title,
                     Priority = question.Priority,
                     Status = question.Status,
                     Answers = question.Answers.Select(answer => new GetQuizzesChapterQuestionAnswer
                     {
                         Id = answer.Id,
-                        Text = answer.Text,
+                        Title = answer.Title,
                         IsCorrect = answer.IsCorrect,
                         Priority = answer.Priority,
                         Status = answer.Status,

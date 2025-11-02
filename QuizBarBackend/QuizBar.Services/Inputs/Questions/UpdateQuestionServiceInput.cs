@@ -1,12 +1,12 @@
-﻿using QuizBar.Shared;
+﻿namespace QuizBar.Services.Inputs.Questions;
 
-namespace QuizBar.Services.Inputs.Questions;
+using QuizBar.Shared;
 
 public class UpdateQuestionServiceInput : IServiceInput
 {
     public required string QuestionId { get; set; }
-    public string? Text { get; set; }
-    public string? ResourceUrl { get; set; }
+    public string? Title { get; set; }
+    public string? Resource { get; set; }
     public QuestionType? Type { get; set; }
     public string? ChapterId { get; set; }
     public int? Priority { get; set; }
@@ -18,7 +18,7 @@ public class UpdateQuestionServiceInput : IServiceInput
 
 public class UpdateQuestionAnswerServiceInput
 {
-    public required string Text { get; set; }
+    public required string Title { get; set; }
     public bool IsCorrect { get; set; }
     public int Priority { get; set; }
 }

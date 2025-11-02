@@ -14,16 +14,14 @@ public enum ErrorReason
     QuestionNotFound = 1001,
     ChapterNotFound = 1002,
     QuizNotFound = 1003,
-    QuizEventNotFound = 1004,
-    QuizLocationNotFound = 1005,
+    SiteNotFound = 1005,
     TeamNotFound = 1006,
 
     AlreadyExists = 2000,
     QuestionAlreadyExists = 2001,
     ChapterAlreadyExists = 2002,
     QuizAlreadyExists = 2003,
-    QuizEventAlreadyExists = 2004,
-    QuizLocationAlreadyExists = 2005,
+    SiteAlreadyExists = 2005,
     TeamAlreadyExists = 2006,
 
     IncompatibleData = 10000

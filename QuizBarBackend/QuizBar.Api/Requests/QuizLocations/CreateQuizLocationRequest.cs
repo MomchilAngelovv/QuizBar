@@ -4,13 +4,13 @@ namespace QuizBar.Api.Requests.QuizLocations;
 
 public class CreateQuizLocationRequest
 {
-    public required string Site { get; set; }
+    public required string Title { get; set; }
 }
 
 public class CreateQuizLocationRequestValidator : AbstractValidator<CreateQuizLocationRequest>
 {
     public CreateQuizLocationRequestValidator()
     {
-        RuleFor(quizLocation => quizLocation.Site).NotEmpty();
+        RuleFor(quizLocation => quizLocation.Title).NotEmpty();
     }
 }

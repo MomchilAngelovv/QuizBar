@@ -1,4 +1,6 @@
-﻿using FluentValidation.Results;
+﻿namespace QuizBar.Api.Controllers;
+
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,8 +9,6 @@ using QuizBar.Services.Results;
 using QuizBar.Shared;
 using System.Net;
 using System.Security.Claims;
-
-namespace QuizBar.Api.Controllers;
 
 [ApiController]
 [Produces("application/json")]
@@ -85,10 +85,6 @@ public class BaseController : ControllerBase
                 message = ValidationErrors.NotFound("Quiz");
                 statusCode = HttpStatusCode.NotFound;
                 break;
-            case ErrorReason.QuizEventNotFound:
-                message = ValidationErrors.NotFound("Quiz event");
-                statusCode = HttpStatusCode.NotFound;
-                break;
             case ErrorReason.TeamNotFound:
                 message = ValidationErrors.NotFound("Team");
                 statusCode = HttpStatusCode.NotFound;
@@ -105,10 +101,6 @@ public class BaseController : ControllerBase
                 break;
             case ErrorReason.QuizAlreadyExists:
                 message = ValidationErrors.AlreadyExists("Quiz");
-                statusCode = HttpStatusCode.Conflict;
-                break;
-            case ErrorReason.QuizEventAlreadyExists:
-                message = ValidationErrors.AlreadyExists("Quiz event");
                 statusCode = HttpStatusCode.Conflict;
                 break;
             case ErrorReason.TeamAlreadyExists:

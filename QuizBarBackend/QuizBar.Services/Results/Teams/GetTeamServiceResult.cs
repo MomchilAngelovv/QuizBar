@@ -15,5 +15,4 @@ public class GetTeamResultServiceResult
 {
     public required double Score { get; set; }
     public required string TeamId { get; set; }
-    public required string QuizEventId { get; set; }
 }

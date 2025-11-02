@@ -1,12 +1,12 @@
-﻿using FluentValidation;
-using QuizBar.Shared;
+﻿namespace QuizBar.Api.Requests.Questions;
 
-namespace QuizBar.Api.Requests.Questions;
+using FluentValidation;
+using QuizBar.Shared;
 
 public class CreateQuestionRequest
 {
-    public required string Text { get; set; }
-    public string ResourceUrl { get; set; }
+    public required string Title { get; set; }
+    public string Resource { get; set; }
     public required QuestionType Type { get; set; }
     public required string ChapterId { get; set; }
     public int Priority { get; set; }
@@ -15,7 +15,7 @@ public class CreateQuestionRequest
 
 public class CreateQuestionAnswer
 {
-    public required string Text { get; set; }
+    public required string Title { get; set; }
     public bool IsCorrect { get; set; }
     public int Priority { get; set; }
 }
@@ -24,13 +24,13 @@ public class CreateQuestionRequestValidator : AbstractValidator<CreateQuestionRe
 {
     public CreateQuestionRequestValidator()
     {
-        RuleFor(question => question.Text).NotEmpty();
+        RuleFor(question => question.Title).NotEmpty();
         RuleFor(question => question.Type).NotEmpty().IsInEnum();
         RuleFor(question => question.Answers).NotEmpty();
 
         RuleForEach(question => question.Answers).ChildRules(pa =>
         {
-            pa.RuleFor(possibleAnswer => possibleAnswer.Text).NotEmpty();
+            pa.RuleFor(possibleAnswer => possibleAnswer.Title).NotEmpty();
         });
 
         When(question => question.Type == QuestionType.SingleChoice, () =>
@@ -46,8 +46,8 @@ public class CreateQuestionRequestValidator : AbstractValidator<CreateQuestionRe
         When(question => question.Type == QuestionType.TrueFalse, () =>
         {
 			RuleFor(question => question.Answers.Count()).Equal(2);
-            RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.Text == "True")).Equal(1);
-            RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.Text == "False")).Equal(1);
+            RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.Title == "True")).Equal(1);
+            RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.Title == "False")).Equal(1);
             RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.IsCorrect == true)).Equal(1);
 			RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.IsCorrect == false)).Equal(1);
 		});
@@ -62,7 +62,7 @@ public class CreateQuestionRequestValidator : AbstractValidator<CreateQuestionRe
         {
             RuleFor(question => question.Answers.Count()).Equal(1);
             RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.IsCorrect == true)).Equal(1);
-            RuleFor(question => question.ResourceUrl).NotEmpty();
+            RuleFor(question => question.Resource).NotEmpty();
         });
     }
 }

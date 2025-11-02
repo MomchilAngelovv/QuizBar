@@ -1,12 +1,12 @@
-﻿using QuizBar.Shared;
+﻿namespace QuizBar.Data.Entities;
 
-namespace QuizBar.Data.Entities;
+using QuizBar.Shared;
 
 public class Answer : IEntityMetaData
 {
     // Main
     public required string Id { get; set; }
-    public required string Text { get; set; }
+    public required string Title { get; set; }
     public required bool IsCorrect { get; set; }
     public int Priority { get; set; }
 

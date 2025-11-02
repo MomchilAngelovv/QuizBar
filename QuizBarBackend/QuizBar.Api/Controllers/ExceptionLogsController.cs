@@ -7,7 +7,6 @@ using QuizBar.Services;
 using QuizBar.Services.Inputs.ExceptionLogs;
 using QuizBar.Services.Results;
 using QuizBar.Shared;
-using System;
 using System.Net;
 
 namespace QuizBar.Api.Controllers;

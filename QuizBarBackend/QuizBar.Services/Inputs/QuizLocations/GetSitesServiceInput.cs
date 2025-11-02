@@ -1,6 +1,6 @@
 ﻿namespace QuizBar.Services.Inputs.QuizLocations;
 
-public class GetQuizLocationsServiceInput
+public class GetSitesServiceInput
 {
     public required int Page { get; set; }
     public QuizLocationsFilter Filter { get; set; }

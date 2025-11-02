@@ -7,9 +7,10 @@ public class Question : IEntityMetaData
     // Main
     public required string Id { get; set; }
     public required QuestionType Type { get; set; }
-    public required string Text { get; set; }
-	public string ResourceUrl { get; set; }
+    public required string Title { get; set; }
+	public string Resource { get; set; }
 	public int Priority { get; set; }
+    public double Score { get; set; }
 
     // Foreign keys
     public required string ChapterId { get; set; }

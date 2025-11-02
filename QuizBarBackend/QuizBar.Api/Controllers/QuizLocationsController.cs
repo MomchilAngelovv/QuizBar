@@ -11,7 +11,7 @@ using QuizBar.Services.Results;
 namespace QuizBar.Api.Controllers;
 
 public class QuizLocationsController(
-    QuizLocationsService quizLocationsService) : BaseController
+    SitesService sitesService) : BaseController
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetQuizzesResponse>))]
@@ -27,7 +27,7 @@ public class QuizLocationsController(
             return ValidationFailed(validationResult);
         }
 
-        var serviceInput = new GetQuizLocationsServiceInput
+        var serviceInput = new GetSitesServiceInput
         {
             Page = request.Page,
             Filter = new QuizLocationsFilter
@@ -36,14 +36,14 @@ public class QuizLocationsController(
             }
         };
 
-        var servieResult = await quizLocationsService.GetQuizLocationsAsync(serviceInput);
+        var servieResult = await sitesService.GetSitesAsync(serviceInput);
 
         return ControllerResponse(new GetQuizLocationsResponse
         {
             QuizLocations = servieResult.Result.QuizLocations.Select(quizLocation => new GetQuizLocationsLocation
             {
                 Id = quizLocation.Id,
-                Site = quizLocation.Site,
+                Title = quizLocation.Title,
                 Status = quizLocation.Status
             }),
             Page = servieResult.Result.Page,
@@ -62,13 +62,13 @@ public class QuizLocationsController(
             return ValidationFailed(validationResult);
         }
 
-        var serviceInput = new CreateQuizLocationServiceInput
+        var serviceInput = new CreateSiteServiceInput
         {
-            Site = request.Site,
+            Title = request.Title,
             UserId = UserId
         };
 
-        var serviceResult = await quizLocationsService.CreateQuizLocationsAsync(serviceInput);
+        var serviceResult = await sitesService.CreateSiteAsync(serviceInput);
         if (serviceResult.Reason != ErrorReason.None)
         {
             return ControllerResponse(serviceResult.Reason);
@@ -93,14 +93,14 @@ public class QuizLocationsController(
             return ValidationFailed(validationResult);
         }
 
-        var serviceInput = new UpdateQuizLocationServiceInput
+        var serviceInput = new UpdateSiteServiceInput
         {
             QuizLocationId = request.QuizLocationId,
-            Site = request.Site,
+            Title = request.Title,
             UserId = UserId
         };
 
-        var serviceResult = await quizLocationsService.UpdateQuizLocationsAsync(serviceInput);
+        var serviceResult = await sitesService.UpdateSiteAsync(serviceInput);
         if (serviceResult.Reason != ErrorReason.None)
         {
             return ControllerResponse(serviceResult.Reason);

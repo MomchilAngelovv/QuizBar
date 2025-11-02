@@ -14,6 +14,6 @@ public class GetQuizLocationsResponse : IPaginationResponse
 public class GetQuizLocationsLocation
 {
     public required string Id { get; set; }
-    public required string Site { get; set; }
+    public required string Title { get; set; }
     public required Statuses Status { get; set; }
 }

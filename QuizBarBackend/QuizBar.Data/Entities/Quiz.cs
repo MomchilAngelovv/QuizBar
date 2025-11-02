@@ -13,7 +13,7 @@ public class Quiz : IEntityMetaData
 
     // Navigation properties
     public virtual ICollection<Chapter> Chapters { get; set; }
-    public virtual ICollection<QuizEvent> Events { get; set; }
+    public virtual ICollection<QuizTeam> QuizzesTeams { get; set; }
 
     // IEntityMetaData
     public required Statuses Status { get; set; }

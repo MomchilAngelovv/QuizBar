@@ -39,7 +39,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 // Identity
-builder.Services.AddIdentity<FokstyUser, FokstyRole>(options =>
+builder.Services.AddIdentity<QuizBarUser, QuizBarRole>(options =>
 {
     options.Password.RequireDigit = true;
     options.Password.RequiredLength = 6;
@@ -91,7 +91,7 @@ builder.Services.AddTransient<SeederService>();
 builder.Services.AddTransient<QuizzesService>();
 builder.Services.AddTransient<TeamsService>();
 builder.Services.AddTransient<QuestionsService>();
-builder.Services.AddTransient<QuizLocationsService>();
+builder.Services.AddTransient<SitesService>();
 builder.Services.AddTransient<ExceptionLogsService>();
 
 var app = builder.Build();
@@ -121,7 +121,7 @@ using var scope = app.Services.CreateScope();
     await seederService.SeedAdministratorsAsync();
     await seederService.SeedRolesAsync();
     await seederService.SeedUserRolesAsync();
-    await seederService.SeedQuizLocationsAsync();
+    await seederService.SeedSitesAsync();
 }
 
 app.Run();

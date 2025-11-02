@@ -1,5 +1,4 @@
-﻿using QuizBar.Services.Results.Teams;
-using QuizBar.Shared;
+﻿using QuizBar.Shared;
 
 namespace QuizBar.Api.Responses.Teams;
 
@@ -16,5 +15,4 @@ public class GetTeamResultServiceResult
 {
     public required double Score { get; set; }
     public required string TeamId { get; set; }
-    public required string QuizEventId { get; set; }
 }

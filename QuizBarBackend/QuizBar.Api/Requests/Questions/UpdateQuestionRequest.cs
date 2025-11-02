@@ -6,8 +6,8 @@ namespace QuizBar.Api.Requests.Questions;
 public class UpdateQuestionRequest 
 {
     public string? QuestionId { get; set; }
-    public string? Text { get; set; }
-    public string? ResourceUrl { get; set; }
+    public string? Title { get; set; }
+    public string? Resource { get; set; }
     public QuestionType? Type { get; set; }
     public string? ChapterId { get; set; }
     public int? Priority { get; set; }
@@ -24,7 +24,7 @@ public class UpdateQuestionRequestValidator : AbstractValidator<UpdateQuestionRe
 
             RuleForEach(question => question.Answers).ChildRules(pa =>
             {
-                pa.RuleFor(possibleAnswer => possibleAnswer.Text).NotEmpty();
+                pa.RuleFor(possibleAnswer => possibleAnswer.Title).NotEmpty();
             });
 
             When(question => question.Type == QuestionType.SingleChoice, () =>
@@ -40,8 +40,8 @@ public class UpdateQuestionRequestValidator : AbstractValidator<UpdateQuestionRe
             When(question => question.Type == QuestionType.TrueFalse, () =>
             {
                 RuleFor(question => question.Answers.Count()).Equal(2);
-                RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.Text == "True")).Equal(1);
-                RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.Text == "False")).Equal(1);
+                RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.Title == "True")).Equal(1);
+                RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.Title == "False")).Equal(1);
                 RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.IsCorrect == true)).Equal(1);
                 RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.IsCorrect == false)).Equal(1);
             });
@@ -56,7 +56,7 @@ public class UpdateQuestionRequestValidator : AbstractValidator<UpdateQuestionRe
             {
                 RuleFor(question => question.Answers.Count()).Equal(1);
                 RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.IsCorrect == true)).Equal(1);
-                RuleFor(question => question.ResourceUrl).NotEmpty();
+                RuleFor(question => question.Resource).NotEmpty();
             });
         });
     }
