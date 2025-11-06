@@ -1,14 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-	<Nullable>annotations</Nullable>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\QuizBar.Data\QuizBar.Data.csproj" />
-    <ProjectReference Include="..\QuizBar.Shared\QuizBar.Shared.csproj" />
-  </ItemGroup>
-
+	<ItemGroup>
+		<ProjectReference Include="..\QuizBar.Data\QuizBar.Data.csproj" />
+		<ProjectReference Include="..\QuizBar.Shared\QuizBar.Shared.csproj" />
+	</ItemGroup>
 </Project>

@@ -2,7 +2,7 @@
 
 public class GetExceptionLogResponse
 {
-    public required string Id { get; set; }
+    public string Id { get; set; }
     public required string Message { get; set; }
     public string Path { get; set; }
     public string QueryString { get; set; }
