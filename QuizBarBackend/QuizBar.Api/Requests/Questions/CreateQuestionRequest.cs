@@ -1,16 +1,23 @@
 ﻿namespace QuizBar.Api.Requests.Questions;
 
 using FluentValidation;
+using FluentValidation.Results;
 using QuizBar.Shared;
+using System.Threading.Tasks;
 
-public class CreateQuestionRequest
+public class CreateQuestionRequest : IValidatableRequest
 {
     public required string Title { get; set; }
     public string Resource { get; set; }
     public required QuestionType Type { get; set; }
     public required string ChapterId { get; set; }
     public int Priority { get; set; }
-    public IEnumerable<CreateQuestionAnswer>? Answers { get; set; }
+    public IEnumerable<CreateQuestionAnswer> Answers { get; set; }
+
+    public Task<ValidationResult> ValidateAsync()
+    {
+        return new CreateQuestionRequestValidator().ValidateAsync(this);
+    }
 }
 
 public class CreateQuestionAnswer

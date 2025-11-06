@@ -5,8 +5,8 @@ using QuizBar.Api.Requests.Questions;
 using QuizBar.Api.Responses;
 using QuizBar.Api.Responses.Questions;
 using QuizBar.Services;
-using QuizBar.Services.Inputs.Questions;
-using QuizBar.Services.Results;
+using QuizBar.Shared.ServiceModels.Inputs.Questions;
+using QuizBar.Shared.ServiceModels.Results;
 
 public class QuestionsController(
     QuestionsService questionsService) : BaseController
@@ -14,9 +14,9 @@ public class QuestionsController(
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<CreateQuestionResponse>))]
     public async Task<IActionResult> CreateQuestionAsync(
-        [FromBody] CreateQuestionRequest request, [FromServices] CreateQuestionRequestValidator requestValidator)
+        [FromBody] CreateQuestionRequest request)
     {
-        var validationResult = await requestValidator.ValidateAsync(request);
+        var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)
         {
             return ValidationFailed(validationResult);
@@ -53,11 +53,11 @@ public class QuestionsController(
     [HttpPut("{questionId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<UpdateQuestionResponse>))]
     public async Task<IActionResult> UpdateQuestionAsync(
-        [FromRoute] string questionId, [FromBody] UpdateQuestionRequest request, [FromServices] UpdateQuestionRequestValidator requestValidator)
+        [FromRoute] string questionId, [FromBody] UpdateQuestionRequest request)
     {
         request.QuestionId = questionId;
 
-        var validationResult = await requestValidator.ValidateAsync(request);
+        var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)
         {
             return ValidationFailed(validationResult);

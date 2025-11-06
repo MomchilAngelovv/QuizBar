@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuizBar.Data;
 using QuizBar.Data.Entities;
-using QuizBar.Services.Inputs.Quizzes;
-using QuizBar.Services.Results;
-using QuizBar.Services.Results.Quizzes;
 using QuizBar.Shared;
+using QuizBar.Shared.ServiceModels.Inputs.Quizzes;
+using QuizBar.Shared.ServiceModels.Results;
+using QuizBar.Shared.ServiceModels.Results.Quizzes;
 
 namespace QuizBar.Services;
 
@@ -168,7 +168,7 @@ public class QuizzesService(
 
         serviceResult.Result = new UpdateQuizScoresServiceResult
         {
-            TeamsScores = quizzesTeams.Select(tqe => new Results.Quizzes.UpdateQuizScoreTeamTeamResult
+            TeamsScores = quizzesTeams.Select(tqe => new UpdateQuizScoreTeamTeamResult
             { 
                 TeamId = tqe.TeamId,
                 Score = tqe.Score

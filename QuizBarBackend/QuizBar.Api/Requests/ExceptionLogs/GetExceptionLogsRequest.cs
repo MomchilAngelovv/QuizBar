@@ -1,10 +1,16 @@
-﻿using FluentValidation;
+﻿namespace QuizBar.Api.Requests.ExceptionLogs;
 
-namespace QuizBar.Api.Requests.ExceptionLogs;
+using FluentValidation;
+using FluentValidation.Results;
 
-public class GetExceptionLogsRequest
+public class GetExceptionLogsRequest : IValidatableRequest
 {
     public int? Page { get; set; } = 1;
+
+    public async Task<ValidationResult> ValidateAsync()
+    {
+        return await new GetExceptionLogsRequestValidator().ValidateAsync(this);
+    }
 }
 
 public class GetExceptionLogsRequestValidator : AbstractValidator<GetExceptionLogsRequest>

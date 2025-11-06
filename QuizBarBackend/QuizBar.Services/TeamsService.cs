@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuizBar.Data;
 using QuizBar.Data.Entities;
-using QuizBar.Services.Inputs.Teams;
-using QuizBar.Services.Results;
-using QuizBar.Services.Results.Teams;
 using QuizBar.Shared;
+using QuizBar.Shared.ServiceModels.Inputs.Teams;
+using QuizBar.Shared.ServiceModels.Results;
+using QuizBar.Shared.ServiceModels.Results.Teams;
 
 namespace QuizBar.Services;
 

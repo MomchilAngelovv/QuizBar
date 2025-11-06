@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿namespace QuizBar.Api.Utilities;
+
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using QuizBar.Services;
-using QuizBar.Services.Inputs.ExceptionLogs;
-
-namespace QuizBar.Api.Utilities;
+using QuizBar.Shared.ServiceModels.Inputs.ExceptionLogs;
 
 public class ExceptionLogExceptionFilter(
     ExceptionLogsService exceptionLogsService) : IAsyncExceptionFilter

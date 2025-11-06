@@ -1,9 +1,10 @@
-﻿using FluentValidation;
+﻿namespace QuizBar.Api.Requests.Questions;
+
+using FluentValidation;
+using FluentValidation.Results;
 using QuizBar.Shared;
 
-namespace QuizBar.Api.Requests.Questions;
-
-public class UpdateQuestionRequest 
+public class UpdateQuestionRequest : IValidatableRequest
 {
     public string? QuestionId { get; set; }
     public string? Title { get; set; }
@@ -12,6 +13,11 @@ public class UpdateQuestionRequest
     public string? ChapterId { get; set; }
     public int? Priority { get; set; }
     public IEnumerable<CreateQuestionAnswer>? Answers { get; set; }
+
+    public Task<ValidationResult> ValidateAsync()
+    {
+        return new UpdateQuestionRequestValidator().ValidateAsync(this);
+    }
 }
 
 public class UpdateQuestionRequestValidator : AbstractValidator<UpdateQuestionRequest>

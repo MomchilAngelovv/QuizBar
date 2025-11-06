@@ -6,8 +6,8 @@ using QuizBar.Api.Requests.Quizzes;
 using QuizBar.Api.Responses;
 using QuizBar.Api.Responses.Quizzes;
 using QuizBar.Services;
-using QuizBar.Services.Inputs.Quizzes;
-using QuizBar.Services.Results;
+using QuizBar.Shared.ServiceModels.Inputs.Quizzes;
+using QuizBar.Shared.ServiceModels.Results;
 
 public class QuizzesController(
     QuizzesService quizzesService) : BaseController
@@ -15,12 +15,12 @@ public class QuizzesController(
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetQuizzesResponse>))]
     public async Task<IActionResult> GetQuizzesAsync(
-        [FromQuery] int? page, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetQuizzesRequest? request, [FromServices] GetQuizzesRequestValidator requestValidator)
+        [FromQuery] int? page, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetQuizzesRequest? request)
     {
         request ??= new GetQuizzesRequest();
         request.Page = page ?? 1;
 
-        var validationResult = await requestValidator.ValidateAsync(request);
+        var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)
         {
             return ValidationFailed(validationResult);
@@ -53,12 +53,12 @@ public class QuizzesController(
     [HttpGet("{quizId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetQuizResponse>))]
     public async Task<IActionResult> GetQuizAsync(
-        [FromRoute] string quizId, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetQuizRequest? request, [FromServices] GetQuizRequestValidator requestValidator)
+        [FromRoute] string quizId, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetQuizRequest? request)
     {
         request ??= new GetQuizRequest();
         request.QuizId = quizId;
 
-        var validationResult = await requestValidator.ValidateAsync(request);
+        var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)
         {
             return ValidationFailed(validationResult);
@@ -109,9 +109,9 @@ public class QuizzesController(
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<CreateQuizResponse>))]
     public async Task<IActionResult> CreateQuizAsync(
-        [FromBody] CreateQuizRequest request, [FromServices] CreateQuizRequestValidator requestValidator)
+        [FromBody] CreateQuizRequest request)
     {
-        var validationResult = await requestValidator.ValidateAsync(request);
+        var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)
         {
             return ValidationFailed(validationResult);

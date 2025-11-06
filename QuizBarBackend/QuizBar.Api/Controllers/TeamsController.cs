@@ -6,8 +6,8 @@ using QuizBar.Api.Requests.Teams;
 using QuizBar.Api.Responses;
 using QuizBar.Api.Responses.Teams;
 using QuizBar.Services;
-using QuizBar.Services.Inputs.Teams;
-using QuizBar.Services.Results;
+using QuizBar.Shared.ServiceModels.Inputs.Teams;
+using QuizBar.Shared.ServiceModels.Results;
 
 public class TeamsController(
     TeamsService teamsService) : BaseController
@@ -15,12 +15,12 @@ public class TeamsController(
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetTeamsResponse>))]
     public async Task<IActionResult> GetTeamsAsync(
-        [FromQuery] int? page, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetTeamsRequest? request, [FromServices] GetTeamsRequestValidator requestValidator)
+        [FromQuery] int? page, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetTeamsRequest? request)
     {
         request ??= new GetTeamsRequest();
         request.Page = page ?? 1;
 
-        var validationResult = await requestValidator.ValidateAsync(request);
+        var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)
         {
             return ValidationFailed(validationResult);
@@ -56,12 +56,12 @@ public class TeamsController(
     [HttpGet("{teamId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetTeamResponse>))]
     public async Task<IActionResult> GetTeamAsync(
-        [FromRoute] string teamId, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetTeamRequest? request, [FromServices] GetTeamRequestValidator requestValidator)
+        [FromRoute] string teamId, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetTeamRequest? request)
     {
         request ??= new GetTeamRequest();
         request.TeamId = teamId;
 
-        var validationResult = await requestValidator.ValidateAsync(request);
+        var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)
         {
             return ValidationFailed(validationResult);
@@ -95,9 +95,9 @@ public class TeamsController(
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<CreateTeamResponse>))]
     public async Task<IActionResult> CreateTeamAsync(
-        [FromBody] CreateTeamRequest request, [FromServices] CreateTeamRequestValidator requestValidator)
+        [FromBody] CreateTeamRequest request)
     {
-        var validationResult = await requestValidator.ValidateAsync(request);
+        var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)
         {
             return ValidationFailed(validationResult);
@@ -124,11 +124,11 @@ public class TeamsController(
     [HttpPut("{teamId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<UpdateTeamResponse>))]
     public async Task<IActionResult> UpdateTeamAsync(
-        [FromRoute] string teamId, [FromBody] UpdateTeamRequest request, [FromServices] UpdateTeamRequestValidator requestValidator)
+        [FromRoute] string teamId, [FromBody] UpdateTeamRequest request)
     {
         request.TeamId = teamId;
 
-        var validationResult = await requestValidator.ValidateAsync(request);
+        var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)
         {
             return ValidationFailed(validationResult);

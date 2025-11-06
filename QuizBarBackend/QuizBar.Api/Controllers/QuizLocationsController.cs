@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿namespace QuizBar.Api.Controllers;
+
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using QuizBar.Api.Requests.QuizLocations;
 using QuizBar.Api.Responses;
 using QuizBar.Api.Responses.QuizLocations;
 using QuizBar.Api.Responses.Quizzes;
 using QuizBar.Services;
-using QuizBar.Services.Inputs.QuizLocations;
-using QuizBar.Services.Results;
-
-namespace QuizBar.Api.Controllers;
+using QuizBar.Shared.ServiceModels.Inputs.QuizLocations;
+using QuizBar.Shared.ServiceModels.Results;
 
 public class QuizLocationsController(
     SitesService sitesService) : BaseController
@@ -16,12 +16,12 @@ public class QuizLocationsController(
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetQuizzesResponse>))]
     public async Task<IActionResult> GetQuizLocationsAsync(
-        [FromQuery] int? page, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetQuizLocationsRequest? request, [FromServices] GetQuizLocationsRequestValidator requestValidator)
+        [FromQuery] int? page, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetQuizLocationsRequest? request)
     {
         request ??= new GetQuizLocationsRequest();
         request.Page = page ?? 1;
         
-        var validationResult = await requestValidator.ValidateAsync(request);
+        var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)
         {
             return ValidationFailed(validationResult);
@@ -54,9 +54,9 @@ public class QuizLocationsController(
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<CreateQuizLocationResponse>))]
     public async Task<IActionResult> CreateQuizLocationAsync(
-        [FromBody] CreateQuizLocationRequest request, [FromServices] CreateQuizLocationRequestValidator requestValidator)
+        [FromBody] CreateQuizLocationRequest request)
     {
-        var validationResult = await requestValidator.ValidateAsync(request);
+        var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)
         {
             return ValidationFailed(validationResult);
@@ -83,11 +83,11 @@ public class QuizLocationsController(
     [HttpPut("{quizId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<UpdateQuizLocationResponse>))]
     public async Task<IActionResult> UpdateQuizLocationAsync(
-        [FromRoute] int quizLocationId, [FromBody] UpdateQuizLocationRequest request, [FromServices] UpdateQuizLocationRequestValidator requestValidator)
+        [FromRoute] int quizLocationId, [FromBody] UpdateQuizLocationRequest request)
     {
         request.QuizLocationId = quizLocationId;
 
-        var validationResult = await requestValidator.ValidateAsync(request);
+        var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)
         {
             return ValidationFailed(validationResult);

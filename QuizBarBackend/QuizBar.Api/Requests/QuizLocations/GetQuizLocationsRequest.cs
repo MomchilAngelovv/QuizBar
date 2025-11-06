@@ -1,10 +1,16 @@
-﻿using FluentValidation;
+﻿namespace QuizBar.Api.Requests.QuizLocations;
 
-namespace QuizBar.Api.Requests.QuizLocations;
+using FluentValidation;
+using FluentValidation.Results;
 
-public class GetQuizLocationsRequest
+public class GetQuizLocationsRequest : IValidatableRequest
 {
     public int Page { get; set; }
+
+    public Task<ValidationResult> ValidateAsync()
+    {
+        return new GetQuizLocationsRequestValidator().ValidateAsync(this);
+    }
 }
 
 public class GetQuizLocationsRequestValidator : AbstractValidator<GetQuizLocationsRequest>

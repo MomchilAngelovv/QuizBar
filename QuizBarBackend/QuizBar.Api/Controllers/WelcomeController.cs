@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿namespace QuizBar.Api.Controllers;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuizBar.Data;
-
-namespace QuizBar.Api.Controllers;
 
 [AllowAnonymous]
 public class WelcomeController(

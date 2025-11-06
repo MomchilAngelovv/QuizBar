@@ -1,15 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿namespace QuizBar.Api.Controllers;
+
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using QuizBar.Api.Requests.ExceptionLogs;
 using QuizBar.Api.Responses;
 using QuizBar.Api.Responses.ExceptionLogs;
 using QuizBar.Services;
-using QuizBar.Services.Inputs.ExceptionLogs;
-using QuizBar.Services.Results;
 using QuizBar.Shared;
+using QuizBar.Shared.ServiceModels.Inputs.ExceptionLogs;
+using QuizBar.Shared.ServiceModels.Results;
 using System.Net;
-
-namespace QuizBar.Api.Controllers;
 
 public class ExceptionLogsController(
     ExceptionLogsService exceptionLogsService) : BaseController
@@ -17,9 +17,9 @@ public class ExceptionLogsController(
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetExceptionLogsResponse>))]
     public async Task<IActionResult> GetExceptionLogsAsync(
-        [FromQuery] GetExceptionLogsRequest request, [FromServices] GetExceptionLogsRequestValidator requestValidator)
+        [FromQuery] GetExceptionLogsRequest request)
     {
-        var validationResult = await requestValidator.ValidateAsync(request);
+        var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)
         {
             return ValidationFailed(validationResult);
@@ -52,12 +52,12 @@ public class ExceptionLogsController(
     [HttpGet("{exceptionLogId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetExceptionLogResponse>))]
     public async Task<IActionResult> GetExceptionLogAsync(
-        [FromRoute] string exceptionLogId, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetExceptionLogRequest? request, [FromServices] GetExceptionLogRequestValidator requestValidator)
+        [FromRoute] string exceptionLogId, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetExceptionLogRequest? request)
     {
         request ??= new GetExceptionLogRequest();
         request.ExceptionLogId = exceptionLogId;
 
-        var validationResult = await requestValidator.ValidateAsync(request);
+        var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)
         {
             return ValidationFailed(validationResult);

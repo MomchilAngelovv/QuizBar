@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuizBar.Data;
 using QuizBar.Data.Entities;
-using QuizBar.Services.Inputs.ExceptionLogs;
-using QuizBar.Services.Results;
-using QuizBar.Services.Results.ExceptionLog;
+using QuizBar.Shared.ServiceModels.Inputs.ExceptionLogs;
+using QuizBar.Shared.ServiceModels.Results;
+using QuizBar.Shared.ServiceModels.Results.ExceptionLog;
 
 namespace QuizBar.Services;
 

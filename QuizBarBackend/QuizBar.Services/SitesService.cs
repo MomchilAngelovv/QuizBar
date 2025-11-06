@@ -3,10 +3,10 @@
 using Microsoft.EntityFrameworkCore;
 using QuizBar.Data;
 using QuizBar.Data.Entities;
-using QuizBar.Services.Inputs.QuizLocations;
-using QuizBar.Services.Results;
-using QuizBar.Services.Results.QuizLocations;
 using QuizBar.Shared;
+using QuizBar.Shared.ServiceModels.Inputs.QuizLocations;
+using QuizBar.Shared.ServiceModels.Results;
+using QuizBar.Shared.ServiceModels.Results.QuizLocations;
 
 public class SitesService(
     ApplicationDbContext db)

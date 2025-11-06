@@ -1,10 +1,16 @@
-﻿using FluentValidation;
+﻿namespace QuizBar.Api.Requests.Teams;
 
-namespace QuizBar.Api.Requests.Teams;
+using FluentValidation;
+using FluentValidation.Results;
 
-public class GetTeamRequest
+public class GetTeamRequest : IValidatableRequest
 {
     public string TeamId { get; set; }
+
+    public Task<ValidationResult> ValidateAsync()
+    {
+        return new GetTeamRequestValidator().ValidateAsync(this);
+    }
 }
 
 public class GetTeamRequestValidator : AbstractValidator<GetTeamRequest>
