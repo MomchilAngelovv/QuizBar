@@ -16,8 +16,7 @@ public class ExceptionLogsController(
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetExceptionLogsResponse>))]
-    public async Task<IActionResult> GetExceptionLogsAsync(
-        [FromQuery] GetExceptionLogsRequest request)
+    public async Task<IActionResult> GetExceptionLogsAsync([FromQuery] GetExceptionLogsRequest request)
     {
         var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)

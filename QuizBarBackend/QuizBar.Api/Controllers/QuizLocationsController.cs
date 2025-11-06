@@ -10,6 +10,7 @@ using QuizBar.Services;
 using QuizBar.Shared.ServiceModels.Inputs.QuizLocations;
 using QuizBar.Shared.ServiceModels.Results;
 
+//TODO ranme this so SitesContrller and confirm empty body behavior is correct
 public class QuizLocationsController(
     SitesService sitesService) : BaseController
 {

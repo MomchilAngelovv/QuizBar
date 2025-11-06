@@ -9,13 +9,13 @@ using QuizBar.Services;
 using QuizBar.Shared.ServiceModels.Inputs.Quizzes;
 using QuizBar.Shared.ServiceModels.Results;
 
+//TODO confirm int? for page
 public class QuizzesController(
     QuizzesService quizzesService) : BaseController
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetQuizzesResponse>))]
-    public async Task<IActionResult> GetQuizzesAsync(
-        [FromQuery] int? page, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetQuizzesRequest? request)
+    public async Task<IActionResult> GetQuizzesAsync(int? page, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetQuizzesRequest? request)
     {
         request ??= new GetQuizzesRequest();
         request.Page = page ?? 1;
@@ -52,8 +52,7 @@ public class QuizzesController(
 
     [HttpGet("{quizId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetQuizResponse>))]
-    public async Task<IActionResult> GetQuizAsync(
-        [FromRoute] string quizId, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetQuizRequest? request)
+    public async Task<IActionResult> GetQuizAsync(string quizId, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetQuizRequest? request)
     {
         request ??= new GetQuizRequest();
         request.QuizId = quizId;
@@ -108,8 +107,7 @@ public class QuizzesController(
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<CreateQuizResponse>))]
-    public async Task<IActionResult> CreateQuizAsync(
-        [FromBody] CreateQuizRequest request)
+    public async Task<IActionResult> CreateQuizAsync(CreateQuizRequest request)
     {
         var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)

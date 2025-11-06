@@ -13,8 +13,7 @@ public class QuestionsController(
 {
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<CreateQuestionResponse>))]
-    public async Task<IActionResult> CreateQuestionAsync(
-        [FromBody] CreateQuestionRequest request)
+    public async Task<IActionResult> CreateQuestionAsync(CreateQuestionRequest request)
     {
         var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)
@@ -52,8 +51,7 @@ public class QuestionsController(
 
     [HttpPut("{questionId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<UpdateQuestionResponse>))]
-    public async Task<IActionResult> UpdateQuestionAsync(
-        [FromRoute] string questionId, [FromBody] UpdateQuestionRequest request)
+    public async Task<IActionResult> UpdateQuestionAsync(string questionId, UpdateQuestionRequest request)
     {
         request.QuestionId = questionId;
 

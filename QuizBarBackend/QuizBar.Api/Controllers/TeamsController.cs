@@ -55,8 +55,7 @@ public class TeamsController(
 
     [HttpGet("{teamId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetTeamResponse>))]
-    public async Task<IActionResult> GetTeamAsync(
-        [FromRoute] string teamId, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetTeamRequest? request)
+    public async Task<IActionResult> GetTeamAsync(string teamId, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetTeamRequest? request)
     {
         request ??= new GetTeamRequest();
         request.TeamId = teamId;
@@ -94,8 +93,7 @@ public class TeamsController(
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<CreateTeamResponse>))]
-    public async Task<IActionResult> CreateTeamAsync(
-        [FromBody] CreateTeamRequest request)
+    public async Task<IActionResult> CreateTeamAsync(CreateTeamRequest request)
     {
         var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)
@@ -123,8 +121,7 @@ public class TeamsController(
 
     [HttpPut("{teamId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<UpdateTeamResponse>))]
-    public async Task<IActionResult> UpdateTeamAsync(
-        [FromRoute] string teamId, [FromBody] UpdateTeamRequest request)
+    public async Task<IActionResult> UpdateTeamAsync(string teamId, UpdateTeamRequest request)
     {
         request.TeamId = teamId;
 

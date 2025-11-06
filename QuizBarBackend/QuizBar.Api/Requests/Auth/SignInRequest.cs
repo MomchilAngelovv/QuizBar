@@ -1,11 +1,17 @@
-﻿using FluentValidation;
+﻿namespace QuizBar.Api.Requests.Auth;
 
-namespace QuizBar.Api.Requests.Auth;
+using FluentValidation;
+using FluentValidation.Results;
 
-public class SignInRequest
+public class SignInRequest : IValidatableRequest
 {
     public required string Email { get; set; }
     public required string Password { get; set; }
+
+    public Task<ValidationResult> ValidateAsync()
+    {
+        return new SignInRequestValidator().ValidateAsync(this);
+    }
 }
 
 public class SignInRequestValidator : AbstractValidator<SignInRequest>

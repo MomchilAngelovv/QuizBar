@@ -21,10 +21,9 @@ public class AuthController(
     [AllowAnonymous]
     [HttpPost("signup")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<SignUpResponse>))]
-    public async Task<IActionResult> SignUp(
-        [FromBody] SignUpRequest request, [FromServices] SignUpRequestValidator requestValidator)
+    public async Task<IActionResult> SignUp(SignUpRequest request)
     {
-        var validationResult = await requestValidator.ValidateAsync(request);
+        var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)
         {
             return ValidationFailed(validationResult);
@@ -69,10 +68,9 @@ public class AuthController(
     [AllowAnonymous]
     [HttpPost("signin")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<SignInResponse>))]
-    public async Task<IActionResult> SignIn(
-        [FromBody] SignInRequest request, [FromServices] SignInRequestValidator requestValidator)
+    public async Task<IActionResult> SignIn(SignInRequest request)
     {
-        var validationResult = await requestValidator.ValidateAsync(request);
+        var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)
         {
             return ValidationFailed(validationResult);
