@@ -2,8 +2,8 @@
 
 public class CreateSiteServiceInput : IServiceInput
 {
-    public required string Title { get; set; }
-
     // IServiceInput
-    public required string UserId { get; set; }
+    public string UserId { get; set; }
+
+    public string Title { get; set; }
 }

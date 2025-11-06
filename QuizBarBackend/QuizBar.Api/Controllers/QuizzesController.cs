@@ -29,10 +29,7 @@ public class QuizzesController(
         var serviceInput = new GetQuizzesServiceInput
         {
             Page = request.Page,
-            Filter = new QuizzesFilter
-            {
-                UserId = UserId
-            }
+            UserId = UserId
         };
 
         var serviceResult = await quizzesService.GetQuizzesAsync(serviceInput);

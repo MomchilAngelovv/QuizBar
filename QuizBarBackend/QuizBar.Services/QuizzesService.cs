@@ -1,12 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿namespace QuizBar.Services;
+
+using Microsoft.EntityFrameworkCore;
 using QuizBar.Data;
 using QuizBar.Data.Entities;
 using QuizBar.Shared;
 using QuizBar.Shared.ServiceModels.Inputs.Quizzes;
 using QuizBar.Shared.ServiceModels.Results;
 using QuizBar.Shared.ServiceModels.Results.Quizzes;
-
-namespace QuizBar.Services;
 
 public class QuizzesService(
     ApplicationDbContext db)
@@ -66,10 +66,10 @@ public class QuizzesService(
 
         if (input.Filter is not null)
         {
-            if (!string.IsNullOrWhiteSpace(input.Filter.UserId))
+            if (!string.IsNullOrWhiteSpace(input.UserId))
             {
                 quizzesQuery = quizzesQuery
-                    .Where(team => team.CreatedBy == input.Filter.UserId);
+                    .Where(team => team.CreatedBy == input.UserId);
             }
         }
 
@@ -140,7 +140,6 @@ public class QuizzesService(
 
         return serviceResult;
     }
-    
     public async Task<ServiceResult<UpdateQuizScoresServiceResult>> UpdateQuizScoresAsync(UpdateQuizScoresServiceInput input)
     {
         var serviceResult = new ServiceResult<UpdateQuizScoresServiceResult>();

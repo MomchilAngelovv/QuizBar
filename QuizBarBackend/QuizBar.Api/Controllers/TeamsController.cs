@@ -29,10 +29,7 @@ public class TeamsController(
         var serviceInput = new GetTeamsServiceInput
         {
             Page = request.Page,
-            Filter = new TeamsFilter
-            {
-                UserId = UserId
-            }
+            UserId = UserId
         };
 
         var serviceResult = await teamsService.GetTeamsAsync(serviceInput);

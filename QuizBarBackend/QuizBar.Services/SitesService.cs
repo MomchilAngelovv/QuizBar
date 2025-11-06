@@ -20,10 +20,10 @@ public class SitesService(
 
         if (input.Filter is not null)
         {
-            if (!string.IsNullOrWhiteSpace(input.Filter.UserId))
+            if (!string.IsNullOrWhiteSpace(input.UserId))
             {
                 quizLocationsQuery = quizLocationsQuery
-                    .Where(ql => ql.CreatedBy == input.Filter.UserId);
+                    .Where(ql => ql.CreatedBy == input.UserId);
             }
         }
 

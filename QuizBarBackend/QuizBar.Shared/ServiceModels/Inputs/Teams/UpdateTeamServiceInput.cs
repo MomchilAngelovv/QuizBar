@@ -2,9 +2,9 @@
 
 public class UpdateTeamServiceInput : IServiceInput
 {
-    public required string TeamId { get; set; }
-    public string Title { get; set; }
+    // IServiceInput
+    public string UserId { get; set; }
 
-    //IServiceInput
-    public required string UserId { get; set; }
+    public string TeamId { get; set; }
+    public string Title { get; set; }
 }

@@ -1,12 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿namespace QuizBar.Services;
+
+using Microsoft.EntityFrameworkCore;
 using QuizBar.Data;
 using QuizBar.Data.Entities;
 using QuizBar.Shared;
 using QuizBar.Shared.ServiceModels.Inputs.Teams;
 using QuizBar.Shared.ServiceModels.Results;
 using QuizBar.Shared.ServiceModels.Results.Teams;
-
-namespace QuizBar.Services;
 
 public class TeamsService(
     ApplicationDbContext db)
@@ -20,10 +20,10 @@ public class TeamsService(
 
         if (input.Filter is not null)
         {
-            if (!string.IsNullOrWhiteSpace(input.Filter.UserId))
+            if (!string.IsNullOrWhiteSpace(input.UserId))
             {
                 teamsQuery = teamsQuery
-                    .Where(team => team.CreatedBy == input.Filter.UserId);
+                    .Where(team => team.CreatedBy == input.UserId);
             }
         }
 

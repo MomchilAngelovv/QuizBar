@@ -1,7 +1,10 @@
 ﻿namespace QuizBar.Shared.ServiceModels.Inputs.QuizLocations;
 
-public class GetSitesServiceInput
+public class GetSitesServiceInput : IServiceInput
 {
-    public required int Page { get; set; }
+    // IServiceInput
+    public string UserId { get; set; }
+
+    public int Page { get; set; }
     public QuizLocationsFilter Filter { get; set; }
 }

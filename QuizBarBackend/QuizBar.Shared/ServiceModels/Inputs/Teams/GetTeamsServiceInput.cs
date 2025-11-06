@@ -1,7 +1,10 @@
 ﻿namespace QuizBar.Shared.ServiceModels.Inputs.Teams;
 
-public class GetTeamsServiceInput
+public class GetTeamsServiceInput : IServiceInput
 {
-    public required int Page { get; set; }
+    // IServiceInput
+    public string UserId { get; set; }
+
+    public int Page { get; set; }
     public TeamsFilter Filter { get; set; }
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿namespace QuizBar.Services;
+
+using Microsoft.EntityFrameworkCore;
 using QuizBar.Data;
 using QuizBar.Data.Entities;
 using QuizBar.Shared;
@@ -6,7 +8,6 @@ using QuizBar.Shared.ServiceModels.Inputs.Questions;
 using QuizBar.Shared.ServiceModels.Results;
 using QuizBar.Shared.ServiceModels.Results.Questions;
 
-namespace QuizBar.Services;
 
 public class QuestionsService(
      ApplicationDbContext db)
@@ -108,9 +109,9 @@ public class QuestionsService(
             question.Resource = input.Resource;
         }
 
-        if (input.Type is not null)
+        if (input.Type != QuestionType.None)
         {
-            question.Type = input.Type.Value;
+            question.Type = input.Type;
         }
 
         if (input.Priority is not null)

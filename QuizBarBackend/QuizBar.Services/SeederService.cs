@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿namespace QuizBar.Services;
+
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using QuizBar.Data;
 using QuizBar.Data.Entities;
 using QuizBar.Shared;
-
-namespace QuizBar.Services;
 
 public class SeederService(
     ApplicationDbContext db,

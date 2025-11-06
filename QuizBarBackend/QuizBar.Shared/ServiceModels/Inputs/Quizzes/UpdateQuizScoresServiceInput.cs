@@ -1,13 +1,16 @@
 ﻿namespace QuizBar.Shared.ServiceModels.Inputs.Quizzes;
 
-public class UpdateQuizScoresServiceInput
+public class UpdateQuizScoresServiceInput : IServiceInput
 {
-    public required string QuizId { get; set; }
-    public required IEnumerable<UpdateQuizEventResultsTeamResult> TeamsScores { get; set; }
+    // IServiceInput
+    public string UserId { get; set; }
+
+    public string QuizId { get; set; }
+    public IEnumerable<UpdateQuizEventResultsTeamResult> TeamsScores { get; set; }
 }
 
 public class UpdateQuizEventResultsTeamResult
 {
-    public required string TeamId { get; set; }
-    public required double Score { get; set; }
+    public string TeamId { get; set; }
+    public double Score { get; set; }
 }

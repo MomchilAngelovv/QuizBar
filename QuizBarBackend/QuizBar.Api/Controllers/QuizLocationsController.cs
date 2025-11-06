@@ -31,10 +31,7 @@ public class QuizLocationsController(
         var serviceInput = new GetSitesServiceInput
         {
             Page = request.Page,
-            Filter = new QuizLocationsFilter
-            {
-                UserId = UserId
-            }
+            UserId = UserId,
         };
 
         var servieResult = await sitesService.GetSitesAsync(serviceInput);

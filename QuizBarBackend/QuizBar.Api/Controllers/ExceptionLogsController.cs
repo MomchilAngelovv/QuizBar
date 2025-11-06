@@ -11,6 +11,7 @@ using QuizBar.Shared.ServiceModels.Inputs.ExceptionLogs;
 using QuizBar.Shared.ServiceModels.Results;
 using System.Net;
 
+//TODO FromQuery Parameters
 public class ExceptionLogsController(
     ExceptionLogsService exceptionLogsService) : BaseController
 {

@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿namespace QuizBar.Services;
+
+using Microsoft.EntityFrameworkCore;
 using QuizBar.Data;
 using QuizBar.Data.Entities;
 using QuizBar.Shared.ServiceModels.Inputs.ExceptionLogs;
 using QuizBar.Shared.ServiceModels.Results;
 using QuizBar.Shared.ServiceModels.Results.ExceptionLog;
-
-namespace QuizBar.Services;
 
 public class ExceptionLogsService(
     ApplicationDbContext db)
