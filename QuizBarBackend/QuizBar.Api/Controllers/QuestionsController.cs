@@ -51,7 +51,7 @@ public class QuestionsController(
 
     [HttpPut("{questionId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<UpdateQuestionResponse>))]
-    public async Task<IActionResult> UpdateQuestionAsync(string questionId, UpdateQuestionRequest request)
+    public async Task<IActionResult> UpdateQuestionAsync(UpdateQuestionRequest request, string questionId)
     {
         request.QuestionId = questionId;
 

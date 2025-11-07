@@ -11,13 +11,12 @@ using QuizBar.Shared.ServiceModels.Inputs.QuizLocations;
 using QuizBar.Shared.ServiceModels.Results;
 
 //TODO ranme this so SitesContrller and confirm empty body behavior is correct
-public class QuizLocationsController(
+public class SitesController(
     SitesService sitesService) : BaseController
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetQuizzesResponse>))]
-    public async Task<IActionResult> GetQuizLocationsAsync(
-        [FromQuery] int? page, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetQuizLocationsRequest? request)
+    public async Task<IActionResult> GetQuizLocationsAsync(int? page, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetQuizLocationsRequest? request)
     {
         request ??= new GetQuizLocationsRequest();
         request.Page = page ?? 1;
@@ -51,8 +50,7 @@ public class QuizLocationsController(
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<CreateQuizLocationResponse>))]
-    public async Task<IActionResult> CreateQuizLocationAsync(
-        [FromBody] CreateQuizLocationRequest request)
+    public async Task<IActionResult> CreateQuizLocationAsync(CreateQuizLocationRequest request)
     {
         var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)
@@ -80,8 +78,7 @@ public class QuizLocationsController(
 
     [HttpPut("{quizId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<UpdateQuizLocationResponse>))]
-    public async Task<IActionResult> UpdateQuizLocationAsync(
-        [FromRoute] int quizLocationId, [FromBody] UpdateQuizLocationRequest request)
+    public async Task<IActionResult> UpdateQuizLocationAsync(int quizLocationId, UpdateQuizLocationRequest request)
     {
         request.QuizLocationId = quizLocationId;
 

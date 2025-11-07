@@ -8,7 +8,6 @@ using QuizBar.Shared.ServiceModels.Inputs.Questions;
 using QuizBar.Shared.ServiceModels.Results;
 using QuizBar.Shared.ServiceModels.Results.Questions;
 
-
 public class QuestionsService(
      ApplicationDbContext db)
 {

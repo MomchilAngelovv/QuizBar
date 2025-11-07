@@ -2,7 +2,7 @@
 
 public class CreateQuizServiceInput : IServiceInput
 {
-    //IServiceInput
+    // IServiceInput
     public string UserId { get; set; }
 
     public string Title { get; set; }

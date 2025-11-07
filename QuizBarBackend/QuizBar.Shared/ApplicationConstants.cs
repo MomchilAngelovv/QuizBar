@@ -1,5 +1,6 @@
 ﻿namespace QuizBar.Shared;
 
+//TODO Add more constants as needed for admin and other stuff
 public static class ApplicationConstants
 {
     public static readonly string ApplicationName = "QuizBar";

@@ -15,10 +15,9 @@ public class QuizzesController(
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetQuizzesResponse>))]
-    public async Task<IActionResult> GetQuizzesAsync(int? page, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetQuizzesRequest? request)
+    public async Task<IActionResult> GetQuizzesAsync(int page = 1)
     {
-        request ??= new GetQuizzesRequest();
-        request.Page = page ?? 1;
+        var request = new GetQuizzesRequest { Page = page };
 
         var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)
@@ -28,8 +27,8 @@ public class QuizzesController(
 
         var serviceInput = new GetQuizzesServiceInput
         {
+            UserId = UserId,
             Page = request.Page,
-            UserId = UserId
         };
 
         var serviceResult = await quizzesService.GetQuizzesAsync(serviceInput);
@@ -49,10 +48,9 @@ public class QuizzesController(
 
     [HttpGet("{quizId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetQuizResponse>))]
-    public async Task<IActionResult> GetQuizAsync(string quizId, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetQuizRequest? request)
+    public async Task<IActionResult> GetQuizAsync(string quizId)
     {
-        request ??= new GetQuizRequest();
-        request.QuizId = quizId;
+        var request = new GetQuizRequest { QuizId = quizId };
 
         var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)

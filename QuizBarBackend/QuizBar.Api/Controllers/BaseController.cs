@@ -31,10 +31,7 @@ public class BaseController : ControllerBase
 
         return ValidationProblem(ModelState);
     }
-
-    protected IActionResult ControllerResponse(
-        string message = default,
-        HttpStatusCode statusCode = HttpStatusCode.OK)
+    protected IActionResult ControllerResponse(string message = default, HttpStatusCode statusCode = HttpStatusCode.OK)
     {
         var controllerResult = new ControllerResponse
         {
@@ -44,12 +41,7 @@ public class BaseController : ControllerBase
 
         return StatusCode((int)statusCode, controllerResult);
     }
-
-    protected IActionResult ControllerResponse<TResult>(
-        TResult data, 
-        bool success = true, 
-        string message = default,
-        HttpStatusCode statusCode = HttpStatusCode.OK) where TResult : class
+    protected IActionResult ControllerResponse<TResult>(TResult data, bool success = true, string message = default, HttpStatusCode statusCode = HttpStatusCode.OK) where TResult : class
     {
         var controllerResult = new ControllerResponse<TResult>()
         {
@@ -60,9 +52,7 @@ public class BaseController : ControllerBase
 
         return StatusCode((int)statusCode, controllerResult);
     }
-
-    protected IActionResult ControllerResponse(
-        ErrorReason errorReason)
+    protected IActionResult ControllerResponse(ErrorReason errorReason)
     {
         var message = string.Empty;
         var statusCode = default(HttpStatusCode);
