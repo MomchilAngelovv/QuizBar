@@ -1,25 +1,22 @@
 ﻿namespace QuizBar.Api.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using QuizBar.Api.Requests.QuizLocations;
+using QuizBar.Api.Requests.Sites;
 using QuizBar.Api.Responses;
-using QuizBar.Api.Responses.QuizLocations;
 using QuizBar.Api.Responses.Quizzes;
+using QuizBar.Api.Responses.Sites;
 using QuizBar.Services;
 using QuizBar.Shared.ServiceModels.Inputs.QuizLocations;
 using QuizBar.Shared.ServiceModels.Results;
 
-//TODO ranme this so SitesContrller and confirm empty body behavior is correct
 public class SitesController(
     SitesService sitesService) : BaseController
 {
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetQuizzesResponse>))]
-    public async Task<IActionResult> GetQuizLocationsAsync(int? page, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetQuizLocationsRequest? request)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetSitesResponse>))]
+    public async Task<IActionResult> GetSitesAsync(int page = 1)
     {
-        request ??= new GetQuizLocationsRequest();
-        request.Page = page ?? 1;
+        var request = new GetSitesRequest { Page = page };
         
         var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)
@@ -35,7 +32,7 @@ public class SitesController(
 
         var servieResult = await sitesService.GetSitesAsync(serviceInput);
 
-        return ControllerResponse(new GetQuizLocationsResponse
+        return ControllerResponse(new GetSitesResponse
         {
             QuizLocations = servieResult.Result.QuizLocations.Select(quizLocation => new GetQuizLocationsLocation
             {
@@ -49,8 +46,8 @@ public class SitesController(
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<CreateQuizLocationResponse>))]
-    public async Task<IActionResult> CreateQuizLocationAsync(CreateQuizLocationRequest request)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<CreateSiteResponse>))]
+    public async Task<IActionResult> CreateQuizLocationAsync(CreateSiteRequest request)
     {
         var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)
@@ -70,15 +67,15 @@ public class SitesController(
             return ControllerResponse(serviceResult.Reason);
         }
 
-        return ControllerResponse(new CreateQuizLocationResponse
+        return ControllerResponse(new CreateSiteResponse
         {
             Id = serviceResult.Result.Id
         });
     }
 
     [HttpPut("{quizId:required}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<UpdateQuizLocationResponse>))]
-    public async Task<IActionResult> UpdateQuizLocationAsync(int quizLocationId, UpdateQuizLocationRequest request)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<UpdateSiteResponse>))]
+    public async Task<IActionResult> UpdateQuizLocationAsync(int quizLocationId, UpdateSiteRequest request)
     {
         request.QuizLocationId = quizLocationId;
 
@@ -101,7 +98,7 @@ public class SitesController(
             return ControllerResponse(serviceResult.Reason);
         }
 
-        return ControllerResponse(new UpdateQuizLocationResponse
+        return ControllerResponse(new UpdateSiteResponse
         {
             Id = serviceResult.Result.Id
         });

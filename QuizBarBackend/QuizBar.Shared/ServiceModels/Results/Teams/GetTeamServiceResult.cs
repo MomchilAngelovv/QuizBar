@@ -1,18 +1,16 @@
-﻿using QuizBar.Shared;
-
-namespace QuizBar.Shared.ServiceModels.Results.Teams;
+﻿namespace QuizBar.Shared.ServiceModels.Results.Teams;
 
 public class GetTeamServiceResult
 {
-    public required string Id { get; set; }
-    public required string Title { get; set; }
-    public required Statuses Status { get; set; }
+    public string Id { get; set; }
+    public string Title { get; set; }
+    public Statuses Status { get; set; }
 
-    public required IEnumerable<GetTeamResultServiceResult> Results { get; set; }
+    public IEnumerable<GetTeamResultServiceResult> Results { get; set; }
 }
 
 public class GetTeamResultServiceResult
 {
-    public required double Score { get; set; }
-    public required string TeamId { get; set; }
+    public double Score { get; set; }
+    public string TeamId { get; set; }
 }

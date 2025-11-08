@@ -8,6 +8,6 @@ public class UpdateQuizScoresServiceResult
 // TODO figure out naming. I dont like it at all
 public class UpdateQuizScoreTeamTeamResult
 {
-    public required string TeamId { get; set; }
-    public required double Score { get; set; }
+    public string TeamId { get; set; }
+    public double Score { get; set; }
 }

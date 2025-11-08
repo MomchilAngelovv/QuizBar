@@ -1,8 +1,8 @@
-﻿using QuizBar.Shared;
+﻿namespace QuizBar.Api.Responses.Sites;
 
-namespace QuizBar.Api.Responses.QuizLocations;
+using QuizBar.Shared;
 
-public class GetQuizLocationsResponse : IPaginationResponse
+public class GetSitesResponse : IPaginationResponse
 {
     public required IEnumerable<GetQuizLocationsLocation> QuizLocations { get; set; }
 

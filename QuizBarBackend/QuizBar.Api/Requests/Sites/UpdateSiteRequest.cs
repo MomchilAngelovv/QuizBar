@@ -1,11 +1,11 @@
-﻿namespace QuizBar.Api.Requests.QuizLocations;
+﻿namespace QuizBar.Api.Requests.Sites;
 
 using FluentValidation;
 using FluentValidation.Results;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-public class UpdateQuizLocationRequest : IValidatableRequest
+public class UpdateSiteRequest : IValidatableRequest
 {
     [JsonIgnore]
     public int QuizLocationId { get; set; }
@@ -17,7 +17,7 @@ public class UpdateQuizLocationRequest : IValidatableRequest
     }
 }
 
-public class UpdateQuizLocationRequestValidator : AbstractValidator<UpdateQuizLocationRequest>
+public class UpdateQuizLocationRequestValidator : AbstractValidator<UpdateSiteRequest>
 {
     public UpdateQuizLocationRequestValidator()
     {

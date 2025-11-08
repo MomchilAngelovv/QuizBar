@@ -10,14 +10,15 @@ using QuizBar.Shared.ServiceModels.Inputs.ExceptionLogs;
 using QuizBar.Shared.ServiceModels.Results;
 using System.Net;
 
-//TODO FromQuery Parameters
 public class ExceptionLogsController(
     ExceptionLogsService exceptionLogsService) : BaseController
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetExceptionLogsResponse>))]
-    public async Task<IActionResult> GetExceptionLogsAsync([FromQuery] GetExceptionLogsRequest request)
+    public async Task<IActionResult> GetExceptionLogsAsync(int page = 1)
     {
+        var request = new GetExceptionLogsRequest { Page = page };
+
         var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)
         {
@@ -50,7 +51,7 @@ public class ExceptionLogsController(
 
     [HttpGet("{exceptionLogId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetExceptionLogResponse>))]
-    public async Task<IActionResult> GetExceptionLogAsync(string exceptionLogId)
+    public async Task<IActionResult> GetExceptionLogAsync(string exceptionLogId = default)
     {
         var request = new GetExceptionLogRequest { ExceptionLogId = exceptionLogId };
 

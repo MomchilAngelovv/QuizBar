@@ -5,11 +5,11 @@ using QuizBar.Shared.ServiceModels.Results;
 
 public class GetSitesServiceResult : IPaginatedServiceResult
 {
-    public required IEnumerable<GetSitesSite> QuizLocations { get; set; }
-
     // IPaginatedServiceResult
-    public required int Page { get; set ; }
-    public required int TotalItems { get; set ; }
+    public required int Page { get; set; }
+    public required int TotalItems { get; set; }
+
+    public required IEnumerable<GetSitesSite> QuizLocations { get; set; }
 }
 
 public class GetSitesSite

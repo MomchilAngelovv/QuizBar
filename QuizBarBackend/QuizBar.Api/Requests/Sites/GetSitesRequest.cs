@@ -1,9 +1,9 @@
-﻿namespace QuizBar.Api.Requests.QuizLocations;
+﻿namespace QuizBar.Api.Requests.Sites;
 
 using FluentValidation;
 using FluentValidation.Results;
 
-public class GetQuizLocationsRequest : IValidatableRequest
+public class GetSitesRequest : IValidatableRequest
 {
     public int Page { get; set; }
 
@@ -13,7 +13,7 @@ public class GetQuizLocationsRequest : IValidatableRequest
     }
 }
 
-public class GetQuizLocationsRequestValidator : AbstractValidator<GetQuizLocationsRequest>
+public class GetQuizLocationsRequestValidator : AbstractValidator<GetSitesRequest>
 {
     public GetQuizLocationsRequestValidator()
     {

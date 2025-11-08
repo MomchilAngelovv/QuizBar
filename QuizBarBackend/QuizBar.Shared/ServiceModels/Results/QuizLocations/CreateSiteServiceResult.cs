@@ -2,5 +2,5 @@
 
 public class CreateSiteServiceResult
 {
-    public required string Id { get; set; }
+    public string Id { get; set; }
 }

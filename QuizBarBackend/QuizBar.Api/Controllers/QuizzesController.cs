@@ -9,7 +9,6 @@ using QuizBar.Services;
 using QuizBar.Shared.ServiceModels.Inputs.Quizzes;
 using QuizBar.Shared.ServiceModels.Results;
 
-//TODO confirm int? for page
 public class QuizzesController(
     QuizzesService quizzesService) : BaseController
 {
@@ -48,7 +47,7 @@ public class QuizzesController(
 
     [HttpGet("{quizId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetQuizResponse>))]
-    public async Task<IActionResult> GetQuizAsync(string quizId)
+    public async Task<IActionResult> GetQuizAsync(string quizId = default)
     {
         var request = new GetQuizRequest { QuizId = quizId };
 

@@ -2,12 +2,12 @@
 
 public class GetExceptionLogServiceResult
 {
-    public required string Id { get; set; }
-    public required string Message { get; set; }
-    public required string StackTrace { get; set; }
+    public string Id { get; set; }
+    public string Message { get; set; }
+    public string StackTrace { get; set; }
     public string Path { get; set; }
     public string QueryString { get; set; }
     public string RouteValues { get; set; }
     public string Headers { get; set; }
-    public required DateTime OccurredOn { get; set; }
+    public DateTime OccurredOn { get; set; }
 }

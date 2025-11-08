@@ -2,11 +2,11 @@
 
 public class GetExceptionLogsServiceResult : IPaginatedServiceResult
 {
-    public required IEnumerable<GetExceptionLogsException> Exceptions { get; set; }
+    // IPaginatedServiceResult
+    public int Page { get; set; }
+    public int TotalItems { get; set; }
 
-    // IPaginationServiceResponse
-    public required int Page { get; set; }
-    public required int TotalItems { get; set; }
+    public IEnumerable<GetExceptionLogsException> Exceptions { get; set; }
 }
 
 public class GetExceptionLogsException

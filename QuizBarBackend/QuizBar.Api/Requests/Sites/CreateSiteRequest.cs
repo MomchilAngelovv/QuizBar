@@ -1,9 +1,9 @@
-﻿namespace QuizBar.Api.Requests.QuizLocations;
+﻿namespace QuizBar.Api.Requests.Sites;
 
 using FluentValidation;
 using FluentValidation.Results;
 
-public class CreateQuizLocationRequest : IValidatableRequest 
+public class CreateSiteRequest : IValidatableRequest 
 {
     public required string Title { get; set; }
 
@@ -13,7 +13,7 @@ public class CreateQuizLocationRequest : IValidatableRequest
     }
 }
 
-public class CreateQuizLocationRequestValidator : AbstractValidator<CreateQuizLocationRequest>
+public class CreateQuizLocationRequestValidator : AbstractValidator<CreateSiteRequest>
 {
     public CreateQuizLocationRequestValidator()
     {
