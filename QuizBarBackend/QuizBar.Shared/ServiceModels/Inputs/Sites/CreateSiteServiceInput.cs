@@ -1,4 +1,4 @@
-﻿namespace QuizBar.Shared.ServiceModels.Inputs.QuizLocations;
+﻿namespace QuizBar.Shared.ServiceModels.Inputs.Sites;
 
 public class CreateSiteServiceInput : IServiceInput
 {

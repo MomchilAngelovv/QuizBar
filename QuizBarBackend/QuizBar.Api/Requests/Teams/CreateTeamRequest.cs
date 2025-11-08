@@ -1,7 +1,7 @@
-﻿using FluentValidation;
-using FluentValidation.Results;
+﻿namespace QuizBar.Api.Requests.Teams;
 
-namespace QuizBar.Api.Requests.Teams;
+using FluentValidation;
+using FluentValidation.Results;
 
 public class CreateTeamRequest : IValidatableRequest
 {

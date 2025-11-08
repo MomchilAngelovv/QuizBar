@@ -5,8 +5,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using QuizBar.Services;
 using QuizBar.Shared.ServiceModels.Inputs.ExceptionLogs;
 
-//TODO Rename this
-public class ExceptionLogExceptionFilter(
+public class GlobalExceptionFilter(
     ExceptionLogsService exceptionLogsService) : IAsyncExceptionFilter
 {
     public async Task OnExceptionAsync(ExceptionContext context)

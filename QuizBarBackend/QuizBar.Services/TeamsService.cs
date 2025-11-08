@@ -68,12 +68,7 @@ public class TeamsService(
         {
             Id = team.Id,
             Title = team.Title,
-            Status = team.Status,
-            Results = team.Results.Select(result => new GetTeamResultServiceResult
-            {
-                Score = result.Score,
-                TeamId = result.TeamId,
-            })
+            Status = team.Status
         };
 
         return serviceResult;

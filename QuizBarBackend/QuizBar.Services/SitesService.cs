@@ -2,11 +2,10 @@
 
 using Microsoft.EntityFrameworkCore;
 using QuizBar.Data;
-using QuizBar.Data.Entities;
 using QuizBar.Shared;
-using QuizBar.Shared.ServiceModels.Inputs.QuizLocations;
+using QuizBar.Shared.ServiceModels.Inputs.Sites;
 using QuizBar.Shared.ServiceModels.Results;
-using QuizBar.Shared.ServiceModels.Results.QuizLocations;
+using QuizBar.Shared.ServiceModels.Results.Sites;
 
 public class SitesService(
     ApplicationDbContext db)
@@ -15,19 +14,19 @@ public class SitesService(
     {
         var serviceResult = new ServiceResult<GetSitesServiceResult>();
 
-        var quizLocationsQuery = db.Sites
+        var sitesQuery = db.Sites
             .AsQueryable();
 
         if (input.Filter is not null)
         {
             if (!string.IsNullOrWhiteSpace(input.UserId))
             {
-                quizLocationsQuery = quizLocationsQuery
+                sitesQuery = sitesQuery
                     .Where(ql => ql.CreatedBy == input.UserId);
             }
         }
 
-        var quizLocations = await quizLocationsQuery
+        var sites = await sitesQuery
             .OrderBy(q => q.Title)
             .Skip((input.Page - 1) * 10)
             .Take(10)
@@ -38,14 +37,14 @@ public class SitesService(
 
         serviceResult.Result = new GetSitesServiceResult
         {
-            QuizLocations = quizLocations.Select(quizLocation => new GetSitesSite
+            Page = input.Page,
+            TotalItems = quizLocationsTotalItems,
+            Sites = sites.Select(quizLocation => new Site
             {
                 Id = quizLocation.Id,
                 Title = quizLocation.Title,
                 Status = quizLocation.Status
-            }),
-            Page = input.Page,
-            TotalItems = quizLocationsTotalItems
+            })
         };
 
         return serviceResult;
@@ -63,7 +62,7 @@ public class SitesService(
             return serviceResult;
         }
 
-        var site = new Site
+        var site = new Data.Entities.Site
         {
             Id = Guid.CreateVersion7().ToString(),
             Title = input.Title,

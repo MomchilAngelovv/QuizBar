@@ -58,7 +58,7 @@ builder.Services.AddIdentity<QuizBarUser, QuizBarRole>(options =>
 // Controllers
 builder.Services.AddControllers(options =>
 {
-    options.Filters.Add<ExceptionLogExceptionFilter>();
+    options.Filters.Add<GlobalExceptionFilter>();
 })
 .AddJsonOptions(options =>
 {

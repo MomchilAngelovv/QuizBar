@@ -1,10 +1,7 @@
 ﻿namespace QuizBar.Shared.ServiceModels.Inputs.ExceptionLogs;
 
-public class CreateExceptionLogServiceInput : IServiceInput
+public class CreateExceptionLogServiceInput
 {
-    // IServiceInput
-    public string UserId { get; set; }
-
     public string Message { get; set; }
     public string StackTrace { get; set; }
     public string Path { get; set; }

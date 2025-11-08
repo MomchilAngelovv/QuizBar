@@ -1,18 +1,10 @@
-﻿using QuizBar.Shared;
+﻿namespace QuizBar.Api.Responses.Teams;
 
-namespace QuizBar.Api.Responses.Teams;
+using QuizBar.Shared;
 
 public class GetTeamResponse
 {
-    public required string Id { get; set; }
-    public required string Title { get; set; }
-    public required Statuses Status { get; set; }
-
-    public required IEnumerable<GetTeamResultServiceResult> Results { get; set; }
-}
-
-public class GetTeamResultServiceResult
-{
-    public required double Score { get; set; }
-    public required string TeamId { get; set; }
+    public string Id { get; set; }
+    public string Title { get; set; }
+    public Statuses Status { get; set; }
 }

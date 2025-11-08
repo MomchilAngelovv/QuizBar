@@ -1,7 +1,6 @@
 ﻿namespace QuizBar.Api.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using QuizBar.Api.Requests.Teams;
 using QuizBar.Api.Responses;
 using QuizBar.Api.Responses.Teams;
@@ -14,11 +13,9 @@ public class TeamsController(
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetTeamsResponse>))]
-    public async Task<IActionResult> GetTeamsAsync(
-        [FromQuery] int? page, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetTeamsRequest? request)
+    public async Task<IActionResult> GetTeamsAsync(int page = 1)
     {
-        request ??= new GetTeamsRequest();
-        request.Page = page ?? 1;
+        var request = new GetTeamsRequest { Page = page };
 
         var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)
@@ -28,8 +25,8 @@ public class TeamsController(
 
         var serviceInput = new GetTeamsServiceInput
         {
+            UserId = UserId,
             Page = request.Page,
-            UserId = UserId
         };
 
         var serviceResult = await teamsService.GetTeamsAsync(serviceInput);
@@ -40,22 +37,21 @@ public class TeamsController(
 
         return ControllerResponse(new GetTeamsResponse
         {
-            Teams = serviceResult.Result.Teams.Select(t => new GetTeamsTeam
-            {
-                Id = t.Id,
-                Title = t.Title,
-            }),
             Page = serviceResult.Result.Page,
-            TotalItems = serviceResult.Result.TotalItems
+            TotalItems = serviceResult.Result.TotalItems,
+            Teams = serviceResult.Result.Teams.Select(team => new Team
+            {
+                Id = team.Id,
+                Title = team.Title,
+            })
         });
     }
 
     [HttpGet("{teamId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetTeamResponse>))]
-    public async Task<IActionResult> GetTeamAsync(string teamId, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] GetTeamRequest? request)
+    public async Task<IActionResult> GetTeamAsync(string teamId = default)
     {
-        request ??= new GetTeamRequest();
-        request.TeamId = teamId;
+        var request = new GetTeamRequest { TeamId = teamId };
 
         var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)
@@ -65,8 +61,8 @@ public class TeamsController(
 
         var serviceInput = new GetTeamServiceInput
         {
-            TeamId = request.TeamId,
-            UserId = UserId
+            UserId = UserId,
+            TeamId = request.TeamId
         };
 
         var serviceResult = await teamsService.GetTeamAsync(serviceInput);
@@ -79,12 +75,7 @@ public class TeamsController(
         {
             Id = serviceResult.Result.Id,
             Title = serviceResult.Result.Title,
-            Status = serviceResult.Result.Status,
-            Results = serviceResult.Result.Results.Select(r => new GetTeamResultServiceResult
-            {
-                Score = r.Score,
-                TeamId = r.TeamId
-            })
+            Status = serviceResult.Result.Status
         });
     }
 
@@ -118,7 +109,7 @@ public class TeamsController(
 
     [HttpPut("{teamId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<UpdateTeamResponse>))]
-    public async Task<IActionResult> UpdateTeamAsync(string teamId, UpdateTeamRequest request)
+    public async Task<IActionResult> UpdateTeamAsync(UpdateTeamRequest request, string teamId = default)
     {
         request.TeamId = teamId;
 
@@ -130,9 +121,9 @@ public class TeamsController(
 
         var serviceInput = new UpdateTeamServiceInput
         {
+            UserId = UserId,
             TeamId = request.TeamId,
-            Title = request.Title,
-            UserId = UserId
+            Title = request.Title
         };
 
         var serviceResult = await teamsService.UpdateTeamAsync(serviceInput);

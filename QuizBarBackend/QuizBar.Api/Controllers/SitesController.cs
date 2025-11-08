@@ -3,10 +3,9 @@
 using Microsoft.AspNetCore.Mvc;
 using QuizBar.Api.Requests.Sites;
 using QuizBar.Api.Responses;
-using QuizBar.Api.Responses.Quizzes;
 using QuizBar.Api.Responses.Sites;
 using QuizBar.Services;
-using QuizBar.Shared.ServiceModels.Inputs.QuizLocations;
+using QuizBar.Shared.ServiceModels.Inputs.Sites;
 using QuizBar.Shared.ServiceModels.Results;
 
 public class SitesController(
@@ -34,14 +33,14 @@ public class SitesController(
 
         return ControllerResponse(new GetSitesResponse
         {
-            QuizLocations = servieResult.Result.QuizLocations.Select(quizLocation => new GetQuizLocationsLocation
+            Page = servieResult.Result.Page,
+            TotalItems = servieResult.Result.TotalItems,
+            QuizLocations = servieResult.Result.Sites.Select(quizLocation => new GetQuizLocationsLocation
             {
                 Id = quizLocation.Id,
                 Title = quizLocation.Title,
                 Status = quizLocation.Status
-            }),
-            Page = servieResult.Result.Page,
-            TotalItems = servieResult.Result.TotalItems
+            })
         });
     }
 

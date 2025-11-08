@@ -6,10 +6,10 @@ public class GetTeamsResponse : IPaginatedControllerResponse
     public int Page { get; set; }
     public int TotalItems { get; set; }
 
-    public IEnumerable<GetTeamsTeam> Teams { get; set; }
+    public IEnumerable<Team> Teams { get; set; }
 }
 
-public class GetTeamsTeam
+public class Team
 {
     public string Id { get; set; }
     public string Title { get; set; }

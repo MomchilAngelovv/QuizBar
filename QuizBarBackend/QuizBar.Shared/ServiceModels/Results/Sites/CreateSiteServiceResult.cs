@@ -1,4 +1,4 @@
-﻿namespace QuizBar.Shared.ServiceModels.Results.QuizLocations;
+﻿namespace QuizBar.Shared.ServiceModels.Results.Sites;
 
 public class CreateSiteServiceResult
 {
