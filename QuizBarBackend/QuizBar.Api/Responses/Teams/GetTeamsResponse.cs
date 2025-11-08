@@ -1,14 +1,16 @@
 ﻿namespace QuizBar.Api.Responses.Teams;
 
-public class GetTeamsResponse : IPaginationResponse
+public class GetTeamsResponse : IPaginatedControllerResponse
 {
-    public required IEnumerable<GetTeamsTeam> Teams { get; set; }
-    public required int Page { get; set; }
-    public required int TotalItems { get; set; }
+    // IPaginatedControllerResponse
+    public int Page { get; set; }
+    public int TotalItems { get; set; }
+
+    public IEnumerable<GetTeamsTeam> Teams { get; set; }
 }
 
 public class GetTeamsTeam
 {
-    public required string Id { get; set; }
-    public required string Title { get; set; }
+    public string Id { get; set; }
+    public string Title { get; set; }
 }

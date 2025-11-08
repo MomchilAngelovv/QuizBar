@@ -1,17 +1,19 @@
-﻿using QuizBar.Shared;
+﻿namespace QuizBar.Api.Responses.Quizzes;
 
-namespace QuizBar.Api.Responses.Quizzes;
+using QuizBar.Shared;
 
-public class GetQuizzesResponse : IPaginationResponse
+public class GetQuizzesResponse : IPaginatedControllerResponse
 {
-    public required IEnumerable<GetQuizzesQuiz> Quizzes { get; set; }
-    public required int Page { get; set; }
-    public required int TotalItems { get; set; }
+    // IPaginatedControllerResponse
+    public int Page { get; set; }
+    public int TotalItems { get; set; }
+
+    public IEnumerable<GetQuizzesQuiz> Quizzes { get; set; }
 }
 
 public class GetQuizzesQuiz
 {
-    public required string Id { get; set; }
-    public required string Title { get; set; }
-    public required Statuses Status { get; set; }
+    public string Id { get; set; }
+    public string Title { get; set; }
+    public Statuses Status { get; set; }
 }

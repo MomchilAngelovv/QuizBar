@@ -41,7 +41,7 @@ public class BaseController : ControllerBase
 
         return StatusCode((int)statusCode, controllerResult);
     }
-    protected IActionResult ControllerResponse<TResult>(TResult data, bool success = true, string message = default, HttpStatusCode statusCode = HttpStatusCode.OK) where TResult : class
+    protected IActionResult ControllerResponse<TResult>(TResult data = null, bool success = true, string message = default, HttpStatusCode statusCode = HttpStatusCode.OK) where TResult : class
     {
         var controllerResult = new ControllerResponse<TResult>()
         {

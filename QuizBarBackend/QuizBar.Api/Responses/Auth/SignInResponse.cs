@@ -2,5 +2,5 @@
 
 public class SignInResponse
 {
-    public required string Token { get; set; }
+    public string Token { get; set; }
 }
