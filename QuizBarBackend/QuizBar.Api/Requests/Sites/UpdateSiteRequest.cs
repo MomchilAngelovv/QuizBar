@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 public class UpdateSiteRequest : IValidatableRequest
 {
     [JsonIgnore]
-    public int QuizLocationId { get; set; }
+    public int SiteId { get; set; }
     public required string Title { get; set; }
 
     public Task<ValidationResult> ValidateAsync()
@@ -21,7 +21,7 @@ public class UpdateQuizLocationRequestValidator : AbstractValidator<UpdateSiteRe
 {
     public UpdateQuizLocationRequestValidator()
     {
-        RuleFor(quizLocation => quizLocation.QuizLocationId).NotEmpty();
+        RuleFor(quizLocation => quizLocation.SiteId).NotEmpty();
         RuleFor(quizLocation => quizLocation.Title).NotEmpty();
     }
 }

@@ -73,11 +73,11 @@ public class SitesController(
         });
     }
 
-    [HttpPut("{quizId:required}")]
+    [HttpPut("{siteId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<UpdateSiteResponse>))]
-    public async Task<IActionResult> UpdateQuizLocationAsync(int quizLocationId, UpdateSiteRequest request)
+    public async Task<IActionResult> UpdateQuizLocationAsync(int siteId, UpdateSiteRequest request)
     {
-        request.QuizLocationId = quizLocationId;
+        request.SiteId = siteId;
 
         var validationResult = await request.ValidateAsync();
         if (!validationResult.IsValid)
@@ -87,7 +87,7 @@ public class SitesController(
 
         var serviceInput = new UpdateSiteServiceInput
         {
-            QuizLocationId = request.QuizLocationId,
+            SiteId = request.SiteId,
             Title = request.Title,
             UserId = UserId
         };

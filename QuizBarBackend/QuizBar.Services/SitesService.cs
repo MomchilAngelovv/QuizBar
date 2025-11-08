@@ -87,8 +87,7 @@ public class SitesService(
         var serviceResult = new ServiceResult<UpdateSiteServiceResult>();
 
         var site = await db.Sites
-            .FirstOrDefaultAsync(quizLocation => quizLocation.Title == input.Title && quizLocation.CreatedBy == input.UserId);
-
+            .FirstOrDefaultAsync(site => site.Title == input.Title && site.CreatedBy == input.UserId);
         if (site is null)
         {
             serviceResult.Reason = ErrorReason.SiteNotFound;
@@ -96,7 +95,7 @@ public class SitesService(
         }
 
         site.Title = input.Title;
-
+            
         db.Sites.Update(site);
         await db.SaveChangesAsync();
 
