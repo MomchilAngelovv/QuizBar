@@ -5,9 +5,9 @@ using QuizBar.Shared;
 public class Question : IEntityMetaData
 {
     // Main
-    public required string Id { get; set; }
-    public required QuestionType Type { get; set; }
-    public required string Title { get; set; }
+    public string Id { get; set; }
+    public QuestionType Type { get; set; }
+    public string Title { get; set; }
 	public string Resource { get; set; }
 	public int Priority { get; set; }
     public double Score { get; set; }
@@ -20,11 +20,11 @@ public class Question : IEntityMetaData
     public virtual ICollection<Answer> Answers { get; set; }
 
     // IEntityMetaData
-    public required Statuses Status { get; set; }
+    public Statuses Status { get; set; }
     public string? Description { get; set; }
 
-    public required DateTime CreatedOn { get; set; }
-    public required string CreatedBy { get; set; }
+    public DateTime CreatedOn { get; set; }
+    public string CreatedBy { get; set; }
 
     public DateTime? ModifiedOn { get; set; }
     public string? ModifiedBy { get; set; }

@@ -8,8 +8,7 @@ using QuizBar.Shared.ServiceModels.Inputs.Quizzes;
 using QuizBar.Shared.ServiceModels.Results;
 using QuizBar.Shared.ServiceModels.Results.Quizzes;
 
-public class QuizzesService(
-    ApplicationDbContext db)
+public class QuizzesService(ApplicationDbContext db)
 {
     public async Task<ServiceResult<GetQuizServiceResult>> GetQuizAsync(QuizzesFilter filter)
     {

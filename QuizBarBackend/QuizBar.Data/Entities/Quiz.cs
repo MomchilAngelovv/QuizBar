@@ -10,9 +10,12 @@ public class Quiz : IEntityMetaData
     public string Scope { get; set; }
 
     // Foreign keys
+    public string SiteId { get; set; }
 
     // Navigation properties
+    public virtual Site Site { get; set; }
     public virtual ICollection<Chapter> Chapters { get; set; }
+    public virtual ICollection<Score> Scores { get; set; }
 
     // IEntityMetaData
     public required Statuses Status { get; set; }

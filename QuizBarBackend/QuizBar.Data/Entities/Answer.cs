@@ -5,23 +5,24 @@ using QuizBar.Shared;
 public class Answer : IEntityMetaData
 {
     // Main
-    public required string Id { get; set; }
-    public required string Title { get; set; }
-    public required bool IsCorrect { get; set; }
+    public string Id { get; set; }
+    public string Label { get; set; }
+    public string Title { get; set; }
+    public bool IsCorrect { get; set; }
     public int Priority { get; set; }
 
     // Foreign keys
-    public required string QuestionId { get; set; }
+    public string QuestionId { get; set; }
 
     // Navigation properties
     public virtual Question Question { get; set; }
 
     // IEntityMetaData
-    public required Statuses Status { get; set; }
+    public Statuses Status { get; set; }
     public string? Description { get; set; }
 
-    public required DateTime CreatedOn { get; set; }
-    public required string CreatedBy { get; set; }
+    public DateTime CreatedOn { get; set; }
+    public string CreatedBy { get; set; }
 
     public DateTime? ModifiedOn { get; set; }
     public string? ModifiedBy { get; set; }

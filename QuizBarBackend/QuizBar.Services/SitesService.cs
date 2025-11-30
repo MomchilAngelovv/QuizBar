@@ -7,8 +7,7 @@ using QuizBar.Shared.ServiceModels.Inputs.Sites;
 using QuizBar.Shared.ServiceModels.Results;
 using QuizBar.Shared.ServiceModels.Results.Sites;
 
-public class SitesService(
-    ApplicationDbContext db)
+public class SitesService(ApplicationDbContext db)
 {
     public async Task<ServiceResult<GetSitesServiceResult>> GetSitesAsync(GetSitesServiceInput input)
     {

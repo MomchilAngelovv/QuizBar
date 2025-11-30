@@ -6,10 +6,7 @@ using QuizBar.Data;
 using QuizBar.Data.Entities;
 using QuizBar.Shared;
 
-public class SeederService(
-    ApplicationDbContext db,
-    UserManager<QuizBarUser> userManager,
-    RoleManager<QuizBarRole> roleManager)
+public class SeederService(ApplicationDbContext db, UserManager<QuizBarUser> userManager, RoleManager<QuizBarRole> roleManager)
 {
     public async Task SeedAdministratorsAsync()
     {

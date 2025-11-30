@@ -2,24 +2,26 @@
 
 using QuizBar.Shared;
 
-public class QuizTeam : IEntityMetaData
+public class Score : IEntityMetaData
 {
     // Main
-    public required string Id { get; set; }
-    public required double Score { get; set; }
+    public string Id { get; set; }
 
     // Foreign keys
-    public required string TeamId { get; set; }
+    public string QuizId { get; set; }
+    public string TeamId { get; set; }
 
     // Navigation properties
     public virtual Team Team { get; set; }
+    public virtual Quiz Quiz { get; set; }
+    public virtual ICollection<QuestionAnswer> Answers { get; set; }
 
     // IEntityMetaData
-    public required Statuses Status { get; set; }
+    public Statuses Status { get; set; }
     public string? Description { get; set; }
 
-    public required DateTime CreatedOn { get; set; }
-    public required string CreatedBy { get; set; }
+    public DateTime CreatedOn { get; set; }
+    public string CreatedBy { get; set; }
 
     public DateTime? ModifiedOn { get; set; }
     public string? ModifiedBy { get; set; }
