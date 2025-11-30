@@ -1,6 +1,6 @@
-﻿using QuizBar.Shared;
+﻿namespace QuizBar.Data.Entities;
 
-namespace QuizBar.Data.Entities;
+using QuizBar.Shared;
 
 public class Quiz : IEntityMetaData
 {
@@ -13,7 +13,6 @@ public class Quiz : IEntityMetaData
 
     // Navigation properties
     public virtual ICollection<Chapter> Chapters { get; set; }
-    public virtual ICollection<QuizTeam> QuizzesTeams { get; set; }
 
     // IEntityMetaData
     public required Statuses Status { get; set; }

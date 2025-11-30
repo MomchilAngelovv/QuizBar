@@ -16,6 +16,7 @@ public class Chapter : IEntityMetaData
     // Navigation properties
     public virtual Quiz Quiz { get; set; }
     public virtual ICollection<Question> Questions { get; set; }
+    public virtual ICollection<QuizTeam> Results { get; set; }
 
     // IEntityMetaData
     public required Statuses Status { get; set; }

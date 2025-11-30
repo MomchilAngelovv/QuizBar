@@ -52,11 +52,7 @@ public class CreateQuestionRequestValidator : AbstractValidator<CreateQuestionRe
 
         When(question => question.Type == QuestionType.TrueFalse, () =>
         {
-			RuleFor(question => question.Answers.Count()).Equal(2);
-            RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.Title == "True")).Equal(1);
-            RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.Title == "False")).Equal(1);
-            RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.IsCorrect == true)).Equal(1);
-			RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.IsCorrect == false)).Equal(1);
+			RuleFor(question => question.Answers.Count()).Equal(1);
 		});
 
         When(question => question.Type == QuestionType.FreeText, () =>

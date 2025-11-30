@@ -9,11 +9,9 @@ public class QuizTeam : IEntityMetaData
     public required double Score { get; set; }
 
     // Foreign keys
-    public required string QuizId { get; set; }
     public required string TeamId { get; set; }
 
     // Navigation properties
-    public virtual Quiz Quiz { get; set; }
     public virtual Team Team { get; set; }
 
     // IEntityMetaData

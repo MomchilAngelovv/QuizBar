@@ -1,6 +1,6 @@
-﻿using QuizBar.Shared;
+﻿namespace QuizBar.Data.Entities;
 
-namespace QuizBar.Data.Entities;
+using QuizBar.Shared;
 
 public class Question : IEntityMetaData
 {
