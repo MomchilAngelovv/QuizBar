@@ -1,15 +1,18 @@
-using FluentValidation;
+using System.Text;
+using System.Text.Json.Serialization;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+
+using FluentValidation;
+using Scalar.AspNetCore;
+
 using QuizBar.Api.Utilities;
 using QuizBar.Data;
 using QuizBar.Data.Entities;
 using QuizBar.Services;
-using Scalar.AspNetCore;
-using System.Text;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 

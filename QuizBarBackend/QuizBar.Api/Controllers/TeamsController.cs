@@ -5,8 +5,8 @@ using QuizBar.Api.Requests.Teams;
 using QuizBar.Api.Responses;
 using QuizBar.Api.Responses.Teams;
 using QuizBar.Services;
-using QuizBar.Shared.ServiceModels.Inputs.Teams;
-using QuizBar.Shared.ServiceModels.Results;
+using QuizBar.Services.ServiceModels.Inputs.Teams;
+using QuizBar.Services.ServiceModels.Results;
 
 public class TeamsController(
     TeamsService teamsService) : BaseController

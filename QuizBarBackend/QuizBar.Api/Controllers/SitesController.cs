@@ -5,8 +5,8 @@ using QuizBar.Api.Requests.Sites;
 using QuizBar.Api.Responses;
 using QuizBar.Api.Responses.Sites;
 using QuizBar.Services;
-using QuizBar.Shared.ServiceModels.Inputs.Sites;
-using QuizBar.Shared.ServiceModels.Results;
+using QuizBar.Services.ServiceModels.Inputs.Sites;
+using QuizBar.Services.ServiceModels.Results;
 
 public class SitesController(
     SitesService sitesService) : BaseController

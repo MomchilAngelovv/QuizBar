@@ -7,45 +7,21 @@ using QuizBar.Data.Entities;
 
 public class ApplicationDbContext : IdentityDbContext<QuizBarUser, QuizBarRole, string>
 {
-    public ApplicationDbContext()
-    {
-
-    }
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-    {
-
-    }
+    public ApplicationDbContext() { }
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
     public DbSet<Quiz> Quizzes { get; set; }
     public DbSet<Chapter> Chapters { get; set; }
     public DbSet<Question> Questions { get; set; }
     public DbSet<Answer> Answers { get; set; }
-
-    public DbSet<Site> Sites { get; set; }
-    public DbSet<Score> QuizzesTeams { get; set; }
-
+    public DbSet<TeamQuestionAnswer> TeamsAnswers { get; set; }
     public DbSet<Team> Teams { get; set; }
 
+    public DbSet<Site> Sites { get; set; }
+
     public DbSet<ExceptionLog> ExceptionLogs { get; set; }
-
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        base.OnModelCreating(builder);
-
-        AddTableQuizzes(builder);
-        AddTableChapters(builder);
-        AddTableQuestions(builder);
-        AddTablePossibleAnswer(builder);
-
-        AddTableQuizLocations(builder);
-        AddTableTeamsQuizEvents(builder);
-
-        AddTableTeams(builder);
-
-        AddTableExceptionLogs(builder);
-    }
-
-    private static void AddTableQuizzes(ModelBuilder builder)
+    
+    private static void ConfigureQuizzes(ModelBuilder builder)
     {
         // Main
         builder.Entity<Quiz>().ToTable("Quizzes").HasKey(p => p.Id);
@@ -55,20 +31,9 @@ public class ApplicationDbContext : IdentityDbContext<QuizBarUser, QuizBarRole, 
 
         // Foreign keys
 
-        // IEntityMetaData
-        builder.Entity<Quiz>().Property(p => p.Status).IsRequired();
-        builder.Entity<Quiz>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
-
-        builder.Entity<Quiz>().Property(p => p.CreatedOn).IsRequired();
-        builder.Entity<Quiz>().Property(p => p.CreatedBy).IsRequired().HasMaxLength(100);
-
-        builder.Entity<Quiz>().Property(p => p.ModifiedOn).IsRequired(false);
-        builder.Entity<Quiz>().Property(p => p.ModifiedBy).IsRequired(false).HasMaxLength(100);
-
-        builder.Entity<Quiz>().Property(p => p.DeletedOn).IsRequired(false);
-        builder.Entity<Quiz>().Property(p => p.DeletedBy).IsRequired(false).HasMaxLength(100);
+        ConfigureIEntityMetaData<Quiz>(builder);
     }
-    private static void AddTableChapters(ModelBuilder builder)
+    private static void ConfigureChapters(ModelBuilder builder)
     {
         // Main
         builder.Entity<Chapter>().ToTable("Chapters").HasKey(p => p.Id);
@@ -80,20 +45,9 @@ public class ApplicationDbContext : IdentityDbContext<QuizBarUser, QuizBarRole, 
         // Foreign keys
         builder.Entity<Chapter>().Property(p => p.QuizId).IsRequired().HasMaxLength(36);
 
-        // IEntityMetaData
-        builder.Entity<Chapter>().Property(p => p.Status).IsRequired();
-        builder.Entity<Chapter>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
-
-        builder.Entity<Chapter>().Property(p => p.CreatedOn).IsRequired();
-        builder.Entity<Chapter>().Property(p => p.CreatedBy).IsRequired().HasMaxLength(100);
-
-        builder.Entity<Chapter>().Property(p => p.ModifiedOn).IsRequired(false);
-        builder.Entity<Chapter>().Property(p => p.ModifiedBy).IsRequired(false).HasMaxLength(100);
-
-        builder.Entity<Chapter>().Property(p => p.DeletedOn).IsRequired(false);
-        builder.Entity<Chapter>().Property(p => p.DeletedBy).IsRequired(false).HasMaxLength(100);
+        ConfigureIEntityMetaData<Chapter>(builder);
     }
-    private static void AddTableQuestions(ModelBuilder builder)
+    private static void ConfigureQuestions(ModelBuilder builder)
     {
         // Main
         builder.Entity<Question>().ToTable("Questions").HasKey(p => p.Id);
@@ -106,20 +60,9 @@ public class ApplicationDbContext : IdentityDbContext<QuizBarUser, QuizBarRole, 
         // Foreign keys
         builder.Entity<Question>().Property(p => p.ChapterId).IsRequired().HasMaxLength(36);
 
-        // IEntityMetaData
-        builder.Entity<Question>().Property(p => p.Status).IsRequired();
-        builder.Entity<Question>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
-
-        builder.Entity<Question>().Property(p => p.CreatedOn).IsRequired();
-        builder.Entity<Question>().Property(p => p.CreatedBy).IsRequired().HasMaxLength(100);
-
-        builder.Entity<Question>().Property(p => p.ModifiedOn).IsRequired(false);
-        builder.Entity<Question>().Property(p => p.ModifiedBy).IsRequired(false).HasMaxLength(100);
-
-        builder.Entity<Question>().Property(p => p.DeletedOn).IsRequired(false);
-        builder.Entity<Question>().Property(p => p.DeletedBy).IsRequired(false).HasMaxLength(100);
+        ConfigureIEntityMetaData<Question>(builder);
     }
-    private static void AddTablePossibleAnswer(ModelBuilder builder)
+    private static void ConfigureAnswers(ModelBuilder builder)
     {
         // Main
         builder.Entity<Answer>().ToTable("Answers").HasKey(p => p.Id);
@@ -130,21 +73,32 @@ public class ApplicationDbContext : IdentityDbContext<QuizBarUser, QuizBarRole, 
         // Foreign keys
         builder.Entity<Answer>().Property(p => p.QuestionId).IsRequired().HasMaxLength(36);
 
-        // IEntityMetaData
-        builder.Entity<Answer>().Property(p => p.Status).IsRequired();
-        builder.Entity<Answer>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
+        ConfigureIEntityMetaData<Answer>(builder);
+    }
+    private static void ConfigureTeamsAnswers(ModelBuilder builder)
+    {
+        // Main
+        builder.Entity<TeamQuestionAnswer>().ToTable("TeamsAnswers").HasKey(tr => tr.Id);
+        builder.Entity<TeamQuestionAnswer>().Property(p => p.Id).IsRequired().HasMaxLength(36);
+        builder.Entity<TeamQuestionAnswer>().Property(p => p.Title).IsRequired().HasMaxLength(200);
 
-        builder.Entity<Answer>().Property(p => p.CreatedOn).IsRequired();
-        builder.Entity<Answer>().Property(p => p.CreatedBy).IsRequired().HasMaxLength(100);
+        // Foreign keys
 
-        builder.Entity<Answer>().Property(p => p.ModifiedOn).IsRequired(false);
-        builder.Entity<Answer>().Property(p => p.ModifiedBy).IsRequired(false).HasMaxLength(100);
+        ConfigureIEntityMetaData<TeamQuestionAnswer>(builder);
+    }
+    private static void ConfigureTeams(ModelBuilder builder)
+    {
+        // Main
+        builder.Entity<Team>().ToTable("Teams").HasKey(tr => tr.Id);
+        builder.Entity<Team>().Property(p => p.Id).IsRequired().HasMaxLength(36);
+        builder.Entity<Team>().Property(p => p.Title).IsRequired().HasMaxLength(200);
 
-        builder.Entity<Answer>().Property(p => p.DeletedOn).IsRequired(false);
-        builder.Entity<Answer>().Property(p => p.DeletedBy).IsRequired(false).HasMaxLength(100);
+        // Foreign keys
+
+        ConfigureIEntityMetaData<Team>(builder);
     }
 
-    private static void AddTableQuizLocations(ModelBuilder builder)
+    private static void ConfigureSites(ModelBuilder builder)
     {
         // Main
         builder.Entity<Site>().ToTable("Sites").HasKey(p => p.Id);
@@ -153,73 +107,46 @@ public class ApplicationDbContext : IdentityDbContext<QuizBarUser, QuizBarRole, 
 
         // Foreign keys
 
-        // IEntityMetaData
-        builder.Entity<Site>().Property(p => p.Status).IsRequired();
-        builder.Entity<Site>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
-
-        builder.Entity<Site>().Property(p => p.CreatedOn).IsRequired();
-        builder.Entity<Site>().Property(p => p.CreatedBy).IsRequired().HasMaxLength(100);
-
-        builder.Entity<Site>().Property(p => p.ModifiedOn).IsRequired(false);
-        builder.Entity<Site>().Property(p => p.ModifiedBy).IsRequired(false).HasMaxLength(100);
-
-        builder.Entity<Site>().Property(p => p.DeletedOn).IsRequired(false);
-        builder.Entity<Site>().Property(p => p.DeletedBy).IsRequired(false).HasMaxLength(100);
-    }
-    private static void AddTableTeamsQuizEvents(ModelBuilder builder)
-    {
-        // Main
-        builder.Entity<Score>().ToTable("QuizzesTeams").HasKey(op => op.Id);
-        builder.Entity<Score>().Property(p => p.Id).IsRequired().HasMaxLength(36);
-        builder.Entity<Score>().Property(p => p.Score).IsRequired();
-
-        // Foreign keys
-        builder.Entity<Score>().Property(p => p.TeamId).IsRequired().HasMaxLength(36);
-
-        // IEntityMetaData
-        builder.Entity<Score>().Property(p => p.Status).IsRequired();
-        builder.Entity<Score>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
-
-        builder.Entity<Score>().Property(p => p.CreatedOn).IsRequired();
-        builder.Entity<Score>().Property(p => p.CreatedBy).IsRequired().HasMaxLength(100);
-
-        builder.Entity<Score>().Property(p => p.ModifiedOn).IsRequired(false);
-        builder.Entity<Score>().Property(p => p.ModifiedBy).IsRequired(false).HasMaxLength(100);
-
-        builder.Entity<Score>().Property(p => p.DeletedOn).IsRequired(false);
-        builder.Entity<Score>().Property(p => p.DeletedBy).IsRequired(false).HasMaxLength(100);
+        ConfigureIEntityMetaData<Site>(builder);
     }
 
-    private static void AddTableTeams(ModelBuilder builder)
-    {
-        // Main
-        builder.Entity<Team>().ToTable("Teams").HasKey(tr => tr.Id);
-        builder.Entity<Team>().Property(p => p.Id).IsRequired().HasMaxLength(36);
-        builder.Entity<Team>().Property(p => p.Title).IsRequired().HasMaxLength(200);
-
-        // Foreign keys
-       
-        // IEntityMetaData
-        builder.Entity<Team>().Property(p => p.Status).IsRequired();
-        builder.Entity<Team>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
-
-        builder.Entity<Team>().Property(p => p.CreatedOn).IsRequired();
-        builder.Entity<Team>().Property(p => p.CreatedBy).IsRequired().HasMaxLength(100);
-
-        builder.Entity<Team>().Property(p => p.ModifiedOn).IsRequired(false);
-        builder.Entity<Team>().Property(p => p.ModifiedBy).IsRequired(false).HasMaxLength(100);
-
-        builder.Entity<Team>().Property(p => p.DeletedOn).IsRequired(false);
-        builder.Entity<Team>().Property(p => p.DeletedBy).IsRequired(false).HasMaxLength(100);
-    }
-
-    private static void AddTableExceptionLogs(ModelBuilder builder)
+    private static void ConfigureExceptionLogs(ModelBuilder builder)
     {
         // Main
         builder.Entity<ExceptionLog>().ToTable("ExceptionLogs").HasKey(p => p.Id);
         builder.Entity<ExceptionLog>().Property(p => p.Id).IsRequired().HasMaxLength(36);
         builder.Entity<ExceptionLog>().Property(p => p.Message).IsRequired();
         builder.Entity<ExceptionLog>().Property(p => p.StackTrace).IsRequired();
+    }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        ConfigureQuizzes(builder);
+        ConfigureChapters(builder);
+        ConfigureQuestions(builder);
+        ConfigureAnswers(builder);
+        ConfigureTeamsAnswers(builder);
+        ConfigureTeams(builder);
+
+        ConfigureSites(builder);
+
+        ConfigureExceptionLogs(builder);
+    }
+    private static void ConfigureIEntityMetaData<T>(ModelBuilder builder) where T : class, IEntityMetaData
+    {
+        builder.Entity<T>().Property(p => p.Status).IsRequired();
+        builder.Entity<T>().Property(p => p.Description).IsRequired(false).HasMaxLength(200);
+
+        builder.Entity<T>().Property(p => p.CreatedOn).IsRequired();
+        builder.Entity<T>().Property(p => p.CreatedBy).IsRequired().HasMaxLength(100);
+
+        builder.Entity<T>().Property(p => p.ModifiedOn).IsRequired(false);
+        builder.Entity<T>().Property(p => p.ModifiedBy).IsRequired(false).HasMaxLength(100);
+
+        builder.Entity<T>().Property(p => p.DeletedOn).IsRequired(false);
+        builder.Entity<T>().Property(p => p.DeletedBy).IsRequired(false).HasMaxLength(100);
     }
 }
 

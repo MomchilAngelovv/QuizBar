@@ -1,12 +1,13 @@
 ﻿namespace QuizBar.Api.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
+
 using QuizBar.Api.Requests.Questions;
 using QuizBar.Api.Responses;
 using QuizBar.Api.Responses.Questions;
 using QuizBar.Services;
-using QuizBar.Shared.ServiceModels.Inputs.Questions;
-using QuizBar.Shared.ServiceModels.Results;
+using QuizBar.Services.ServiceModels.Inputs.Questions;
+using QuizBar.Services.ServiceModels.Results;
 
 public class QuestionsController(
     QuestionsService questionsService) : BaseController

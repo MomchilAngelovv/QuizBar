@@ -18,6 +18,7 @@ public class Question : IEntityMetaData
     // Navigation properties
     public virtual Chapter Chapter { get; set; }
     public virtual ICollection<Answer> Answers { get; set; }
+    public virtual ICollection<TeamQuestionAnswer> TeamsAnswers { get; set; }
 
     // IEntityMetaData
     public Statuses Status { get; set; }

@@ -39,7 +39,7 @@ public class AuthController(
         {
             Id = Guid.CreateVersion7().ToString(),
             Email = request.Email,
-            SecurityStamp = Guid.NewGuid().ToString(),
+            SecurityStamp = Guid.CreateVersion7().ToString(),
             UserName = request.Email,
             EmailConfirmed = true,
             Status = Statuses.Active,
@@ -111,6 +111,7 @@ public class AuthController(
             UserClaims = userClaims
         };
     }
+
     private string CreateToken(QuizBarUser user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();

@@ -5,9 +5,9 @@ using QuizBar.Api.Requests.ExceptionLogs;
 using QuizBar.Api.Responses;
 using QuizBar.Api.Responses.ExceptionLogs;
 using QuizBar.Services;
+using QuizBar.Services.ServiceModels.Inputs.ExceptionLogs;
+using QuizBar.Services.ServiceModels.Results;
 using QuizBar.Shared;
-using QuizBar.Shared.ServiceModels.Inputs.ExceptionLogs;
-using QuizBar.Shared.ServiceModels.Results;
 using System.Net;
 
 public class ExceptionLogsController(

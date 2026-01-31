@@ -3,13 +3,12 @@
 using Microsoft.EntityFrameworkCore;
 using QuizBar.Data;
 using QuizBar.Data.Entities;
+using QuizBar.Services.ServiceModels.Inputs.Questions;
+using QuizBar.Services.ServiceModels.Results;
+using QuizBar.Services.ServiceModels.Results.Questions;
 using QuizBar.Shared;
-using QuizBar.Shared.ServiceModels.Inputs.Questions;
-using QuizBar.Shared.ServiceModels.Results;
-using QuizBar.Shared.ServiceModels.Results.Questions;
 
-public class QuestionsService(
-     ApplicationDbContext db)
+public class QuestionsService(ApplicationDbContext db)
 {
     public async Task<ServiceResult<CreateQuestionServiceResult>> CreateQuestionAsync(CreateQuestionServiceInput input)
     {
@@ -41,23 +40,32 @@ public class QuestionsService(
             Status = Statuses.Active,
             CreatedOn = DateTime.UtcNow,
             CreatedBy = input.UserId,
-            Answers = []
-        };
-
-        foreach (var answer in input.Answers)
-        {
-            question.Answers.Add(new Answer
+            Answers = [.. input.Answers.Select(answer => new Answer
             {
                 Id = Guid.CreateVersion7().ToString(),
                 Title = answer.Title,
                 IsCorrect = answer.IsCorrect,
                 Priority = answer.Priority,
-                QuestionId = question.Id,
                 Status = Statuses.Active,
                 CreatedOn = DateTime.UtcNow,
                 CreatedBy = input.UserId
-            });
-        }
+            })]
+        };
+
+        //foreach (var answer in input.Answers)
+        //{
+        //    question.Answers.Add(new Answer
+        //    {
+        //        Id = Guid.CreateVersion7().ToString(),
+        //        Title = answer.Title,
+        //        IsCorrect = answer.IsCorrect,
+        //        Priority = answer.Priority,
+        //        QuestionId = question.Id,
+        //        Status = Statuses.Active,
+        //        CreatedOn = DateTime.UtcNow,
+        //        CreatedBy = input.UserId
+        //    });
+        //}
 
         if (input.Type == QuestionType.Video || 
             input.Type == QuestionType.Sound)

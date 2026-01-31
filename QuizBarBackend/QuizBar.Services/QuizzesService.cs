@@ -3,10 +3,10 @@
 using Microsoft.EntityFrameworkCore;
 using QuizBar.Data;
 using QuizBar.Data.Entities;
+using QuizBar.Services.ServiceModels.Inputs.Quizzes;
+using QuizBar.Services.ServiceModels.Results;
+using QuizBar.Services.ServiceModels.Results.Quizzes;
 using QuizBar.Shared;
-using QuizBar.Shared.ServiceModels.Inputs.Quizzes;
-using QuizBar.Shared.ServiceModels.Results;
-using QuizBar.Shared.ServiceModels.Results.Quizzes;
 
 public class QuizzesService(ApplicationDbContext db)
 {
@@ -135,42 +135,6 @@ public class QuizzesService(ApplicationDbContext db)
         serviceResult.Result = new CreateQuizServiceResult
         {
             Id = quiz.Id,
-        };
-
-        return serviceResult;
-    }
-    public async Task<ServiceResult<UpdateQuizScoresServiceResult>> UpdateQuizScoresAsync(UpdateQuizScoresServiceInput input)
-    {
-        var serviceResult = new ServiceResult<UpdateQuizScoresServiceResult>();
-
-        var quiz = await db.Quizzes.FirstOrDefaultAsync(qe => qe.Id == input.QuizId);
-        if (quiz is null)
-        {
-            serviceResult.Reason = ErrorReason.QuizNotFound;
-            return serviceResult;
-        }
-
-        var quizzesTeams = await db.QuizzesTeams
-            .Include(tqe => tqe.Team)
-            .Where(tqe => tqe.QuizId == quiz.Id)
-            .ToListAsync();
-
-        foreach (var teamsQuizEvent in quizzesTeams)
-        {
-            var teamScore = input.TeamsScores.First(ts => ts.TeamId == teamsQuizEvent.TeamId);
-            teamsQuizEvent.Score += teamScore.Score;
-        }
-
-        db.QuizzesTeams.UpdateRange(quizzesTeams);
-        await db.SaveChangesAsync();
-
-        serviceResult.Result = new UpdateQuizScoresServiceResult
-        {
-            TeamsScores = quizzesTeams.Select(tqe => new UpdateQuizScoreTeamTeamResult
-            { 
-                TeamId = tqe.TeamId,
-                Score = tqe.Score
-            })
         };
 
         return serviceResult;

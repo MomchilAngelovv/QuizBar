@@ -3,13 +3,12 @@
 using Microsoft.EntityFrameworkCore;
 using QuizBar.Data;
 using QuizBar.Data.Entities;
+using QuizBar.Services.ServiceModels.Inputs.Teams;
+using QuizBar.Services.ServiceModels.Results;
+using QuizBar.Services.ServiceModels.Results.Teams;
 using QuizBar.Shared;
-using QuizBar.Shared.ServiceModels.Inputs.Teams;
-using QuizBar.Shared.ServiceModels.Results;
-using QuizBar.Shared.ServiceModels.Results.Teams;
 
-public class TeamsService(
-    ApplicationDbContext db)
+public class TeamsService(ApplicationDbContext db)
 {
     public async Task<ServiceResult<GetTeamsServiceResult>> GetTeamsAsync(GetTeamsServiceInput input)
     {
@@ -27,6 +26,7 @@ public class TeamsService(
             }
         }
 
+        //TODO Make general pagination parameters and response
         var teams = await teamsQuery
             .OrderBy(q => q.Title)
             .Skip((input.Page - 1) * 10)
@@ -55,9 +55,7 @@ public class TeamsService(
         var serviceResult = new ServiceResult<GetTeamServiceResult>();
 
         var team = await db.Teams
-            .Include(team => team.Results)
             .FirstOrDefaultAsync(t => t.Id == input.TeamId);
-
         if (team is null)
         {
             serviceResult.Reason = ErrorReason.TeamNotFound;
@@ -77,7 +75,8 @@ public class TeamsService(
     {
         var serviceResult = new ServiceResult<CreateTeamServiceResult>();
 
-        var teamExists = await db.Teams.AnyAsync(team => team.Title == input.Title && team.CreatedBy == input.UserId);
+        var teamExists = await db.Teams
+            .AnyAsync(team => team.Title == input.Title && team.CreatedBy == input.UserId);
         if (teamExists)
         {
             serviceResult.Reason = ErrorReason.TeamAlreadyExists;
@@ -107,7 +106,8 @@ public class TeamsService(
     {
         var serviceResult = new ServiceResult<UpdateTeamServiceResult>();
 
-        var team = await db.Teams.FirstOrDefaultAsync(t => t.Id == input.TeamId);
+        var team = await db.Teams
+            .FirstOrDefaultAsync(t => t.Id == input.TeamId);
         if (team is null)
         {
             serviceResult.Reason = ErrorReason.TeamNotFound;

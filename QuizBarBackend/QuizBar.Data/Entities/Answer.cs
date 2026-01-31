@@ -16,6 +16,7 @@ public class Answer : IEntityMetaData
 
     // Navigation properties
     public virtual Question Question { get; set; }
+    public virtual ICollection<TeamQuestionAnswer> TeamsAnswers { get; set; }
 
     // IEntityMetaData
     public Statuses Status { get; set; }

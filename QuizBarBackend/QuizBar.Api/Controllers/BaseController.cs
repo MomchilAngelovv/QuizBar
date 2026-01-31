@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuizBar.Api.Responses;
+using QuizBar.Services.ServiceModels.Results;
 using QuizBar.Shared;
-using QuizBar.Shared.ServiceModels.Results;
 using System.Net;
 using System.Security.Claims;
 

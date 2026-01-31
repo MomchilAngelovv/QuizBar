@@ -3,11 +3,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using QuizBar.Services;
-using QuizBar.Shared.ServiceModels.Inputs.ExceptionLogs;
+using QuizBar.Services.ServiceModels.Inputs.ExceptionLogs;
 
-public class GlobalExceptionFilter(
-    ExceptionLogsService exceptionLogsService) : IAsyncExceptionFilter
+public class GlobalExceptionFilter(ExceptionLogsService exceptionLogsService) : IAsyncExceptionFilter
 {
+    //TODO: Make a service in the middle ware to save request body and pass it here if error occurs
     public async Task OnExceptionAsync(ExceptionContext context)
     {
         var request = context.HttpContext.Request;

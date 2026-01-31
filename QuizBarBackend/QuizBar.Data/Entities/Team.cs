@@ -11,7 +11,7 @@ public class Team : IEntityMetaData
     // Foreign keys
 
     // Navigation properties
-    public virtual ICollection<Score> Scores { get; set; }
+    public virtual ICollection<TeamQuestionAnswer> TeamsAnswers { get; set; }
 
     // IEntityMetaData
     public Statuses Status { get; set; }

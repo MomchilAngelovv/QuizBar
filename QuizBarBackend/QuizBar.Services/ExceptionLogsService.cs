@@ -3,9 +3,9 @@
 using Microsoft.EntityFrameworkCore;
 using QuizBar.Data;
 using QuizBar.Data.Entities;
-using QuizBar.Shared.ServiceModels.Inputs.ExceptionLogs;
-using QuizBar.Shared.ServiceModels.Results;
-using QuizBar.Shared.ServiceModels.Results.ExceptionLog;
+using QuizBar.Services.ServiceModels.Inputs.ExceptionLogs;
+using QuizBar.Services.ServiceModels.Results;
+using QuizBar.Services.ServiceModels.Results.ExceptionLog;
 
 public class ExceptionLogsService(
     ApplicationDbContext db)

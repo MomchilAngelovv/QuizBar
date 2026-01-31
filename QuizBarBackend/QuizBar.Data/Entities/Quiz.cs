@@ -5,8 +5,8 @@ using QuizBar.Shared;
 public class Quiz : IEntityMetaData
 {
     // Main
-    public required string Id { get; set; }
-    public required string Title { get; set; }
+    public string Id { get; set; }
+    public string Title { get; set; }
     public string Scope { get; set; }
 
     // Foreign keys
@@ -15,14 +15,13 @@ public class Quiz : IEntityMetaData
     // Navigation properties
     public virtual Site Site { get; set; }
     public virtual ICollection<Chapter> Chapters { get; set; }
-    public virtual ICollection<Score> Scores { get; set; }
 
     // IEntityMetaData
-    public required Statuses Status { get; set; }
+    public Statuses Status { get; set; }
     public string? Description { get; set; }
 
-    public required DateTime CreatedOn { get; set; }
-    public required string CreatedBy { get; set; }
+    public DateTime CreatedOn { get; set; }
+    public string CreatedBy { get; set; }
 
     public DateTime? ModifiedOn { get; set; }
     public string? ModifiedBy { get; set; }
