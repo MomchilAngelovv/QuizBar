@@ -2,6 +2,7 @@
 
 using FluentValidation;
 using FluentValidation.Results;
+
 using QuizBar.Shared;
 
 public class UpdateQuestionRequest : IValidatableRequest

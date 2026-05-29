@@ -1,7 +1,7 @@
-﻿using FluentValidation;
-using System.Text.Json.Serialization;
+﻿namespace QuizBar.Api.Requests.Quizzes;
 
-namespace QuizBar.Api.Requests.Quizzes;
+using System.Text.Json.Serialization;
+using FluentValidation;
 
 public class UpdateQuizEventScoresRequest
 {

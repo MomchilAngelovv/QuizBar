@@ -1,7 +1,8 @@
-﻿using FluentValidation;
+﻿namespace QuizBar.Api.Requests.Quizzes;
+
 using System.Text.Json.Serialization;
 
-namespace QuizBar.Api.Requests.Quizzes;
+using FluentValidation;
 
 public class CreateQuizEventRequest
 {

@@ -87,8 +87,7 @@ public class QuestionsService(ApplicationDbContext db)
     {
         var serviceResult = new ServiceResult<UpdateQuestionServiceResult>();
 
-        var question = await db.Questions
-            .FirstOrDefaultAsync(question => question.Id == input.QuestionId);
+        var question = await db.Questions.FirstOrDefaultAsync(question => question.Id == input.QuestionId);
         if (question is not null)
         {
             serviceResult.Reason = ErrorReason.QuestionNotFound;
@@ -97,8 +96,7 @@ public class QuestionsService(ApplicationDbContext db)
 
         if (input.ChapterId is not null)
         {
-            var chapter = await db.Chapters
-                .FirstOrDefaultAsync(ch => ch.Id == input.ChapterId && ch.CreatedBy == input.UserId);
+            var chapter = await db.Chapters.FirstOrDefaultAsync(ch => ch.Id == input.ChapterId && ch.CreatedBy == input.UserId);
             if (chapter is null)
             {
                 serviceResult.Reason = ErrorReason.ChapterNotFound;

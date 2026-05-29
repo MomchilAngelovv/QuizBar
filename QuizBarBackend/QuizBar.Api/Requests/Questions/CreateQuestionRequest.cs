@@ -1,9 +1,11 @@
 ﻿namespace QuizBar.Api.Requests.Questions;
 
+using System.Threading.Tasks;
+
 using FluentValidation;
 using FluentValidation.Results;
+
 using QuizBar.Shared;
-using System.Threading.Tasks;
 
 public class CreateQuestionRequest : IValidatableRequest
 {

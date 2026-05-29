@@ -31,6 +31,7 @@ public class QuizzesController(
 
         var serviceResult = await quizzesService.GetQuizzesAsync(serviceInput);
 
+        // TODO Think to simplify this bu retuunign anonoums object from the service and avoid the mapping in the controller
         return ControllerResponse(new GetQuizzesResponse
         {
             Quizzes = serviceResult.Result.Quizzes.Select(q => new GetQuizzesQuiz

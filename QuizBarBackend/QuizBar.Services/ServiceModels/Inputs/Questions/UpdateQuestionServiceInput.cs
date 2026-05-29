@@ -1,7 +1,6 @@
 ﻿namespace QuizBar.Services.ServiceModels.Inputs.Questions;
 
 using QuizBar.Services.ServiceModels.Inputs;
-
 using QuizBar.Shared;
 
 public class UpdateQuestionServiceInput : IServiceInput

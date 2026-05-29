@@ -19,10 +19,10 @@ using System.Security.Claims;
 [ProducesResponseType(StatusCodes.Status504GatewayTimeout, Type = typeof(ControllerResponse))]
 public class BaseController : ControllerBase
 {
-    public string UserId => User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-    public string UserEmail => User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
+    protected string UserId => User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+    protected string UserEmail => User.Claims.First(c => c.Type == ClaimTypes.Email).Value;
 
-    protected ActionResult ValidationFailed(ValidationResult validationResult)
+    protected IActionResult ValidationFailed(ValidationResult validationResult)
     {
         foreach (var error in validationResult.Errors)
         {

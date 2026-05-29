@@ -10,7 +10,8 @@ using QuizBar.Services.ServiceModels.Results;
 
 public class TeamsController(
     TeamsService teamsService) : BaseController
-{
+{   
+    // Get
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetTeamsResponse>))]
     public async Task<IActionResult> GetTeamsAsync(int page = 1)
@@ -79,6 +80,7 @@ public class TeamsController(
         });
     }
 
+    // Create
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<CreateTeamResponse>))]
     public async Task<IActionResult> CreateTeamAsync(CreateTeamRequest request)
@@ -107,6 +109,7 @@ public class TeamsController(
         });
     }
 
+    // Update
     [HttpPut("{teamId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<UpdateTeamResponse>))]
     public async Task<IActionResult> UpdateTeamAsync(UpdateTeamRequest request, string teamId = default)
@@ -137,4 +140,6 @@ public class TeamsController(
             Id = serviceResult.Result.Id,
         });
     }
+
+    // Delete
 }

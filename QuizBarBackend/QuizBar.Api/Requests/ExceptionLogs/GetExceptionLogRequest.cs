@@ -1,8 +1,9 @@
 ﻿namespace QuizBar.Api.Requests.ExceptionLogs;
 
+using System.Text.Json.Serialization;
+
 using FluentValidation;
 using FluentValidation.Results;
-using System.Text.Json.Serialization;
 
 public class GetExceptionLogRequest : IValidatableRequest
 {
