@@ -1,6 +1,7 @@
 ﻿namespace QuizBar.Services;
 
 using Microsoft.EntityFrameworkCore;
+
 using QuizBar.Data;
 using QuizBar.Data.Entities;
 using QuizBar.Services.ServiceModels.Inputs.Quizzes;
@@ -67,8 +68,7 @@ public class QuizzesService(ApplicationDbContext db)
         {
             if (!string.IsNullOrWhiteSpace(input.UserId))
             {
-                quizzesQuery = quizzesQuery
-                    .Where(team => team.CreatedBy == input.UserId);
+                quizzesQuery = quizzesQuery.Where(team => team.CreatedBy == input.UserId);
             }
         }
 
@@ -88,8 +88,7 @@ public class QuizzesService(ApplicationDbContext db)
                 Id = q.Id,
                 Title = q.Title,
                 Scope = q.Scope,
-                Status = q.Status,
-                
+                Status = q.Status
             }),
             Page = input.Page,
             TotalItems = quizzesTotalItems

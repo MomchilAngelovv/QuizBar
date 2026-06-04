@@ -80,7 +80,7 @@ public class TeamsController(
         });
     }
 
-    // Create
+    // Post
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<CreateTeamResponse>))]
     public async Task<IActionResult> CreateTeamAsync(CreateTeamRequest request)
@@ -109,7 +109,7 @@ public class TeamsController(
         });
     }
 
-    // Update
+    // Put
     [HttpPut("{teamId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<UpdateTeamResponse>))]
     public async Task<IActionResult> UpdateTeamAsync(UpdateTeamRequest request, string teamId = default)

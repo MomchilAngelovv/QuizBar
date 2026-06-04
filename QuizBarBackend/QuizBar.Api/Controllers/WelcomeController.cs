@@ -9,10 +9,10 @@ public class WelcomeController(
     IConfiguration configuration, 
     ApplicationDbContext db) : BaseController
 {
+    // Get
     [HttpGet]
     public IActionResult Welcome()
     {
-        
         return Ok(new
         {
             Text = $"{DateTime.UtcNow} - QuizBar.Api is working",

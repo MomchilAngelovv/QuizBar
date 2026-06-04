@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 public class QuestionsController(
     QuestionsService questionsService) : BaseController
 {
+    // Post
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<CreateQuestionResponse>))]
     public async Task<IActionResult> CreateQuestionAsync(CreateQuestionRequest request)
@@ -51,6 +52,7 @@ public class QuestionsController(
         });
     }
 
+    // Put
     [HttpPut("{questionId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<UpdateQuestionResponse>))]
     public async Task<IActionResult> UpdateQuestionAsync(UpdateQuestionRequest request, string questionId = default)

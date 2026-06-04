@@ -10,6 +10,7 @@ using QuizBar.Services.ServiceModels.Results.ExceptionLog;
 public class ExceptionLogsService(
     ApplicationDbContext db)
 {
+    // Get
     public async Task<ServiceResult<GetExceptionLogsServiceResult>> GetExceptionLogsAsync(GetExceptionLogsServiceInput input)
     {
         var serviceResult = new ServiceResult<GetExceptionLogsServiceResult>();
@@ -64,6 +65,8 @@ public class ExceptionLogsService(
 
         return serviceResult;
     }
+
+    //Create
     public async Task<ServiceResult<CreateExceptionLogServiceResult>> CreateExceptionLogAsync(CreateExceptionLogServiceInput input)
     {
         var serviceResult = new ServiceResult<CreateExceptionLogServiceResult>();
@@ -90,4 +93,8 @@ public class ExceptionLogsService(
 
         return serviceResult;
     }
+
+    // Update 
+
+    // Delete
 }

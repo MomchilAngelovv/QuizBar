@@ -65,48 +65,5 @@ public class UpdateQuestionRequestValidator : AbstractValidator<UpdateQuestionRe
             RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.IsCorrect == true)).Equal(1);
             RuleFor(question => question.Resource).NotEmpty();
         });
-
-        //When(question => question.Type != QuestionType.None, () =>
-        //{
-        //    RuleFor(question => question.Answers).NotEmpty();
-
-        //    RuleForEach(question => question.Answers).ChildRules(pa =>
-        //    {
-        //        pa.RuleFor(possibleAnswer => possibleAnswer.Title).NotEmpty();
-        //    });
-
-        //    When(question => question.Type == QuestionType.SingleChoice, () =>
-        //    {
-        //        RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.IsCorrect == true)).Equal(1);
-        //    });
-
-        //    When(question => question.Type == QuestionType.MultiChoice, () =>
-        //    {
-        //        RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.IsCorrect == true)).GreaterThan(1);
-        //    });
-
-        //    When(question => question.Type == QuestionType.TrueFalse, () =>
-        //    {
-        //        RuleFor(question => question.Answers.Count()).Equal(2);
-        //        RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.Title == "True")).Equal(1);
-        //        RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.Title == "False")).Equal(1);
-        //        RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.IsCorrect == true)).Equal(1);
-        //        RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.IsCorrect == false)).Equal(1);
-        //    });
-
-        //    When(question => question.Type == QuestionType.FreeText, () =>
-        //    {
-        //        RuleFor(question => question.Answers.Count()).Equal(1);
-        //        RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.IsCorrect == true)).Equal(1);
-        //    });
-
-        //    When(question => question.Type == QuestionType.Video || question.Type == QuestionType.Sound, () =>
-        //    {
-        //        RuleFor(question => question.Answers.Count()).Equal(1);
-        //        RuleFor(question => question.Answers.Count(possibleAnswer => possibleAnswer.IsCorrect == true)).Equal(1);
-        //        RuleFor(question => question.Resource).NotEmpty();
-        //    });
-        //});
-
     }
 }

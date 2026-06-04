@@ -11,6 +11,7 @@ using QuizBar.Services.ServiceModels.Results;
 public class QuizzesController(
     QuizzesService quizzesService) : BaseController
 {
+    // Get
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetQuizzesResponse>))]
     public async Task<IActionResult> GetQuizzesAsync(int page = 1)
@@ -99,6 +100,7 @@ public class QuizzesController(
         });
     }
 
+    // Post
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<CreateQuizResponse>))]
     public async Task<IActionResult> CreateQuizAsync(CreateQuizRequest request)

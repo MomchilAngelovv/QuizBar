@@ -11,6 +11,7 @@ using QuizBar.Services.ServiceModels.Results;
 public class SitesController(
     SitesService sitesService) : BaseController
 {
+    // Get
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<GetSitesResponse>))]
     public async Task<IActionResult> GetSitesAsync(int page = 1)
@@ -44,6 +45,7 @@ public class SitesController(
         });
     }
 
+    // Post
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<CreateSiteResponse>))]
     public async Task<IActionResult> CreateQuizLocationAsync(CreateSiteRequest request)
@@ -72,6 +74,7 @@ public class SitesController(
         });
     }
 
+    // Put
     [HttpPut("{siteId:required}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<UpdateSiteResponse>))]
     public async Task<IActionResult> UpdateQuizLocationAsync(int siteId, UpdateSiteRequest request)
