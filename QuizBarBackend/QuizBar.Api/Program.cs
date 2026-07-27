@@ -13,6 +13,7 @@ using QuizBar.Api.Utilities;
 using QuizBar.Data;
 using QuizBar.Data.Entities;
 using QuizBar.Services;
+using Polly;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,6 +75,25 @@ builder.Services.AddOpenApi();
 
 // Health checks
 builder.Services.AddHealthChecks();
+
+builder.Services.AddHttpClient("test", client =>
+{
+    client.BaseAddress = new Uri("https://api.openai.com/v1/");
+    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {builder.Configuration["OpenAI:ApiKey"]}");
+}).AddResilienceHandler("resiliencePolicy", pipeLine => 
+{
+    pipeLine.AddRetry(new Polly.Retry.RetryStrategyOptions<HttpResponseMessage>
+    {
+        MaxRetryAttempts = 3,
+        BackoffType = DelayBackoffType.Exponential,
+        Delay = TimeSpan.FromSeconds(2),
+        //OnRetry = (outcome) =>
+        //{
+        //    var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>();
+        //    logger.LogWarning($"Retrying due to: {outcome.Exception?.Message ?? outcome.Result.ReasonPhrase}. Attempt {retryAttempt}.");
+        //}
+    });
+});
 
 // Cors
 builder.Services.AddCors(options =>

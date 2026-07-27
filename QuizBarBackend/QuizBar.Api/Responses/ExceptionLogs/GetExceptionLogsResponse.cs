@@ -2,11 +2,11 @@
 
 public class GetExceptionLogsResponse : IPaginatedControllerResponse
 {
+    public IEnumerable<GetExceptionLogsException> Exceptions { get; set; }
+
     // IPaginatedControllerResponse
     public int Page { get; set; }
     public int TotalItems { get; set; }
-
-    public IEnumerable<GetExceptionLogsException> Exceptions { get; set; }
 }
 
 public class GetExceptionLogsException

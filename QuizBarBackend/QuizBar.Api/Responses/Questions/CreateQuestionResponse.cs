@@ -2,5 +2,5 @@
 
 public class CreateQuestionResponse
 {
-    public required string Id { get; set; }
+    public string Id { get; set; }
 }

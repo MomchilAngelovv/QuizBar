@@ -1,6 +1,6 @@
-﻿using QuizBar.Shared;
+﻿namespace QuizBar.Api.Responses.Quizzes;
 
-namespace QuizBar.Api.Responses.Quizzes;
+using QuizBar.Shared;
 
 public class GetQuizResponse
 {

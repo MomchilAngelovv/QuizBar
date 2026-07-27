@@ -4,11 +4,11 @@ using QuizBar.Shared;
 
 public class GetQuizzesResponse : IPaginatedControllerResponse
 {
+    public IEnumerable<GetQuizzesQuiz> Quizzes { get; set; }
+
     // IPaginatedControllerResponse
     public int Page { get; set; }
     public int TotalItems { get; set; }
-
-    public IEnumerable<GetQuizzesQuiz> Quizzes { get; set; }
 }
 
 public class GetQuizzesQuiz
