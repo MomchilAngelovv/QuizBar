@@ -142,4 +142,33 @@ public class TeamsController(
     }
 
     // Delete
+    [HttpDelete("{teamId:required}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ControllerResponse<DeleteTeamResponse>))]
+    public async Task<IActionResult> DeleteTeamAsync(string teamId)
+    {
+        var request = new DeleteTeamRequest { TeamId = teamId };
+
+        var validationResult = await request.ValidateAsync();
+        if (!validationResult.IsValid)
+        {
+            return ValidationFailed(validationResult);
+        }
+
+        var serviceInput = new DeleteTeamServiceInput
+        {
+            UserId = UserId,
+            TeamId = request.TeamId
+        };
+
+        var serviceResult = await teamsService.DeleteTeamAsync(serviceInput);
+        if (serviceResult.Reason != ErrorReason.None)
+        {
+            return ControllerResponse(serviceResult.Reason);
+        }
+
+        return ControllerResponse(new DeleteTeamResponse
+        {
+            Id = serviceResult.Result.Id,
+        });
+    }
 }

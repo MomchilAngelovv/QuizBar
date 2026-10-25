@@ -15,6 +15,7 @@ public class TeamsService(ApplicationDbContext db)
         var serviceResult = new ServiceResult<GetTeamsServiceResult>();
 
         var teamsQuery = db.Teams
+            .Where(team => team.DeletedOn == null)
             .AsQueryable();
 
         if (input.Filter is not null)
@@ -34,7 +35,7 @@ public class TeamsService(ApplicationDbContext db)
             .ToListAsync();
 
         var teamsTotalItems = await db.Teams
-            .CountAsync();
+            .CountAsync(team => team.DeletedOn == null);
 
         serviceResult.Result = new GetTeamsServiceResult
         {
@@ -55,7 +56,7 @@ public class TeamsService(ApplicationDbContext db)
         var serviceResult = new ServiceResult<GetTeamServiceResult>();
 
         var team = await db.Teams
-            .FirstOrDefaultAsync(t => t.Id == input.TeamId);
+            .FirstOrDefaultAsync(t => t.Id == input.TeamId && t.DeletedOn == null);
         if (team is null)
         {
             serviceResult.Reason = ErrorReason.TeamNotFound;
@@ -76,7 +77,7 @@ public class TeamsService(ApplicationDbContext db)
         var serviceResult = new ServiceResult<CreateTeamServiceResult>();
 
         var teamExists = await db.Teams
-            .AnyAsync(team => team.Title == input.Title && team.CreatedBy == input.UserId);
+            .AnyAsync(team => team.Title == input.Title && team.CreatedBy == input.UserId && team.DeletedOn == null);
         if (teamExists)
         {
             serviceResult.Reason = ErrorReason.TeamAlreadyExists;
@@ -107,7 +108,7 @@ public class TeamsService(ApplicationDbContext db)
         var serviceResult = new ServiceResult<UpdateTeamServiceResult>();
 
         var team = await db.Teams
-            .FirstOrDefaultAsync(t => t.Id == input.TeamId);
+            .FirstOrDefaultAsync(t => t.Id == input.TeamId && t.DeletedOn == null);
         if (team is null)
         {
             serviceResult.Reason = ErrorReason.TeamNotFound;
@@ -126,6 +127,32 @@ public class TeamsService(ApplicationDbContext db)
         await db.SaveChangesAsync();
 
         serviceResult.Result = new UpdateTeamServiceResult
+        {
+            Id = team.Id
+        };
+
+        return serviceResult;
+    }
+
+    public async Task<ServiceResult<DeleteTeamServiceResult>> DeleteTeamAsync(DeleteTeamServiceInput input)
+    {
+        var serviceResult = new ServiceResult<DeleteTeamServiceResult>();
+
+        var team = await db.Teams
+            .FirstOrDefaultAsync(t => t.Id == input.TeamId && t.DeletedOn == null);
+        if (team is null)
+        {
+            serviceResult.Reason = ErrorReason.TeamNotFound;
+            return serviceResult;
+        }
+
+        team.DeletedOn = DateTime.UtcNow;
+        team.DeletedBy = input.UserId;
+
+        db.Teams.Update(team);
+        await db.SaveChangesAsync();
+
+        serviceResult.Result = new DeleteTeamServiceResult
         {
             Id = team.Id
         };
