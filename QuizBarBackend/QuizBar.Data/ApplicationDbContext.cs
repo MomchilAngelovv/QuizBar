@@ -83,6 +83,11 @@ public class ApplicationDbContext : IdentityDbContext<QuizBarUser, QuizBarRole, 
         builder.Entity<TeamQuestionAnswer>().Property(p => p.Title).IsRequired().HasMaxLength(200);
 
         // Foreign keys
+        builder.Entity<TeamQuestionAnswer>()
+            .HasOne(teamAnswer => teamAnswer.Question)
+            .WithMany(question => question.TeamsAnswers)
+            .HasForeignKey(teamAnswer => teamAnswer.QuestionId)
+            .OnDelete(DeleteBehavior.NoAction);
 
         ConfigureIEntityMetaData<TeamQuestionAnswer>(builder);
     }
