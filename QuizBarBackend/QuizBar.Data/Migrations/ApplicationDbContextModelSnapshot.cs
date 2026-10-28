@@ -806,7 +806,7 @@ namespace QuizBar.Data.Migrations
                     b.HasOne("QuizBar.Data.Entities.Question", "Question")
                         .WithMany("TeamsAnswers")
                         .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("QuizBar.Data.Entities.Team", "Team")

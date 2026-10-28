@@ -12,8 +12,8 @@ using QuizBar.Data;
 namespace QuizBar.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260418083848_Initial")]
-    partial class Initial
+    [Migration("20261028134700_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -809,7 +809,7 @@ namespace QuizBar.Data.Migrations
                     b.HasOne("QuizBar.Data.Entities.Question", "Question")
                         .WithMany("TeamsAnswers")
                         .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("QuizBar.Data.Entities.Team", "Team")
